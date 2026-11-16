@@ -11,19 +11,28 @@ const marquee = [...ticker, ...ticker];
   <div class="cursor" aria-hidden="true"><span></span></div>
 
   <header class="nav">
-    <a class="nav-logo" href="#top" aria-label={`${site.name} — home`}>{site.short}<i>®</i></a>
-    <nav class="nav-links" aria-label="Primary">
-      <a href="#work">Work</a>
-      <a href="#services">Services</a>
-      <a href="#process">Process</a>
-      <a href="#about">About</a>
-    </nav>
+    <a class="nav-logo glass" href="#top" aria-label={`${site.name} — home`}>{site.short}<i>®</i></a>
+    <div class="nav-mid glass">
+      <span class="nav-sec" aria-hidden="true"><b data-sec-n>00</b><span class="nav-sec-t" data-sec-t>Index</span></span>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#work">Work</a>
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
     <a class="nav-cta" href="#contact" data-magnetic>Let’s talk</a>
   </header>
 
+  <a class="float-cta glass" href="#contact">
+    <span class="fc-thumb" aria-hidden="true"></span>
+    <span class="fc-txt"><small>Have a project?</small>Let’s talk</span>
+    <span class="fc-arrow" aria-hidden="true">→</span>
+  </a>
+
   <main id="main">
     <!-- HERO -->
-    <section class="hero" id="top">
+    <section class="hero" id="top" data-label="Index">
       <div class="hero-bg" aria-hidden="true">
         <span class="orb orb-a" data-speed="0.9" data-mouse="30"></span>
         <span class="orb orb-b" data-speed="-0.6" data-mouse="-20"></span>
@@ -63,15 +72,23 @@ const marquee = [...ticker, ...ticker];
     </div>
 
     <!-- STATEMENT -->
-    <section class="statement-sec" aria-labelledby="statement-h">
-      <h2 id="statement-h" class="eyebrow">( Intro )</h2>
+    <section class="statement-sec" aria-labelledby="statement-h" data-label="Intro">
+      <div class="tiles" aria-hidden="true">
+        <span class="tile t1" data-speed="1.4"></span>
+        <span class="tile t2" data-speed="-1.8"></span>
+        <span class="tile t3" data-speed="0.9"></span>
+        <span class="tile t4" data-speed="-1.1"></span>
+        <span class="tile t5" data-speed="2"></span>
+        <span class="tile t6" data-speed="-0.7"></span>
+      </div>
+      <h2 id="statement-h" class="eyebrow"><b>01</b>Intro</h2>
       <Split tag="p" mode="scrub" class="statement" text={statement} />
     </section>
 
     <!-- WORK -->
-    <section class="work" id="work" aria-labelledby="work-h">
+    <section class="work" id="work" aria-labelledby="work-h" data-label="Selected work">
       <div class="sec-head">
-        <h2 id="work-h" class="eyebrow">( Selected work )</h2>
+        <h2 id="work-h" class="eyebrow"><b>02</b>Selected work</h2>
         <Split tag="p" class="xl" text="Recent *projects*" />
       </div>
 
@@ -80,6 +97,7 @@ const marquee = [...ticker, ...ticker];
           work.map((p, i) => (
             <li class="card">
               <article class={`card-inner art-${i + 1}`} data-cursor="View">
+                <span class="card-cta" aria-hidden="true">( Case study )</span>
                 <div class="card-art" aria-hidden="true">
                   <span class="s s1" data-speed="0.8"></span>
                   <span class="s s2" data-speed="-0.5"></span>
@@ -87,7 +105,7 @@ const marquee = [...ticker, ...ticker];
                   <span class="s s4" data-speed="-1"></span>
                 </div>
                 <div class="card-info">
-                  <p class="card-n">{p.n}</p>
+                  <p class="card-n">[ {p.n} / {String(work.length).padStart(2, '0')} ]</p>
                   <h3 class="card-title">{p.title}</h3>
                   <p class="card-kind">{p.kind}</p>
                   <ul class="tags">
@@ -103,9 +121,9 @@ const marquee = [...ticker, ...ticker];
     </section>
 
     <!-- SERVICES -->
-    <section class="services" id="services" aria-labelledby="services-h">
+    <section class="services" id="services" aria-labelledby="services-h" data-label="Services">
       <div class="sec-head">
-        <h2 id="services-h" class="eyebrow">( What I do )</h2>
+        <h2 id="services-h" class="eyebrow"><b>03</b>What I do</h2>
         <Split tag="p" class="xl" text="Everything a brand *needs* to grow" />
       </div>
       <ul class="svc-list">
@@ -122,10 +140,10 @@ const marquee = [...ticker, ...ticker];
     </section>
 
     <!-- PROCESS (pinned horizontal scroll on desktop) -->
-    <section class="process" id="process" aria-labelledby="process-h">
+    <section class="process" id="process" aria-labelledby="process-h" data-label="Process">
       <div class="process-pin">
         <div class="process-head">
-          <h2 id="process-h" class="eyebrow">( How it works )</h2>
+          <h2 id="process-h" class="eyebrow"><b>04</b>How it works</h2>
           <Split tag="p" class="xl" text="Four steps. *Zero* fluff." />
         </div>
         <ol class="track">
@@ -143,7 +161,7 @@ const marquee = [...ticker, ...ticker];
     </section>
 
     <!-- ABOUT -->
-    <section class="about" id="about" aria-labelledby="about-h">
+    <section class="about" id="about" aria-labelledby="about-h" data-label="About">
       <div class="about-grid">
         <div class="about-visual" aria-hidden="true">
           <div class="portrait" data-speed="0.35">
@@ -161,7 +179,7 @@ const marquee = [...ticker, ...ticker];
           </span>
         </div>
         <div class="about-copy">
-          <h2 id="about-h" class="eyebrow">( About )</h2>
+          <h2 id="about-h" class="eyebrow"><b>05</b>About</h2>
           <Split tag="p" class="lg" text={`Hi, I’m ${site.short}. I make brands feel *inevitable.*`} />
           <p class="about-p">
             I’m a brand and marketing strategist based in Melbourne. I sit where strategy meets craft — shaping
@@ -186,7 +204,7 @@ const marquee = [...ticker, ...ticker];
   <!-- FOOTER / CONTACT (uncovers beneath the page on desktop) -->
   <footer class="footer" id="contact">
     <div class="footer-inner">
-      <p class="eyebrow">( Contact )</p>
+      <p class="eyebrow"><b>06</b>Contact</p>
       <Split tag="p" class="mega foot-title" text="Let’s make something *unforgettable.*" />
       <a class="mail" href={`mailto:${site.email}`} data-magnetic data-cursor="Say hi">
         {site.email}

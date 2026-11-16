@@ -19,6 +19,56 @@ if (clock && tz) {
   setInterval(tick, 30_000);
 }
 
+/* ── Live section label in the nav pill ── */
+const secN = $('[data-sec-n]');
+const secT = $('[data-sec-t]');
+const labelled = $$('[data-label]');
+let current = -1;
+const setLabel = (i: number, text: string) => {
+  if (!secN || !secT || i === current) return;
+  const dir = i > current ? 1 : -1;
+  current = i;
+  const swap = () => {
+    secN.textContent = String(i).padStart(2, '0');
+    secT.textContent = text;
+  };
+  if (reduce) return swap();
+  gsap.to(secT, {
+    yPercent: -120 * dir, opacity: 0, duration: 0.22, ease: 'power2.in',
+    onComplete() {
+      swap();
+      gsap.fromTo(secT, { yPercent: 120 * dir, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.35, ease: 'power3.out' });
+    },
+  });
+};
+labelled.forEach((sec, i) => {
+  ScrollTrigger.create({
+    trigger: sec,
+    start: 'top 50%',
+    end: 'bottom 50%',
+    onToggle: (self) => self.isActive && setLabel(i, sec.dataset.label || ''),
+  });
+});
+// Footer is fixed on desktop, so detect "contact" from the end of <main>.
+ScrollTrigger.create({
+  trigger: 'main',
+  start: 'bottom 50%',
+  onEnter: () => setLabel(labelled.length, 'Contact'),
+  onLeaveBack: () => setLabel(labelled.length - 1, labelled[labelled.length - 1]?.dataset.label || ''),
+});
+
+/* ── Floating contact card: visible between hero and footer ── */
+const floatCta = $('.float-cta');
+if (floatCta) {
+  ScrollTrigger.create({
+    trigger: '.hero',
+    start: 'bottom 70%',
+    endTrigger: 'main',
+    end: 'bottom bottom',
+    onToggle: (self) => floatCta.classList.toggle('show', self.isActive),
+  });
+}
+
 if (!reduce) {
   ScrollTrigger.config({ ignoreMobileResize: true });
 
@@ -40,11 +90,12 @@ if (!reduce) {
   /* ── Generic parallax: any [data-speed] moves relative to its section ── */
   $$('[data-speed]').forEach((el) => {
     const s = parseFloat(el.dataset.speed || '0');
+    const k = el.classList.contains('tile') ? 70 : 18; // tiles get deeper, Floema-style drift
     gsap.fromTo(
       el,
-      { yPercent: -s * 18 },
+      { yPercent: -s * k },
       {
-        yPercent: s * 18,
+        yPercent: s * k,
         ease: 'none',
         scrollTrigger: { trigger: el.closest('section') || el.parentElement, start: 'top bottom', end: 'bottom top', scrub: true },
       },
