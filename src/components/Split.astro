@@ -7,8 +7,9 @@ interface Props {
   class?: string;
   /** 'css' = plays immediately via CSS (hero/LCP). 'scroll' = revealed by GSAP on scroll. */
   mode?: 'css' | 'scroll' | 'scrub';
+  id?: string;
 }
-const { text, tag: Tag = 'div', class: cls = '', mode = 'scroll' } = Astro.props;
+const { text, tag: Tag = 'div', class: cls = '', mode = 'scroll', id } = Astro.props;
 
 const words: { w: string; accent: boolean }[] = [];
 let accent = false;
@@ -24,7 +25,7 @@ for (const raw of text.split(/\s+/)) {
 const label = text.replace(/\*/g, '');
 ---
 
-<Tag class={`split split-${mode} ${cls}`} data-split={mode}>
+<Tag id={id} class={`split split-${mode} ${cls}`} data-split={mode}>
   <span class="sr">{label}</span>
   {
     words.map((x, i) => (

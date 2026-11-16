@@ -8,18 +8,15 @@ import { site } from '../data/site';
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>{site.name} — {site.role}</title>
+    <title>{`${site.name} — ${site.role}, ${site.location}`}</title>
     <meta name="description" content={site.description} />
-    <meta name="theme-color" content="#0b0b0c" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#ece8df" />
     <meta property="og:title" content={`${site.name} — ${site.role}`} />
     <meta property="og:description" content={site.description} />
     <meta property="og:type" content="website" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preload" href="/fonts/bricolage-latin.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/instrument-serif-italic-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/archivo.woff2" as="font" type="font/woff2" crossorigin />
     <script is:inline>
-      // Hide scroll-reveal start states only when JS runs and motion is allowed.
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('anim');
     </script>
   </head>
