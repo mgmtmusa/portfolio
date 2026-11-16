@@ -1,0 +1,38 @@
+---
+// Splits text into masked words at BUILD time (no runtime DOM splitting = no layout cost).
+// Wrap a word/phrase in *asterisks* for the italic serif accent.
+interface Props {
+  text: string;
+  tag?: 'h1' | 'h2' | 'h3' | 'p' | 'div';
+  class?: string;
+  /** 'css' = plays immediately via CSS (hero/LCP). 'scroll' = revealed by GSAP on scroll. */
+  mode?: 'css' | 'scroll' | 'scrub';
+}
+const { text, tag: Tag = 'div', class: cls = '', mode = 'scroll' } = Astro.props;
+
+const words: { w: string; accent: boolean }[] = [];
+let accent = false;
+for (const raw of text.split(/\s+/)) {
+  let w = raw;
+  const starts = w.startsWith('*');
+  const ends = w.endsWith('*') && w.length > 1;
+  if (starts) { accent = true; w = w.slice(1); }
+  if (ends) w = w.slice(0, -1);
+  words.push({ w, accent });
+  if (ends) accent = false;
+}
+const label = text.replace(/\*/g, '');
+---
+
+<Tag class={`split split-${mode} ${cls}`} data-split={mode}>
+  <span class="sr">{label}</span>
+  {
+    words.map((x, i) => (
+      <>
+        <span class="w" aria-hidden="true" style={`--i:${i}`}>
+          <span class={`wi${x.accent ? ' accent' : ''}`}>{x.w}</span>
+        </span>{' '}
+      </>
+    ))
+  }
+</Tag>

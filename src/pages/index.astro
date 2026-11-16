@@ -1,0 +1,209 @@
+---
+import Base from '../layouts/Base.astro';
+import Split from '../components/Split.astro';
+import { site, ticker, statement, work, services, steps, principles } from '../data/site';
+const marquee = [...ticker, ...ticker];
+---
+
+<Base>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"><span></span></div>
+
+  <header class="nav">
+    <a class="nav-logo" href="#top" aria-label={`${site.name} — home`}>{site.short}<i>®</i></a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#about">About</a>
+    </nav>
+    <a class="nav-cta" href="#contact" data-magnetic>Let’s talk</a>
+  </header>
+
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-bg" aria-hidden="true">
+        <span class="orb orb-a" data-speed="0.9" data-mouse="30"></span>
+        <span class="orb orb-b" data-speed="-0.6" data-mouse="-20"></span>
+        <svg class="ring" data-speed="0.4" viewBox="0 0 200 200" width="200" height="200" focusable="false">
+          <circle cx="100" cy="100" r="98" fill="none" stroke="currentColor" stroke-width="0.6" stroke-dasharray="2 6" />
+          <circle cx="100" cy="100" r="70" fill="none" stroke="currentColor" stroke-width="0.6" />
+        </svg>
+      </div>
+
+      <div class="hero-top">
+        <p class="pill"><span class="dot" aria-hidden="true"></span> Available for new projects</p>
+        <p class="hero-meta">{site.role}<br />{site.location}</p>
+      </div>
+
+      <div class="hero-copy">
+        <Split tag="h1" mode="css" class="mega" text="I build brands people *remember.*" />
+      </div>
+
+      <div class="hero-bottom">
+        <p class="hero-lede">
+          Strategy, identity and campaigns for founders and teams who’d rather be unforgettable than average.
+        </p>
+        <a class="scroll-cue" href="#work" aria-label="Scroll to selected work">
+          <span>Scroll</span>
+          <svg width="14" height="22" viewBox="0 0 14 22" fill="none" aria-hidden="true" focusable="false">
+            <path d="M7 1v19M1 14l6 6 6-6" stroke="currentColor" stroke-width="1.5" />
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- TICKER -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        {marquee.map((t) => <span>{t}<i>✦</i></span>)}
+      </div>
+    </div>
+
+    <!-- STATEMENT -->
+    <section class="statement-sec" aria-labelledby="statement-h">
+      <h2 id="statement-h" class="eyebrow">( Intro )</h2>
+      <Split tag="p" mode="scrub" class="statement" text={statement} />
+    </section>
+
+    <!-- WORK -->
+    <section class="work" id="work" aria-labelledby="work-h">
+      <div class="sec-head">
+        <h2 id="work-h" class="eyebrow">( Selected work )</h2>
+        <Split tag="p" class="xl" text="Recent *projects*" />
+      </div>
+
+      <ol class="cards">
+        {
+          work.map((p, i) => (
+            <li class="card">
+              <article class={`card-inner art-${i + 1}`} data-cursor="View">
+                <div class="card-art" aria-hidden="true">
+                  <span class="s s1" data-speed="0.8"></span>
+                  <span class="s s2" data-speed="-0.5"></span>
+                  <span class="s s3" data-speed="1.2"></span>
+                  <span class="s s4" data-speed="-1"></span>
+                </div>
+                <div class="card-info">
+                  <p class="card-n">{p.n}</p>
+                  <h3 class="card-title">{p.title}</h3>
+                  <p class="card-kind">{p.kind}</p>
+                  <ul class="tags">
+                    {p.tags.map((t) => <li>{t}</li>)}
+                    <li class="yr">{p.year}</li>
+                  </ul>
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services" id="services" aria-labelledby="services-h">
+      <div class="sec-head">
+        <h2 id="services-h" class="eyebrow">( What I do )</h2>
+        <Split tag="p" class="xl" text="Everything a brand *needs* to grow" />
+      </div>
+      <ul class="svc-list">
+        {
+          services.map((s, i) => (
+            <li class="svc">
+              <span class="svc-n">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="svc-t">{s.t}</h3>
+              <p class="svc-d">{s.d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <!-- PROCESS (pinned horizontal scroll on desktop) -->
+    <section class="process" id="process" aria-labelledby="process-h">
+      <div class="process-pin">
+        <div class="process-head">
+          <h2 id="process-h" class="eyebrow">( How it works )</h2>
+          <Split tag="p" class="xl" text="Four steps. *Zero* fluff." />
+        </div>
+        <ol class="track">
+          {
+            steps.map((s) => (
+              <li class="step">
+                <span class="step-n" aria-hidden="true">{s.n}</span>
+                <h3 class="step-t">{s.t}</h3>
+                <p class="step-d">{s.d}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about" aria-labelledby="about-h">
+      <div class="about-grid">
+        <div class="about-visual" aria-hidden="true">
+          <div class="portrait" data-speed="0.35">
+            <span class="portrait-initial">{site.short.charAt(0)}</span>
+          </div>
+          <span class="badge" data-speed="-0.8">
+            <svg viewBox="0 0 120 120" width="120" height="120" focusable="false">
+              <defs>
+                <path id="circ" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"></path>
+              </defs>
+              <text font-size="11" letter-spacing="3.2" fill="currentColor">
+                <textPath href="#circ">BRAND • STRATEGY • CREATIVE •</textPath>
+              </text>
+            </svg>
+          </span>
+        </div>
+        <div class="about-copy">
+          <h2 id="about-h" class="eyebrow">( About )</h2>
+          <Split tag="p" class="lg" text={`Hi, I’m ${site.short}. I make brands feel *inevitable.*`} />
+          <p class="about-p">
+            I’m a brand and marketing strategist based in Melbourne. I sit where strategy meets craft — shaping
+            the idea, then making sure every word, pixel and post carries it. I work with founders and small teams
+            who care about doing things properly.
+          </p>
+          <ul class="principles">
+            {
+              principles.map((p) => (
+                <li>
+                  <h3>{p.t}</h3>
+                  <p>{p.d}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER / CONTACT (uncovers beneath the page on desktop) -->
+  <footer class="footer" id="contact">
+    <div class="footer-inner">
+      <p class="eyebrow">( Contact )</p>
+      <Split tag="p" class="mega foot-title" text="Let’s make something *unforgettable.*" />
+      <a class="mail" href={`mailto:${site.email}`} data-magnetic data-cursor="Say hi">
+        {site.email}
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false">
+          <path d="M8 32 32 8M12 8h20v20" stroke="currentColor" stroke-width="2.5" />
+        </svg>
+      </a>
+      <div class="foot-row">
+        <ul class="socials">
+          {site.socials.map((s) => <li><a href={s.href} rel="noopener noreferrer" target="_blank">{s.label}</a></li>)}
+        </ul>
+        <p class="clock" data-tz={site.timeZone}>
+          <span>{site.location}</span> · <time data-clock>--:--</time>
+        </p>
+        <a class="to-top" href="#top">Back to top ↑</a>
+      </div>
+      <p class="legal">© {site.year} {site.name}. All rights reserved.</p>
+    </div>
+  </footer>
+</Base>
