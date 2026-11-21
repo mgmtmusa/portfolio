@@ -39,6 +39,19 @@ if (hand && hero && finePointer && !reduce) {
   });
 }
 
+/* Direct anchor loads (e.g. /#career): the web font can arrive after the browser
+   has jumped to the target and shift it. Re-align once fonts are ready, unless the
+   visitor has already started scrolling. */
+if (location.hash.length > 1 && 'fonts' in document) {
+  let touched = false;
+  const stop = () => (touched = true);
+  for (const ev of ['wheel', 'touchstart', 'keydown', 'pointerdown']) addEventListener(ev, stop, { once: true, passive: true });
+  document.fonts.ready.then(() => {
+    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (target && !touched) target.scrollIntoView({ block: 'start', behavior: 'instant' as ScrollBehavior });
+  });
+}
+
 /* Career staircase: blocks rise once when the section comes into view.
    Without JS (or with reduced motion) the staircase is simply drawn complete. */
 const career = document.querySelector<HTMLElement>('.career');

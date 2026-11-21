@@ -10,6 +10,11 @@ export default defineConfig({
   use: {
     baseURL: process.env.BASE_URL ?? `http://127.0.0.1:${PORT}`,
     trace: 'retain-on-failure',
+    // Protected Vercel previews: send the short-lived local OIDC token (never logged or committed).
+    extraHTTPHeaders:
+      process.env.BASE_URL && process.env.VERCEL_OIDC_TOKEN
+        ? { 'x-vercel-trusted-oidc-idp-token': process.env.VERCEL_OIDC_TOKEN }
+        : undefined,
   },
   // Tests run against the production build (`npm run build` first).
   webServer: process.env.BASE_URL
