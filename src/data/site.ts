@@ -31,7 +31,7 @@ export type Case = {
   question: string;
   responsibilities: string[];
   decisions: { t: string; d: string }[];
-  execution: string[];
+  execution?: string[];
   evidence: { text: string; href?: string; label?: string };
   tools?: string[];
 };
@@ -104,13 +104,12 @@ export const cases: Case[] = [
     when: 'February 2021 to now',
     where: 'National student brand in Melbourne, Sydney, Adelaide, Brisbane and Canberra',
     results: [
-      { v: '13.2K', l: 'followers, up from 400' },
       { v: '18', l: 'sold-out events hosted as lead MC' },
-      { v: '650', l: 'average attendance, up from 280' },
       { v: '70%', l: 'more revenue per event' },
+      { v: '5', l: 'cities: Melbourne, Sydney, Adelaide, Brisbane, Canberra' },
     ],
     brief: 'I Heart Uni is a national student brand that runs events for university students in five Australian cities.',
-    question: 'Grow an audience and fill rooms in five cities, mostly through organic content rather than paid reach.',
+    question: 'Grow an audience and fill rooms in five cities, mostly through organic content.',
     responsibilities: [
       'Brand positioning and content direction',
       'The event marketing calendar for every city',
@@ -123,26 +122,21 @@ export const cases: Case[] = [
       },
       {
         t: 'One calendar for five cities',
-        d: 'A single event marketing calendar kept positioning and timing consistent from Melbourne to Canberra.',
+        d: 'I set the event marketing calendar for every city, alongside the brand’s positioning and content direction.',
       },
       {
         t: 'Host the room',
-        d: 'As lead MC I hosted 18 sold-out events across the five cities, while average attendance grew from 280 to 650.',
+        d: 'I hosted the events myself as lead MC, from Melbourne to Canberra.',
       },
     ],
-    execution: [
-      'Brand positioning and content direction for a national audience',
-      'Event marketing calendar across Melbourne, Sydney, Adelaide, Brisbane and Canberra',
-      'Lead MC at 18 sold-out events',
-    ],
     evidence: {
-      text: 'Event photos and account analytics aren’t published here. The figures above are the before-and-after numbers from my time running the brand.',
+      text: 'Event photos and account analytics aren’t published here. The chart shows the start and current figures from my time running the brand.',
     },
   },
   {
     slug: 'the-lil-project',
     org: 'The Lil Project',
-    card: { tone: 'cream', v: '768', l: 'children reached in Zambia' },
+    card: { tone: 'cream', v: '768', l: 'children reached in Zambia (organisation total)' },
     title: 'Gigs that fund school buildings',
     summary:
       'I led event production and marketing for gigs with Melbourne artists that fund school construction in Zambia.',
@@ -169,7 +163,6 @@ export const cases: Case[] = [
         d: 'I built the partnership and sponsorship pipeline that each event drew on.',
       },
     ],
-    execution: ['Event production with Melbourne artists', 'Partnership and sponsorship pipeline', 'Social, email and on-the-ground promotion'],
     evidence: { text: 'The organisation’s work is public.', href: 'https://thelilproject.com', label: 'Visit thelilproject.com' },
   },
 ];
@@ -179,7 +172,7 @@ export const career = [
   {
     when: 'April 2021',
     t: 'Field Sales Representative',
-    d: 'Face-to-face sales of solar, battery and HVAC upgrades. Set the company’s highest day-one sales record.',
+    d: 'Door-to-door sales of solar, battery and HVAC upgrades. Set the company’s highest day-one sales record.',
   },
   {
     when: 'July 2021',
@@ -214,10 +207,8 @@ export const approach = [
   },
 ];
 
-export const experience = [
-  { when: '2023 to now', role: 'Marketing & Growth Specialist', org: 'Evitech', case: 'evitech' },
-  { when: '2022', role: 'Business Development & People Operations Manager', org: 'Evitech', note: 'Opened the NSW hub.' },
-  { when: '2021', role: 'B2B Sales Executive, Team Leader and Field Sales Representative', org: 'Evitech', note: '$2M+ in B2B contracts closed.' },
+export const experience: { when: string; role: string; org: string; case?: string; note?: string }[] = [
+  { when: '2021 to now', role: 'Field Sales Representative to Marketing & Growth Specialist', org: 'Evitech', case: 'evitech', note: 'Four roles, shown in the career path above.' },
   { when: '2021 to now', role: 'Brand Manager & Lead MC', org: 'I Heart Uni', case: 'i-heart-uni' },
   { when: '2023 to 2025', role: 'Event Coordinator', org: 'The Lil Project', case: 'the-lil-project' },
   { when: '2021 to 2023', role: 'Commerce Student Ambassador', org: 'University of Melbourne', note: 'MC for O-Week cohorts of 1,000 students; trained 12 new ambassadors.' },

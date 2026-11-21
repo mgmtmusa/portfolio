@@ -26,7 +26,7 @@
   /* Motion: control feedback, secondary transitions, hero choreography */
   --t-fast: 160ms;
   --t-mid: 300ms;
-  --t-hero: 700ms;
+  --t-hero: 560ms;
   --ease: cubic-bezier(0.2, 0.7, 0.1, 1);
   color-scheme: light;
 }
@@ -129,16 +129,19 @@ p { max-width: 62ch; }
 /* Landscape phones: size the name by height so role and actions stay on the first screen */
 @media (orientation: landscape) and (max-height: 520px) {
   .hero { padding-block: 1rem 1.5rem; }
-  .hero-name { font-size: calc((100svh - var(--hh) - 10rem) / 2.6); }
-  .hero-role { margin-top: 0.75rem; }
-  .hero-angle { font-size: 0.95rem; line-height: 1.45; }
-  .hero-actions { margin-top: 0.9rem; }
+  .hero-name { font-size: calc((100svh - var(--hh) - 12.5rem) / 2.6); }
+  .hero-role { margin-top: 0.75rem; font-size: 1.05rem; }
+  .hero-angle { font-size: 0.9rem; line-height: 1.4; max-width: 54ch; }
+  .hero-actions { margin-top: 0.75rem; }
+  .hero .hand-in { --cw: clamp(105px, 34svh, 150px); }
+  .hero .card-hand:nth-child(2) { --x: 48%; }
+  .hero .card-hand:nth-child(3) { --x: -48%; }
 }
 
 /* The hand: three case-study cards in a shallow 3D fan */
 .hand { position: relative; height: clamp(300px, 92vw, 430px); perspective: 1400px; }
 .hand-in {
-  --cw: clamp(150px, 40vw, 220px);
+  --cw: clamp(116px, 37vw, 220px);
   position: absolute; inset: 0; transform-style: preserve-3d;
   transform: rotateX(var(--rx, 4deg)) rotateY(var(--ry, -8deg));
 }
@@ -172,18 +175,24 @@ p { max-width: 62ch; }
   transform: translate3d(var(--x), var(--y), var(--z)) rotate(var(--r));
   transition: transform var(--t-mid) var(--ease);
 }
-.card-hand::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: var(--edge); transform: translateZ(-6px); }
+/* Card thickness is a flat offset edge on the face (a 3D pseudo-layer painted over the text in WebKit).
+   The face lifts while the link's hit area stays put, so a card never slides out from under the pointer. */
+.card-hand .card-in { box-shadow: 5px 6px 0 var(--edge); transition: transform var(--t-mid) var(--ease); }
 /* z-index mirrors the 3D depth so 2D hit-testing and audits agree with what you see */
 .card-hand:nth-child(1) { --x: 0%; --y: -3%; --z: 40px; --r: 0deg; z-index: 3; }
 .card-hand:nth-child(2) { --x: 58%; --y: 4%; --z: 0px; --r: 9deg; z-index: 2; }
 .card-hand:nth-child(3) { --x: -58%; --y: 4%; --z: -20px; --r: -9deg; z-index: 1; }
 .card-hand:hover, .card-hand:focus-visible { z-index: 4; }
-.card-hand:hover, .card-hand:focus-visible {
-  transform: translate3d(var(--x), calc(var(--y) - 7%), 110px) rotate(calc(var(--r) * 0.35));
+@media (max-width: 639px) {
+  .card-hand:nth-child(2) { --x: 54%; }
+  .card-hand:nth-child(3) { --x: -54%; }
 }
-.card-hand:focus-visible { outline-offset: 5px; }
+.card-hand:hover .card-in, .card-hand:focus-visible .card-in { transform: translate3d(0, -6%, 90px); }
+/* Focus ring sits on the face, so it travels with the lifted card */
+.card-hand:focus-visible { outline: none; }
+.card-hand:focus-visible .card-in { outline: 3px solid var(--ink); outline-offset: 4px; }
 @media (prefers-reduced-motion: no-preference) {
-  .card-hand { animation: deal var(--t-hero) var(--ease) backwards; animation-delay: calc(var(--i) * 90ms + 120ms); }
+  .card-hand { animation: deal var(--t-hero) var(--ease) backwards; animation-delay: calc(var(--i) * 70ms + 60ms); }
 }
 @keyframes deal { from { transform: translate3d(0, 22%, 0) rotate(0deg); opacity: 0; } }
 
@@ -191,10 +200,9 @@ p { max-width: 62ch; }
 .work, .approach, .exp, .caps, .bg { padding: clamp(4rem, 9vw, 8rem) var(--g); }
 .work { padding-top: clamp(3rem, 6vw, 5rem); }
 
-.feature { display: grid; gap: clamp(1.75rem, 4vw, 4.5rem); align-items: center; padding-bottom: clamp(3rem, 6vw, 5rem); }
-.feature .card-flat { max-width: 300px; }
-.feature-body { display: grid; gap: 1rem; justify-items: start; }
-@media (min-width: 800px) { .feature { grid-template-columns: minmax(220px, 320px) 1fr; } .feature .card-flat { max-width: none; } }
+.feature { padding-bottom: clamp(3rem, 6vw, 5rem); }
+.feature-body { display: grid; gap: 1rem; justify-items: start; max-width: 60rem; }
+.feature .h3 { font-size: clamp(2.25rem, 4.6vw, 4.25rem); }
 
 .results { display: flex; flex-wrap: wrap; gap: 1.25rem 2.5rem; margin: 0.5rem 0; }
 .results > div { display: flex; flex-direction: column; gap: 0.35rem; }
@@ -232,7 +240,7 @@ p { max-width: 62ch; }
 .stairs-wrap { display: grid; place-items: center; min-height: 340px; order: -1; }
 @media (min-width: 960px) { .stairs-wrap { order: 0; min-height: 520px; } }
 .stairs {
-  --u: clamp(40px, 6vw, 72px);
+  --u: clamp(34px, 4.6vw, 58px);
   position: relative; width: calc(var(--u) * 4); height: calc(var(--u) * 2.2);
   transform-style: preserve-3d; transform: rotateX(58deg) rotateZ(-42deg);
   margin-top: calc(var(--u) * 2.6);
@@ -244,9 +252,9 @@ p { max-width: 62ch; }
 }
 .f { position: absolute; }
 .f-top { inset: 0; transform: translateZ(var(--h)); background: var(--paper); }
-.f-front { left: 0; bottom: 0; width: 100%; height: var(--h); transform-origin: 50% 100%; transform: rotateX(-90deg); background: var(--red); }
-.f-side { left: 0; top: 0; width: var(--h); height: 100%; transform-origin: 0 50%; transform: rotateY(-90deg); background: #7a160b; }
-.blk-top .f-top { background: #3f8f6b; }
+.f-front { left: 0; bottom: 0; width: 100%; height: var(--h); transform-origin: 50% 100%; transform: rotateX(-90deg); background: #5e584f; }
+.f-side { left: 0; top: 0; width: var(--h); height: 100%; transform-origin: 0 50%; transform: rotateY(-90deg); background: #3a3631; }
+.blk-top .f-top { background: var(--red-lt); }
 @media (prefers-reduced-motion: no-preference) {
   .js .blk { transform: scale3d(1, 1, 0.04); transition: transform 520ms var(--ease); transition-delay: calc(var(--i) * 130ms); }
   .js .risen .blk { transform: none; }
@@ -294,10 +302,7 @@ p { max-width: 62ch; }
 
 /* ───────── Case study ───────── */
 .case { padding: clamp(1.5rem, 4vw, 3rem) var(--g) 0; }
-.case-top { display: grid; gap: 2.5rem; padding-bottom: clamp(2rem, 4vw, 3rem); align-items: end; }
 .case-head { display: grid; gap: 1rem; justify-items: start; }
-.case-top .card-flat { max-width: 240px; }
-@media (min-width: 1000px) { .case-top { grid-template-columns: minmax(0, 1fr) 280px; gap: clamp(3rem, 6vw, 6rem); } .case-top .card-flat { max-width: none; } }
 .back { margin-bottom: 1rem; }
 .case-title { font-size: clamp(2.75rem, 7.6vw, 7.25rem); max-width: 15ch; text-wrap: balance; }
 .case-summary { font-size: clamp(1.15rem, 1.6vw, 1.4rem); line-height: 1.45; max-width: 50ch; }
@@ -353,4 +358,7 @@ p { max-width: 62ch; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: 1ms !important; }
   .hand-in { transform: rotateX(4deg) rotateY(-8deg); }
+  .card-hand:hover .card-in, .card-hand:focus-visible .card-in { transform: none; }
+  .card-hand:hover .card-in { outline: 3px solid var(--ink); outline-offset: 4px; }
+  .card-hand:hover .card-cta { text-decoration: underline; text-underline-offset: 0.2em; }
 }

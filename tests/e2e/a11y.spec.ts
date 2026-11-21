@@ -35,8 +35,9 @@ test.describe('keyboard', () => {
       found = await page.evaluate(() => document.activeElement?.closest('.hand') !== null);
     }
     expect(found).toBe(true);
-    const outline = await page.evaluate(() => getComputedStyle(document.activeElement!).outlineStyle);
-    expect(outline).not.toBe('none');
+    // The ring is drawn on the card face so it moves with the lifted card.
+    const outline = await page.evaluate(() => getComputedStyle(document.activeElement!.querySelector('.card-in')!).outlineStyle);
+    expect(outline).toBe('solid');
     await page.keyboard.press('Enter');
     await expect(page).toHaveURL(/\/work\/evitech\/$/);
   });

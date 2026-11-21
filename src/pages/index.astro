@@ -4,6 +4,7 @@ import CaseCard from '../components/CaseCard.astro';
 import { site, cases, career, approach, experience, capabilities, tools, recognition, caseBySlug } from '../data/site';
 
 const [lead, ...rest] = cases;
+
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -51,10 +52,9 @@ const jsonLd = {
     <h2 class="h2" id="work-h">Selected work</h2>
 
     <article class="feature">
-      <CaseCard c={lead} />
       <div class="feature-body">
         <p class="meta">{lead.org}, {lead.when}</p>
-        <h3 class="h3"><a href={`/work/${lead.slug}/`}>{lead.title}</a></h3>
+        <h3 class="h3">{lead.title}</h3>
         <p class="lede">{lead.summary}</p>
         <dl class="results">
           {
@@ -77,9 +77,7 @@ const jsonLd = {
             <p class="meta">
               {c.org}, {c.when}
             </p>
-            <h3 class="h3">
-              <a href={`/work/${c.slug}/`}>{c.title}</a>
-            </h3>
+            <h3 class="h3">{c.title}</h3>
             <p>{c.summary}</p>
             <dl class="results results-sm">
               {c.results.slice(0, 2).map((r) => (
@@ -93,7 +91,7 @@ const jsonLd = {
               ))}
             </dl>
             <a class="link" href={`/work/${c.slug}/`}>
-              Read the {c.org} case study
+              Read the case study<span class="sr">: {c.org}</span>
             </a>
           </article>
         ))
@@ -121,7 +119,7 @@ const jsonLd = {
     <div class="career-in">
       <div class="career-copy">
         <h2 class="h2" id="ca-h">From the sales floor to growth</h2>
-        <p class="career-sub">Four roles at Evitech since April 2021, promoted roughly every twelve months.</p>
+        <p class="career-sub">Four roles at Evitech since April 2021: three promotions in under two years.</p>
         <ol class="rungs">
           {
             career.map((r) => (
@@ -171,12 +169,12 @@ const jsonLd = {
             <span class="exp-role">{e.role}</span>
             <span class="exp-org">{e.org}</span>
             <span class="exp-note">
-              {e.case ? (
+              {e.note}
+              {e.note && e.case && ' '}
+              {e.case && (
                 <a class="link" href={`/work/${e.case}/`}>
                   Case study<span class="sr">: {caseBySlug(e.case).title}</span>
                 </a>
-              ) : (
-                e.note
               )}
             </span>
           </li>

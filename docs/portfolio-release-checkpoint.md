@@ -1,6 +1,6 @@
 # Portfolio release checkpoint
 
-_Last updated: phase 1 — baseline_
+_Last updated: phase 4 — review cycle 1 fixed, awaiting re-review of the frozen commit_
 
 ## Where things are
 
@@ -17,7 +17,10 @@ npm run build               # static build to dist/
 npm run preview             # serve dist/ on :4321
 npm run check               # astro check (types)          [added in phase 2]
 npm run test:e2e            # Playwright suite against the production build [added in phase 2]
-node scripts/qa/snapshot.mjs <url> <outdir>          # 8-viewport screenshots + overflow/name metrics
+node scripts/qa/capture.mjs <url> <outdir> [full]   # all pages × 8 viewports + overflow/name metrics
+node scripts/qa/engines.mjs <url> <outdir>          # hero in Chromium, WebKit, iPhone portrait/landscape
+node scripts/qa/interactions.mjs <url> <outdir>     # hover, keyboard focus, reduced motion
+npm run og                                          # regenerate public/og.png
 node scripts/qa/lighthouse.mjs <url> <outdir> 3 mobile   # median of 3 Lighthouse runs
 ```
 
@@ -67,6 +70,72 @@ Other baseline problems:
 - Signature interaction: the hero card hand becomes three real links to case studies.
 - Case studies as static Astro routes at `/work/<slug>/` (simplest deep-linkable, shareable, back-button-safe option).
 
+## Phase 2–3: redesign (commits b9f8a99, ca4a5f0 + working tree)
+
+Design plan (Frontend Design skill, revised against the brief):
+- Palette: paper #ede8de, ink #171512, stone #5e584f, signal red #bd2617 (sparingly), court green #124734, card cream #d8cfbd.
+- Type: Archivo variable only. Condensed 850 uppercase for the name and section headlines; sentence case everywhere else. No mono labels, no single-word headline accents, no middle-dot strings, no appended arrows.
+- One bold element: the hero hand of three case-study cards (real links). Everything else quiet and editorial.
+- Motion tokens: 160 ms feedback, 300 ms secondary, 700 ms hero deal-in. One orchestrated load moment; the career staircase rises once on view. No count-ups, no section fade-ups. GSAP removed.
+- Content: metrics live where they were earned (case results; career rungs). The impact grid is gone. Company/organisation outcomes are labelled.
+
+Routes: `/`, `/work/evitech/`, `/work/i-heart-uni/`, `/work/the-lil-project/`, `/404`, `/sitemap.xml`.
+
+## Test results so far
+
+| Check | Result | Evidence |
+| --- | --- | --- |
+| `npx astro check` | 0 errors | — |
+| Playwright, local build (chromium, webkit, Pixel 7 emu, iPhone 14 emu) | 84 passed, 32 intentional skips | `npx playwright test` |
+| Playwright vs protected Vercel preview (OIDC header) | 83 passed, 1 failed (iPhone anchor load) → fixed in ca4a5f0, 12/12 on repeat | — |
+| Width sweep 320–1920 + 1366×700 + 844×390 | no overflow; name ≥ 12 px from the right edge | `docs/evidence/pass2/` |
+| axe WCAG 2.2 AA (home, 3 cases, 404) | 0 violations after label-in-name and stacking fixes | test suite |
+| Lighthouse mobile, local build, median of 3 | Perf 100 · LCP 1,053 ms · CLS 0 · TBT 13 ms · 41.8 KB total (was 89.8 KB) | `docs/evidence/pass1/lh-mobile-summary.json` |
+| Preview smoke (vercel curl) | all routes 200, 404 page 404, assets 200; HTML identical to local build except Vercel Live script | — |
+
+Blocked / limited:
+- **Firefox:** Playwright's Firefox build exits with "Could not find profile folder" on this macOS release (also outside the tool sandbox and after a forced reinstall). Project gated behind `PW_FIREFOX=1`.
+- **Real iPhone:** not available; WebKit + iPhone 14 emulation only.
+- **Field data (INP):** no real-user data available for this site.
+- **Preview access:** Vercel Deployment Protection kept on. Preview checked with `vercel curl` and Playwright using the local OIDC header.
+
+## New-copy claim review (source: master résumé PDF)
+
+| Copy | Résumé source | Status |
+| --- | --- | --- |
+| "door to door" (hero, approach, career rung 1) | "I came up through sales, from door-to-door to leading a team" | Supported |
+| "flew to Sydney weekly … negotiated its warehouse lease" | "Flew to Sydney weekly and negotiated the warehouse lease" | Supported |
+| Claude, Zapier, GoHighLevel for "lead scoring" | "AI and workflow automation with Claude, Zapier and GoHighLevel for reporting, lead scoring and production" | Supported |
+| "Most of the growth came from organic content" | "mostly through organic content and a community-first approach" | Supported; "rather than paid reach" removed |
+| "One calendar for five cities" | "Set brand positioning, content direction and the event marketing calendar" | Reworded to the résumé's own claim |
+| "I led event production and marketing" (The Lil Project, Event Coordinator) | "Led event production and marketing strategy for a social impact music organisation" | Supported by résumé wording; owner to confirm title vs scope |
+| "Meta Business Suite" | Résumé tools: "Meta Business Suite · Meta Pixel" | Supported |
+| "Three promotions in under two years" | Dates: Apr 2021 → Jul 2021 → Jan 2022 → Jan 2023 | Supported by dates (replaces "roughly every twelve months", which contradicted them) |
+
+## Review cycle 1 — Head of Engineering verdict: BLOCK (on ca4a5f0)
+
+| # | Severity | Finding | Resolution |
+| --- | --- | --- | --- |
+| 1 | Critical | Hero cards blank in WebKit (3D `::after` edge painted over faces) | Edge layer removed; thickness is a flat offset edge on the face. Verified in WebKit desktop, iPhone 14 portrait and landscape. Visual baselines per engine added (`tests/e2e/hero.spec.ts`). |
+| 2 | Major | Hover jitter at card edge | The face lifts; the link's hit area stays still. Hover-stability test added. |
+| 3 | Major | 844×390: CTA cut off, red card clipped | Landscape sizing by height, smaller hand with specific selectors. Geometry test (CTA fully visible, cards inside frame, no text under cards) at 8 sizes. |
+| 4 | Major (process) | Evidence not tied to one SHA | Release candidate frozen and re-verified on a single commit (see below). |
+| 5 | Minor | Focus ring detached from lifted card | Ring moved to the card face. Test added. |
+| 6 | Minor | Reduced motion still moved cards | No movement; outline + underline cue. Test added. |
+| 7 | Minor | New copy claims unreviewed | Table above. |
+| 8 | Minor | 768 unlabelled on hero card and OG | "(organisation total)" on card and OG image. |
+| 9 | Minor | Duplicated claims | Feature card removed from Selected work; decorative card removed from case pages; Evitech experience rows merged into one; I Heart Uni attendance shown once (chart). |
+| 10 | Minor | "Read the The Lil Project" | Tile links read "Read the case study" with the org name for screen readers. |
+| 11 | Minor | Redundant tab stops | Tile and feature headings are no longer links. |
+| 12 | Minor | "Roughly every twelve months" contradicted the dates | "Three promotions in under two years". |
+| 13 | Minor | Test gaps | Geometry, visual, hover, focus and reduced-motion tests added. |
+| 14 | Nit | Canonical on 404 | Canonical omitted when `noindex`. |
+| 15 | Nit | Stale `snapshot.mjs`, stale doc | Script removed; doc updated. |
+| 16 | Nit | Skill committed | Kept on purpose: the brief asked for the skill at project scope. |
+| 17 | Nit | Hero choreography ~1,000 ms | 560 ms with 70 ms stagger, finishes ≈ 760 ms. |
+| 18 | Nit | OG image unfinished | Re-laid out; all three cards readable. |
+| 19 | Nit | Staircase competes with the hand | Staircase made smaller and monochrome (ink, stone, one light-red top); the hand keeps the colour. Eyebrow above case H1 removed. |
+
 ## Next action
 
-Phase 2: add `check` and `test:e2e` scripts, then redesign the homepage and build the case-study routes.
+Commit, push, verify the Vercel preview of that exact SHA (suite with OIDC header, `vercel curl` smoke), run Lighthouse on a clean build of the SHA, then send the frozen SHA back to the Head of Engineering for re-review.
