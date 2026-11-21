@@ -143,6 +143,8 @@ p { max-width: 62ch; }
   --cw: clamp(116px, 37vw, 220px);
   position: absolute; inset: 0; transform-style: preserve-3d;
   transform: rotateX(var(--rx, 4deg)) rotateY(var(--ry, -8deg));
+  /* The container is a full-size 3D plane; let pointer events fall through to the cards */
+  pointer-events: none;
 }
 @media (min-width: 960px), (min-width: 640px) and (orientation: landscape) {
   .hand { height: min(560px, calc(100svh - var(--hh) - 3rem)); }
@@ -159,11 +161,11 @@ p { max-width: 62ch; }
 .card-green { --face: var(--green); --fg: var(--paper); --edge: #0a2b1f; }
 .card-red { --face: var(--red); --fg: var(--paper); --edge: #761307; }
 .card-cream { --face: var(--cream); --fg: var(--ink); --edge: #a99d86; }
-.card-org { font-weight: 750; font-size: 6.2cqw; line-height: 1.2; }
+.card-org { font-weight: 750; font-size: max(10px, 6.2cqw); line-height: 1.2; }
 .card-title { font-size: 10.6cqw; margin-top: 4cqw; align-self: start; text-wrap: balance; }
-.card-stat { font-size: 5.4cqw; font-weight: 600; line-height: 1.25; }
+.card-stat { font-size: max(9.5px, 5.4cqw); font-weight: 600; line-height: 1.25; }
 .card-stat b { display: block; font-size: 30cqw; line-height: 0.85; margin-bottom: 1.5cqw; }
-.card-cta { margin-top: 5cqw; padding-top: 4cqw; border-top: 1.5px solid currentColor; font-size: 5.2cqw; font-weight: 750; }
+.card-cta { margin-top: 5cqw; padding-top: 4cqw; border-top: 1.5px solid currentColor; font-size: max(9.5px, 5.2cqw); font-weight: 750; }
 .card-flat { width: 100%; max-width: 340px; }
 .card-flat:hover .card-cta { text-decoration: underline; text-underline-offset: 0.2em; }
 
@@ -178,9 +180,9 @@ p { max-width: 62ch; }
    The face lifts while the link's hit area stays put, so a card never slides out from under the pointer. */
 .card-hand .card-in { box-shadow: 5px 6px 0 var(--edge); transition: transform var(--t-mid) var(--ease); }
 /* z-index mirrors the 3D depth so 2D hit-testing and audits agree with what you see */
-.card-hand:nth-child(1) { --x: 0%; --y: -3%; --z: 40px; --r: 0deg; z-index: 3; }
-.card-hand:nth-child(2) { --x: 58%; --y: 4%; --z: 0px; --r: 9deg; z-index: 2; }
-.card-hand:nth-child(3) { --x: -58%; --y: 4%; --z: -20px; --r: -9deg; z-index: 1; }
+.card-hand:nth-child(1) { --x: 0%; --y: -3%; --z: 40px; --r: 0deg; z-index: 3; pointer-events: auto; }
+.card-hand:nth-child(2) { --x: 58%; --y: 4%; --z: 20px; --r: 9deg; z-index: 2; pointer-events: auto; }
+.card-hand:nth-child(3) { --x: -58%; --y: 4%; --z: 2px; --r: -9deg; z-index: 1; pointer-events: auto; }
 .card-hand:hover, .card-hand:focus-visible { z-index: 4; }
 @media (max-width: 639px) {
   .card-hand:nth-child(2) { --x: 54%; }
@@ -301,7 +303,7 @@ p { max-width: 62ch; }
 
 /* ───────── Case study ───────── */
 .case { padding: clamp(1.5rem, 4vw, 3rem) var(--g) 0; }
-.case-head { display: grid; gap: 1rem; justify-items: start; }
+.case-head { display: grid; gap: 1rem; justify-items: start; padding-bottom: clamp(2rem, 4vw, 3rem); }
 .back { margin-bottom: 1rem; }
 .case-title { font-size: clamp(2.75rem, 7.6vw, 7.25rem); max-width: 15ch; text-wrap: balance; }
 .case-summary { font-size: clamp(1.15rem, 1.6vw, 1.4rem); line-height: 1.45; max-width: 50ch; }

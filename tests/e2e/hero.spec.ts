@@ -87,3 +87,26 @@ test.describe('hero cards under reduced motion', () => {
     expect(after.o).toBe('solid');
   });
 });
+
+test.describe('every hero card opens its case study by pointer or tap', () => {
+  // Regression: a card placed behind the hand's 3D plane was unreachable by pointer and touch.
+  for (const [i, slug] of ['evitech', 'i-heart-uni', 'the-lil-project'].entries()) {
+    test(`card ${i + 1} → /work/${slug}/`, async ({ page, isMobile }) => {
+      await page.goto('/');
+      await page.waitForTimeout(900);
+      // Find a point where this card is the topmost hit target.
+      const pt = await page.evaluate((idx) => {
+        const card = document.querySelectorAll('.card-hand')[idx];
+        const r = card.getBoundingClientRect();
+        for (let y = r.top + 8; y < r.bottom - 8; y += 8)
+          for (let x = r.left + 8; x < r.right - 8; x += 8)
+            if (document.elementFromPoint(x, y)?.closest('.card-hand') === card) return { x, y };
+        return null;
+      }, i);
+      expect(pt, `card ${i + 1} has no exposed, hittable area`).not.toBeNull();
+      if (isMobile) await page.touchscreen.tap(pt!.x, pt!.y);
+      else await page.mouse.click(pt!.x, pt!.y);
+      await expect(page).toHaveURL(new RegExp(`/work/${slug}/$`));
+    });
+  }
+});
