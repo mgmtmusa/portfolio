@@ -7,28 +7,14 @@
       "a11y": 100,
       "bp": 100,
       "seo": 100,
-      "lcp": 1057,
+      "lcp": 1053,
       "cls": 0,
-      "tbt": 31,
-      "fcp": 673,
+      "tbt": 33,
+      "fcp": 648,
       "jsKB": 0,
       "fontKB": 31.8,
       "imgKB": 0,
-      "totalKB": 41.9
-    },
-    {
-      "perf": 100,
-      "a11y": 100,
-      "bp": 100,
-      "seo": 100,
-      "lcp": 1055,
-      "cls": 0,
-      "tbt": 30,
-      "fcp": 629,
-      "jsKB": 0,
-      "fontKB": 31.8,
-      "imgKB": 0,
-      "totalKB": 41.9
+      "totalKB": 42
     },
     {
       "perf": 100,
@@ -37,12 +23,40 @@
       "seo": 100,
       "lcp": 1053,
       "cls": 0,
-      "tbt": 27,
-      "fcp": 629,
+      "tbt": 37,
+      "fcp": 627,
       "jsKB": 0,
       "fontKB": 31.8,
       "imgKB": 0,
-      "totalKB": 41.9
+      "totalKB": 42
+    },
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1052,
+      "cls": 0,
+      "tbt": 55,
+      "fcp": 626,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 42
+    },
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1053,
+      "cls": 0,
+      "tbt": 49,
+      "fcp": 627,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 42
     },
     {
       "perf": 100,
@@ -52,25 +66,11 @@
       "lcp": 1053,
       "cls": 0,
       "tbt": 0,
-      "fcp": 630,
+      "fcp": 628,
       "jsKB": 0,
       "fontKB": 31.8,
       "imgKB": 0,
-      "totalKB": 41.9
-    },
-    {
-      "perf": 100,
-      "a11y": 100,
-      "bp": 100,
-      "seo": 100,
-      "lcp": 1054,
-      "cls": 0,
-      "tbt": 0,
-      "fcp": 631,
-      "jsKB": 0,
-      "fontKB": 31.8,
-      "imgKB": 0,
-      "totalKB": 41.9
+      "totalKB": 42
     }
   ],
   "median": {
@@ -78,13 +78,13 @@
     "a11y": 100,
     "bp": 100,
     "seo": 100,
-    "lcp": 1054,
+    "lcp": 1053,
     "cls": 0,
-    "tbt": 27,
-    "fcp": 630,
+    "tbt": 37,
+    "fcp": 627,
     "jsKB": 0,
     "fontKB": 31.8,
     "imgKB": 0,
-    "totalKB": 41.9
+    "totalKB": 42
   }
 }

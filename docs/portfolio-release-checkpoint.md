@@ -1,6 +1,6 @@
 # Portfolio release checkpoint
 
-_Last updated: phase 5 — release candidate 14fc013 verified, re-review in progress_
+_Last updated: phase 6 — review cycle 2 fixed; release candidate f2add8b verified; cycle 3 re-review in progress_
 
 ## Where things are
 
@@ -136,6 +136,31 @@ Blocked / limited:
 | 18 | Nit | OG image unfinished | Re-laid out; all three cards readable. |
 | 19 | Nit | Staircase competes with the hand | Staircase made smaller and monochrome (ink, stone, one light-red top); the hand keeps the colour. Eyebrow above case H1 removed. |
 
+## Review cycle 2 — Head of Engineering verdict: BLOCK (on 14fc013)
+
+All 19 cycle-1 findings confirmed fixed. New findings:
+
+| # | Severity | Finding | Resolution (f2add8b) |
+| --- | --- | --- | --- |
+| 1 | Major | The Lil Project hero card couldn't be clicked, tapped or hovered (it sat behind the hand's full-size 3D plane, which won hit-testing). Also present in ca4a5f0. | `.hand-in` passes pointer events through; every card sits in front of the plane. New test clicks/taps each card at an exposed point in all four engines. |
+| 2 | Minor | Case facts touched the results rule (padding lost with the removed wrapper) | `.case-head` padding restored |
+| 3 | Nit | Card text 6–8 px on phones | Floors of 9.5–10 px on small card text |
+| 4 | Nit | Selected work is text-only at desktop | Kept on purpose: the cards live in the hero; Selected work is the typographic reading layer |
+
+## Release candidate f2add8b — verification
+
+Preview of exactly this SHA: https://portfolio-1921l3we7-musa-c771.vercel.app (Vercel API `gitSource.sha` f2add8b9885f…; protected, `x-robots-tag: noindex`).
+
+| Check | Result |
+| --- | --- |
+| `npx astro check` | 0 errors |
+| Playwright, local build | 113 passed |
+| Playwright, preview (OIDC header) | 113 passed |
+| Lighthouse mobile home, 5 runs | 100 ×5 · LCP 1,053 ms · TBT 0–55 ms (median 37) · CLS 0 |
+| Lighthouse mobile /work/evitech/, 3 runs | 100 ×3 · LCP 1,053 ms · TBT 0–75 ms |
+| Preview smoke (`vercel curl`) | 5 routes 200, 404 → 404, og/sitemap/robots 200 |
+| Evidence | `docs/evidence/rc-final/` regenerated from f2add8b |
+
 ## Release candidate 14fc013 — verification
 
 App code frozen at **14fc013** (later commits on the branch touch only `docs/`).
@@ -160,4 +185,4 @@ Lighthouse note: on 2a37962 one of eight runs scored 75 (TBT 1,376 ms, unattribu
 
 ## Next action
 
-Wait for the Head of Engineering re-review of 14fc013. If APPROVE: update the draft PR and hand off. If BLOCK: fix, re-freeze, re-verify, re-review.
+Wait for the Head of Engineering cycle-3 verdict on f2add8b. If APPROVE: update the draft PR body and hand off. If BLOCK: fix, re-freeze, re-verify, re-review.

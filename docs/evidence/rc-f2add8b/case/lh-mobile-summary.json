@@ -1,0 +1,62 @@
+{
+  "url": "http://127.0.0.1:4321/work/evitech/",
+  "preset": "mobile",
+  "runs": [
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1052,
+      "cls": 0,
+      "tbt": 60,
+      "fcp": 601,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 40.5
+    },
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1053,
+      "cls": 0,
+      "tbt": 75,
+      "fcp": 601,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 40.5
+    },
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1053,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 602,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 40.5
+    }
+  ],
+  "median": {
+    "perf": 100,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 1053,
+    "cls": 0,
+    "tbt": 60,
+    "fcp": 601,
+    "jsKB": 0,
+    "fontKB": 31.8,
+    "imgKB": 0,
+    "totalKB": 40.5
+  }
+}
