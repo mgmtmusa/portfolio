@@ -1,246 +1,244 @@
 ---
 import Base from '../layouts/Base.astro';
-import Split from '../components/Split.astro';
-import { site, impact, ladder, experience, disciplines, tools, recognition } from '../data/site';
-const pad = (n: number) => String(n).padStart(2, '0');
-const fmt = (x: (typeof impact)[number]) => `${x.pre}${x.dec ? x.v.toFixed(x.dec) : x.v}${x.suf}`;
+import CaseCard from '../components/CaseCard.astro';
+import { site, cases, career, approach, experience, capabilities, tools, recognition, caseBySlug } from '../data/site';
+
+const [lead, ...rest] = cases;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: site.role,
+  url: site.url,
+  email: `mailto:${site.email}`,
+  sameAs: [site.linkedin],
+  worksFor: { '@type': 'Organization', name: 'Evitech Pty Ltd' },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'University of Melbourne' },
+  address: { '@type': 'PostalAddress', addressLocality: 'Melbourne', addressRegion: 'VIC', addressCountry: 'AU' },
+  knowsLanguage: ['English', 'Bengali', 'Hindi'],
+};
 ---
 
-<Base>
-  <a class="skip" href="#main">Skip to content</a>
-  <div class="progress" aria-hidden="true"></div>
-
-  <header class="bar">
-    <a class="bar-name" href="#top">{site.name}</a>
-    <p class="bar-meta">{site.role} Specialist<br />{site.location}</p>
-    <nav class="bar-nav" aria-label="Primary">
-      <a href="#impact">Impact</a>
-      <a href="#story">Story</a>
-      <a href="#experience">Experience</a>
-      <a href="#skills">Skills</a>
-    </nav>
-    <p class="bar-time">Local time<br /><time data-clock>--:--</time></p>
-    <a class="bar-cta" href="#contact">Get in touch ↗</a>
-  </header>
-
-  <main id="main">
-    <!-- ───────── HERO ───────── -->
-    <section class="hero" id="top">
-      <p class="cap cap-l">
-        <span class="lbl">Now</span>
-        Marketing &amp; Growth Specialist at Evitech. I turn campaign data into decisions.
-      </p>
-      <p class="cap cap-r">
-        <span class="lbl">Before</span>
-        I came up through sales — from door-to-door to $2M+ in B2B contracts closed.
-      </p>
-
-      <!-- 3D: a player card with real thickness, with a deck of cards fanned behind it -->
-      <div class="stage" aria-hidden="true">
-        <div class="scene">
-          <div class="card-flip">
-            <div class="card-tilt">
-              <div class="face front">
-                <div class="fc-top"><span>No. 01</span><span>Melbourne</span></div>
-                <div class="fc-mono">MW</div>
-                <div class="fc-name">Musa<br />Abdullah Walid</div>
-                <div class="fc-stats">
-                  <span><b>28%</b>Lower CPA</span>
-                  <span><b>65%</b>More leads</span>
-                  <span><b>$2M+</b>Closed</span>
-                </div>
-                <div class="fc-band">Marketing &amp; Growth · BCom UniMelb</div>
-              </div>
-              {Array.from({ length: 6 }, (_, i) => <div class="edge" style={`--z:${-(i + 1) * 0.9}px`}></div>)}
-              <div class="face back">
-                <div class="fc-top"><span>The roster</span><span>2017 — Now</span></div>
-                <ol class="fb-list">
-                  <li><b>Evitech</b>Sales → Marketing &amp; Growth</li>
-                  <li><b>I Heart Uni</b>Brand Manager &amp; Lead MC</li>
-                  <li><b>The Lil Project</b>Event Coordinator</li>
-                  <li><b>UniMelb</b>Commerce Ambassador</li>
-                  <li><b>Roger David</b>118% of target</li>
-                </ol>
-                <div class="fb-foot">English · Bangla · Hindi</div>
-              </div>
-            </div>
-          </div>
-          <div class="deck">
-            <div class="dk dk-1" style="--n:1"><span class="dk-org">Evitech</span><span class="dk-v">$2M+</span><span class="dk-l">B2B closed</span></div>
-            <div class="dk dk-2" style="--n:2"><span class="dk-org">I Heart Uni</span><span class="dk-v">13.2K</span><span class="dk-l">Audience built</span></div>
-            <div class="dk dk-3" style="--n:3"><span class="dk-org">The Lil Project</span><span class="dk-v">768</span><span class="dk-l">Children reached</span></div>
-          </div>
-        </div>
-      </div>
-
-      <h1 class="name">
-        <span class="name-l"><Split tag="span" mode="css" text="Musa Abdullah" /></span>
-        <span class="name-l name-l2"><Split tag="span" mode="css" text="Walid" /><span class="name-role" aria-hidden="true">Marketing &amp;<br />Growth</span></span>
+<Base title={`${site.name} — ${site.role}, ${site.city}`} path="/" jsonLd={jsonLd}>
+  <!-- ───────── Hero ───────── -->
+  <section class="hero" id="top" aria-labelledby="hero-name">
+    <div class="hero-copy">
+      <h1 class="hero-name" id="hero-name">
+        <span>Musa</span>
+        <span>Abdullah</span>
+        <span>Walid</span>
       </h1>
-    </section>
-
-    <!-- ───────── STATEMENT ───────── -->
-    <section class="statement" aria-labelledby="st-h">
-      <h2 id="st-h" class="lbl">( Profile )</h2>
-      <Split tag="p" mode="scrub" class="st-text" text="I came up through sales, so I know what a lead is *worth.* Now I build the marketing that brings them in." />
-    </section>
-
-    <!-- ───────── IMPACT ───────── -->
-    <section class="impact" id="impact" aria-labelledby="im-h">
-      <div class="sec-head">
-        <p class="lbl">( Key impact )</p>
-        <Split tag="h2" id="im-h" class="sec-title" text="The *numbers.*" />
+      <p class="hero-role">Marketing &amp; Growth Specialist in Melbourne</p>
+      <p class="hero-angle">
+        I came up through sales — door to door, then $2M+ in B2B contracts — so I build marketing around what a lead is
+        actually worth.
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-ink" href="#work">View selected work</a>
+        <a class="link" href={`mailto:${site.email}`}>or email me</a>
       </div>
-      <ul class="stats">
-        {
-          impact.map((x) => (
-            <li class="stat">
-              <span class="stat-v" data-count={x.v} data-pre={x.pre} data-suf={x.suf} data-dec={x.dec ?? 0}>{fmt(x)}</span>
-              <span class="stat-l">{x.l}</span>
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-
-    <!-- ───────── LADDER (3D) ───────── -->
-    <section class="ladder" id="story" aria-labelledby="ld-h">
-      <div class="ladder-pin">
-        <div class="ladder-copy">
-          <p class="lbl lbl-inv">Evitech Pty Ltd · Energy efficiency, solar &amp; HVAC · Apr 2021 — Now</p>
-          <Split tag="h2" class="ld-title" text="A promotion *every year.*" />
-          <ol class="rungs">
-            {
-              ladder.map((r, i) => (
-                <li class="rung" style={`--i:${i}`}>
-                  <span class="rung-n">{r.when}</span>
-                  <span class="rung-t">{r.t}</span>
-                  <span class="rung-d">{r.d}</span>
-                </li>
-              ))
-            }
-          </ol>
-        </div>
-        <div class="stairs-wrap" aria-hidden="true">
-          <div class="stairs">
-            {
-              ladder.map((_, i) => (
-                <div class={`blk${i === ladder.length - 1 ? ' blk-top' : ''}`} style={`--i:${i}`}>
-                  <div class="f f-top"><span>{pad(i + 1)}</span></div>
-                  <div class="f f-front"></div>
-                  <div class="f f-side"></div>
-                </div>
-              ))
-            }
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ───────── EXPERIENCE ───────── -->
-    <section class="exp" id="experience" aria-labelledby="ex-h">
-      <div class="sec-head">
-        <p class="lbl">( Experience · 2017 — Now )</p>
-        <Split tag="h2" id="ex-h" class="sec-title" text="Where I’ve *worked.*" />
-      </div>
-      <ol class="exp-list">
-        {
-          experience.map((e) => (
-            <li class="row">
-              <span class="row-when">{e.when}</span>
-              <span class="row-role">{e.role}</span>
-              <span class="row-org">
-                {e.href ? <a href={e.href} rel="noopener noreferrer" target="_blank">{e.org} ↗</a> : e.org}
-              </span>
-              <span class="row-note">{e.note}</span>
-            </li>
-          ))
-        }
-      </ol>
-    </section>
-
-    <!-- ───────── SKILLS ───────── -->
-    <section class="skills" id="skills" aria-labelledby="sk-h">
-      <div class="sec-head">
-        <p class="lbl">( Core skills )</p>
-        <Split tag="h2" id="sk-h" class="sec-title" text="Four *disciplines.*" />
-      </div>
-      <div class="arenas">
-        {
-          disciplines.map((a) => (
-            <article class="arena">
-              <div class="arena-in">
-                <span class="arena-n">{a.n}</span>
-                <h3 class="arena-t">{a.t}</h3>
-                <p class="arena-lede">{a.lede}</p>
-                <ul class="arena-list">
-                  {a.skills.map((s) => <li>{s}</li>)}
-                </ul>
-              </div>
-            </article>
-          ))
-        }
-      </div>
-      <div class="tools">
-        <p class="lbl">Tools</p>
-        <ul class="tool-list">{tools.map((t) => <li>{t}</li>)}</ul>
-      </div>
-    </section>
-
-    <!-- ───────── RECOGNITION ───────── -->
-    <section class="recog" aria-labelledby="rc-h">
-      <div class="sec-head">
-        <p class="lbl">( International recognition )</p>
-        <Split tag="h2" id="rc-h" class="sec-title" text="Represented *Bangladesh.*" />
-      </div>
-      <ol class="rc-list">
-        {
-          recognition.map((r) => (
-            <li class="rc">
-              <span class="row-when">{r.when}</span>
-              <span class="rc-t">{r.t}</span>
-              <span class="rc-d">{r.d}</span>
-            </li>
-          ))
-        }
-      </ol>
-    </section>
-
-    <!-- ───────── CREDENTIALS ───────── -->
-    <section class="creds" aria-labelledby="cr-h">
-      <h2 id="cr-h" class="sr">Education, languages and interests</h2>
-      <div class="cred">
-        <span class="lbl">Education</span>
-        <p class="cred-big">Bachelor of Commerce</p>
-        <p class="cred-sub">Marketing &amp; Accounting · University of Melbourne · Graduated 2025</p>
-      </div>
-      <div class="cred">
-        <span class="lbl">Languages</span>
-        <p class="cred-big">English, Bangla, Hindi</p>
-        <p class="cred-sub">Native English &amp; Bangla · fluent Hindi</p>
-      </div>
-      <div class="cred">
-        <span class="lbl">Off the clock</span>
-        <p class="cred-big">Music, fashion, food</p>
-        <p class="cred-sub">And the practical use of AI in marketing</p>
-      </div>
-    </section>
-  </main>
-
-  <!-- ───────── CONTACT ───────── -->
-  <footer class="footer" id="contact">
-    <div class="footer-in">
-      <p class="lbl lbl-foot">( Contact · Full Australian working rights )</p>
-      <Split tag="p" class="foot-title" text="Need growth that sales *can feel?*" />
-      <a class="mail" href={`mailto:${site.email}`}>{site.email} <span aria-hidden="true">↗</span></a>
-      <div class="foot-row">
-        <ul class="socials">
-          {site.socials.map((s) => <li><a href={s.href} rel="noopener noreferrer" target="_blank">{s.label} ↗</a></li>)}
-        </ul>
-        <p>{site.location} · <time data-clock>--:--</time></p>
-        <a href="#top">Back to top ↑</a>
-      </div>
-      <p class="legal">© {site.year} {site.name}</p>
     </div>
-  </footer>
+
+    <nav class="hand" aria-label="Case studies">
+      <div class="hand-in">
+        {cases.map((c, i) => <CaseCard c={c} i={i} variant="hand" />)}
+      </div>
+    </nav>
+  </section>
+
+  <!-- ───────── Selected work ───────── -->
+  <section class="work" id="work" aria-labelledby="work-h">
+    <h2 class="h2" id="work-h">Selected work</h2>
+
+    <article class="feature">
+      <CaseCard c={lead} />
+      <div class="feature-body">
+        <p class="meta">{lead.org}, {lead.when}</p>
+        <h3 class="h3"><a href={`/work/${lead.slug}/`}>{lead.title}</a></h3>
+        <p class="lede">{lead.summary}</p>
+        <dl class="results">
+          {
+            lead.results.slice(0, 2).map((r) => (
+              <div>
+                <dt>{r.l}</dt>
+                <dd>{r.v}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        <a class="link" href={`/work/${lead.slug}/`}>Read the Evitech case study</a>
+      </div>
+    </article>
+
+    <div class="pair">
+      {
+        rest.map((c) => (
+          <article class="tile">
+            <p class="meta">
+              {c.org}, {c.when}
+            </p>
+            <h3 class="h3">
+              <a href={`/work/${c.slug}/`}>{c.title}</a>
+            </h3>
+            <p>{c.summary}</p>
+            <dl class="results results-sm">
+              {c.results.slice(0, 2).map((r) => (
+                <div>
+                  <dt>
+                    {r.l}
+                    {r.scope && <span class="scope"> ({r.scope.toLowerCase()})</span>}
+                  </dt>
+                  <dd>{r.v}</dd>
+                </div>
+              ))}
+            </dl>
+            <a class="link" href={`/work/${c.slug}/`}>
+              Read the {c.org} case study
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ───────── Approach ───────── -->
+  <section class="approach" id="approach" aria-labelledby="ap-h">
+    <h2 class="h2" id="ap-h">How sales shapes my marketing</h2>
+    <div class="approach-grid">
+      {
+        approach.map((a) => (
+          <div class="principle">
+            <h3 class="h4">{a.t}</h3>
+            <p>{a.d}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ───────── Career ───────── -->
+  <section class="career" id="career" aria-labelledby="ca-h">
+    <div class="career-in">
+      <div class="career-copy">
+        <h2 class="h2" id="ca-h">From the sales floor to growth</h2>
+        <p class="career-sub">Four roles at Evitech since April 2021, promoted roughly every twelve months.</p>
+        <ol class="rungs">
+          {
+            career.map((r) => (
+              <li class="rung">
+                <p class="rung-when">{r.when}</p>
+                <h3 class="rung-t">{r.t}</h3>
+                <p class="rung-d">
+                  {r.d}
+                  {r.link && (
+                    <>
+                      {' '}
+                      <a class="link" href={r.link.href}>
+                        {r.link.label}
+                      </a>
+                    </>
+                  )}
+                </p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+      <div class="stairs-wrap" aria-hidden="true">
+        <div class="stairs">
+          {
+            career.map((_, i) => (
+              <div class={`blk${i === career.length - 1 ? ' blk-top' : ''}`} style={`--i:${i}`}>
+                <div class="f f-top" />
+                <div class="f f-front" />
+                <div class="f f-side" />
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── Experience ───────── -->
+  <section class="exp" id="experience" aria-labelledby="ex-h">
+    <h2 class="h2" id="ex-h">Experience</h2>
+    <ol class="exp-list">
+      {
+        experience.map((e) => (
+          <li class="exp-row">
+            <span class="exp-when">{e.when}</span>
+            <span class="exp-role">{e.role}</span>
+            <span class="exp-org">{e.org}</span>
+            <span class="exp-note">
+              {e.case ? (
+                <a class="link" href={`/work/${e.case}/`}>
+                  Case study<span class="sr">: {caseBySlug(e.case).title}</span>
+                </a>
+              ) : (
+                e.note
+              )}
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- ───────── Capabilities ───────── -->
+  <section class="caps" aria-labelledby="cp-h">
+    <h2 class="h2" id="cp-h">What I bring</h2>
+    <div class="caps-grid">
+      {
+        capabilities.map((c) => (
+          <div class="cap">
+            <h3 class="h4">{c.t}</h3>
+            <p>{c.items}.</p>
+            <p class="cap-seen">
+              Shown in{' '}
+              {c.cases.map((slug, i) => (
+                <>
+                  {i > 0 && ' and '}
+                  <a class="link" href={`/work/${slug}/`}>
+                    {caseBySlug(slug).org}
+                  </a>
+                </>
+              ))}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+    <p class="tools"><span class="tools-h">Tools I use:</span> {tools.join(', ')}.</p>
+  </section>
+
+  <!-- ───────── Background ───────── -->
+  <section class="bg" aria-labelledby="bg-h">
+    <h2 class="h2" id="bg-h">Background</h2>
+    <div class="bg-grid">
+      <div>
+        <h3 class="h4">Education</h3>
+        <p>Bachelor of Commerce, majoring in Marketing and Accounting. University of Melbourne, graduated 2025.</p>
+        <h3 class="h4">Languages</h3>
+        <p>English and Bangla (native), Hindi (fluent).</p>
+        <h3 class="h4">Leadership</h3>
+        <p>President of the Multicultural and Multi-Faith Club at Trinity College, University of Melbourne, 2019 to 2021.</p>
+      </div>
+      <div>
+        <h3 class="h4">Debating and international forums</h3>
+        <ul class="recog">
+          {
+            recognition.map((r) => (
+              <li>
+                <span class="recog-when">{r.when}</span>
+                <span>
+                  <b>{r.t}.</b> {r.d}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
 </Base>

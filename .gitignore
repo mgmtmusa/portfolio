@@ -7,3 +7,4 @@ dist/
 .vercel
 test-results/
 playwright-report/
+docs/evidence/**/lh-*-[0-9].json
