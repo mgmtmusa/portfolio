@@ -11,5 +11,11 @@
   "dependencies": {
     "astro": "^5.0.0",
     "gsap": "^3.12.5"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.65.1",
+    "typescript": "^5.9.3"
   }
 }
