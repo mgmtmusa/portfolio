@@ -1,0 +1,90 @@
+{
+  "url": "http://127.0.0.1:4321/",
+  "preset": "mobile",
+  "runs": [
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1057,
+      "cls": 0,
+      "tbt": 31,
+      "fcp": 673,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 41.9
+    },
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1055,
+      "cls": 0,
+      "tbt": 30,
+      "fcp": 629,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 41.9
+    },
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1053,
+      "cls": 0,
+      "tbt": 27,
+      "fcp": 629,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 41.9
+    },
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1053,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 630,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 41.9
+    },
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1054,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 631,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 41.9
+    }
+  ],
+  "median": {
+    "perf": 100,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 1054,
+    "cls": 0,
+    "tbt": 27,
+    "fcp": 630,
+    "jsKB": 0,
+    "fontKB": 31.8,
+    "imgKB": 0,
+    "totalKB": 41.9
+  }
+}

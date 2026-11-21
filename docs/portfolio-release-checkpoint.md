@@ -1,6 +1,6 @@
 # Portfolio release checkpoint
 
-_Last updated: phase 4 — review cycle 1 fixed, awaiting re-review of the frozen commit_
+_Last updated: phase 5 — release candidate 14fc013 verified, re-review in progress_
 
 ## Where things are
 
@@ -136,6 +136,28 @@ Blocked / limited:
 | 18 | Nit | OG image unfinished | Re-laid out; all three cards readable. |
 | 19 | Nit | Staircase competes with the hand | Staircase made smaller and monochrome (ink, stone, one light-red top); the hand keeps the colour. Eyebrow above case H1 removed. |
 
+## Release candidate 14fc013 — verification
+
+App code frozen at **14fc013** (later commits on the branch touch only `docs/`).
+Preview of exactly this SHA (Vercel API `gitSource.sha` = 14fc013b61bc…): https://portfolio-q8mresl69-musa-c771.vercel.app — protected by Vercel Authentication, `x-robots-tag: noindex`. Branch alias: https://portfolio-git-redesign-case-studies-musa-c771.vercel.app
+
+| Check | Before (prod 7d645d4) | After (RC 14fc013) | Evidence |
+| --- | --- | --- | --- |
+| `npm ci && npm run build` | — | clean | — |
+| `npx astro check` | — | 0 errors, 0 warnings | — |
+| Playwright, local build | — | 101 passed | `npx playwright test` |
+| Playwright, RC preview (OIDC header) | — | 101 passed | `BASE_URL=<preview> vercel env run -- npx playwright test` |
+| Lighthouse mobile home (5 runs) | 100 · LCP 1,233 · TBT 0 (median of 3) | 100 ×5 · LCP 1,054 · TBT median 27, max 31 | `docs/evidence/rc-final/lh-mobile-summary.json` |
+| Lighthouse desktop home | — | 100 · LCP 251 ms | `docs/evidence/rc-2a37962/lh-desktop-summary.json` |
+| Case pages, Lighthouse mobile | n/a (no routes) | 100 each, LCP ≈ 1,053 ms | `docs/evidence/pass2/case-*` |
+| Transfer, home | 89.8 KB (JS 48 KB, font 31.7 KB) | 41.9 KB (JS inline < 1 KB, font 31.8 KB) | Lighthouse summaries |
+| Overflow / clipping, 5 routes × 8 viewports | name clipped at 1920 | none; name ≥ 12 px from edge; cards inside frame | `docs/evidence/rc-final/*.jpg` |
+| Engines | — | Chromium, WebKit desktop, iPhone 14 portrait + landscape (emulation) | `docs/evidence/rc-final/*-first-screen.png` |
+| axe WCAG 2.2 AA (5 routes) | — | 0 violations | test suite |
+| Preview smoke | — | 5 routes 200, 404 → 404, og/sitemap 200 | `vercel curl` |
+
+Lighthouse note: on 2a37962 one of eight runs scored 75 (TBT 1,376 ms, unattributed style/layout tasks) and two showed ~120–155 ms; on 14fc013 five of five runs scored 100.
+
 ## Next action
 
-Commit, push, verify the Vercel preview of that exact SHA (suite with OIDC header, `vercel curl` smoke), run Lighthouse on a clean build of the SHA, then send the frozen SHA back to the Head of Engineering for re-review.
+Wait for the Head of Engineering re-review of 14fc013. If APPROVE: update the draft PR and hand off. If BLOCK: fix, re-freeze, re-verify, re-review.
