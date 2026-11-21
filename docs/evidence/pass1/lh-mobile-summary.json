@@ -1,0 +1,62 @@
+{
+  "url": "http://127.0.0.1:4321/",
+  "preset": "mobile",
+  "runs": [
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1053,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 642,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 41.8
+    },
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1052,
+      "cls": 0,
+      "tbt": 35,
+      "fcp": 626,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 41.8
+    },
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1053,
+      "cls": 0,
+      "tbt": 13,
+      "fcp": 627,
+      "jsKB": 0,
+      "fontKB": 31.8,
+      "imgKB": 0,
+      "totalKB": 41.8
+    }
+  ],
+  "median": {
+    "perf": 100,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 1053,
+    "cls": 0,
+    "tbt": 13,
+    "fcp": 627,
+    "jsKB": 0,
+    "fontKB": 31.8,
+    "imgKB": 0,
+    "totalKB": 41.8
+  }
+}

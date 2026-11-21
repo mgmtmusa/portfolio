@@ -6,10 +6,19 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "check": "astro check",
+    "test:e2e": "playwright test",
+    "og": "node scripts/og.mjs"
   },
   "dependencies": {
-    "astro": "^5.0.0",
-    "gsap": "^3.12.5"
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^22.20.5",
+    "typescript": "^5.9.3"
   }
 }

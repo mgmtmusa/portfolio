@@ -1,0 +1,62 @@
+{
+  "url": "https://portfolio-omega-gold-33.vercel.app/",
+  "preset": "mobile",
+  "runs": [
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1250,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 1083,
+      "jsKB": 48,
+      "fontKB": 31.7,
+      "imgKB": 0,
+      "totalKB": 89.8
+    },
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1233,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 1073,
+      "jsKB": 48,
+      "fontKB": 31.7,
+      "imgKB": 0,
+      "totalKB": 89.7
+    },
+    {
+      "perf": 100,
+      "a11y": 100,
+      "bp": 100,
+      "seo": 100,
+      "lcp": 1230,
+      "cls": 0,
+      "tbt": 0,
+      "fcp": 1071,
+      "jsKB": 48,
+      "fontKB": 31.7,
+      "imgKB": 0,
+      "totalKB": 89.8
+    }
+  ],
+  "median": {
+    "perf": 100,
+    "a11y": 100,
+    "bp": 100,
+    "seo": 100,
+    "lcp": 1233,
+    "cls": 0,
+    "tbt": 0,
+    "fcp": 1073,
+    "jsKB": 48,
+    "fontKB": 31.7,
+    "imgKB": 0,
+    "totalKB": 89.8
+  }
+}
