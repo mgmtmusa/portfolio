@@ -1,6 +1,6 @@
 # Portfolio release checkpoint
 
-_Last updated: phase 6 — review cycle 2 fixed; release candidate f2add8b verified; cycle 3 re-review in progress_
+_Last updated: phase 7 — APPROVED. Release candidate f2add8b (app code); handoff commit is the branch head (docs only on top)._
 
 ## Where things are
 
@@ -183,6 +183,22 @@ Preview of exactly this SHA (Vercel API `gitSource.sha` = 14fc013b61bc…): http
 
 Lighthouse note: on 2a37962 one of eight runs scored 75 (TBT 1,376 ms, unattributed style/layout tasks) and two showed ~120–155 ms; on 14fc013 five of five runs scored 100.
 
+## Review cycle 3 — Head of Engineering verdict: APPROVE (f2add8b)
+
+- Lil Project card fixed: hittable area in every engine (e.g. 39,552 px² desktop, 14,288 px² iPhone 14 emulation; was 0). Clicks and taps open the right case study.
+- Case facts spacing fixed (32–48 px gap). Card text floors applied; nothing clipped at 320/360/390/768/844×390.
+- Reviewer's independent runs: Playwright 113 passed on its own build and on the preview; Lighthouse mobile home 5/5 = 100.
+- Non-blocking notes: a lifted side card keeps hover while you sweep onto Evitech (it is visually on top); 1–3 corner pixels per engine with unstable hover; ~1 in 200 boundary taps resolve to the overlapping neighbour (normal touch adjustment); Firefox unverified.
+
+## Open items for the owner
+
+- Confirm "I led event production and marketing" for The Lil Project against the Event Coordinator title.
+- Check the site once in Firefox (Playwright Firefox can't launch on this Mac).
+- Check on a real iPhone (only WebKit/iPhone emulation was available).
+- Production publication was not authorised in the thread: merging PR #1 to `main` publishes to the live URL.
+
 ## Next action
 
-Wait for the Head of Engineering cycle-3 verdict on f2add8b. If APPROVE: update the draft PR body and hand off. If BLOCK: fix, re-freeze, re-verify, re-review.
+None pending. To release: review the preview, then merge https://github.com/mgmtmusa/portfolio/pull/1 (Vercel deploys `main` to production), then run `BASE_URL=https://portfolio-omega-gold-33.vercel.app npx playwright test` and `node scripts/qa/lighthouse.mjs https://portfolio-omega-gold-33.vercel.app/ docs/evidence/prod 3 mobile`.
+
+To resume after an interruption: `git switch redesign/case-studies && npm ci && npm run build && npx playwright test`.
