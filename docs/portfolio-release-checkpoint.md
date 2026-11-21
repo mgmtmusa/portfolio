@@ -1,6 +1,6 @@
 # Portfolio release checkpoint
 
-_Last updated: phase 7 — APPROVED. Release candidate f2add8b (app code); handoff commit is the branch head (docs only on top)._
+_Last updated: phase 8 — PUBLISHED. PR #1 merged to main (merge commit 279857e); production verified._
 
 ## Where things are
 
@@ -197,8 +197,20 @@ Lighthouse note: on 2a37962 one of eight runs scored 75 (TBT 1,376 ms, unattribu
 - Check on a real iPhone (only WebKit/iPhone emulation was available).
 - Production publication was not authorised in the thread: merging PR #1 to `main` publishes to the live URL.
 
+## Production verification (merge commit 279857e, 22 Nov 2026)
+
+Publication authorised by the owner in the thread. PR https://github.com/mgmtmusa/portfolio/pull/1 merged with a merge commit; Vercel deployed `main` to production (deployment gitSource.sha 279857e…, READY). App code identical to the approved f2add8b (0 files differ in src/public/tests/scripts/config).
+
+| Check | Result |
+| --- | --- |
+| https://portfolio-omega-gold-33.vercel.app/ | 200, new title, public (no `x-robots-tag: noindex`) |
+| Playwright against production | 113 passed |
+| Lighthouse mobile home, 3 runs | 100 ×3 · LCP 1,068–1,087 ms · TBT 0–52 ms · CLS 0 · 42.3 KB |
+
+Evidence: `docs/evidence/prod/lh-mobile-summary.json`.
+
 ## Next action
 
-None pending. To release: review the preview, then merge https://github.com/mgmtmusa/portfolio/pull/1 (Vercel deploys `main` to production), then run `BASE_URL=https://portfolio-omega-gold-33.vercel.app npx playwright test` and `node scripts/qa/lighthouse.mjs https://portfolio-omega-gold-33.vercel.app/ docs/evidence/prod 3 mobile`.
+Released. Remaining owner items above (Firefox, real iPhone, Lil Project wording).
 
 To resume after an interruption: `git switch redesign/case-studies && npm ci && npm run build && npx playwright test`.
