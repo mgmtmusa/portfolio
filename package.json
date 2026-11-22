@@ -12,6 +12,7 @@
     "og": "node scripts/og.mjs"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "astro": "^5.0.0"
   },
   "devDependencies": {

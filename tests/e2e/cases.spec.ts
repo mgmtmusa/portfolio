@@ -43,6 +43,13 @@ test('unknown routes show the 404 page with ways back', async ({ page }) => {
   await expect(page).toHaveURL(/\/$/);
 });
 
+test('Vercel Web Analytics loads its first-party script', async ({ page }) => {
+  const script = page.waitForRequest((r) => new URL(r.url()).pathname === '/_vercel/insights/script.js');
+  await page.goto('/');
+  await script;
+  await expect(page.locator('vercel-analytics')).toHaveCount(1);
+});
+
 test('the public Lil Project link opens the real site in a new tab', async ({ page }) => {
   await page.goto('/work/the-lil-project/');
   const link = page.getByRole('link', { name: /Visit thelilproject\.com/ });

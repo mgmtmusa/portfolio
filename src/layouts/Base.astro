@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Analytics from '@vercel/analytics/astro';
 import { site } from '../data/site';
 
 interface Props {
@@ -78,5 +79,7 @@ const homeHref = (hash: string) => (isHome ? hash : `/${hash}`);
     <script>
       import '../scripts/main';
     </script>
+    <!-- Vercel Web Analytics: cookieless page views, served from /_vercel/insights on Vercel only. -->
+    <Analytics />
   </body>
 </html>
