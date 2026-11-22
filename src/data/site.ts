@@ -126,7 +126,7 @@ export const cases: Case[] = [
       { v: '2.6×', l: 'revenue growth in under three years', scope: 'Company revenue' },
     ],
     brief:
-      'Evitech sells energy-efficiency upgrades — solar, battery storage, HVAC and hot water — to homes and businesses in Victoria and New South Wales. Paid media runs at roughly $15K to $30K a month across Meta and Google.',
+      'Evitech sells energy-efficiency upgrades to homes and businesses in Victoria and New South Wales: solar, battery storage, HVAC and hot water. Paid media runs at roughly $15K to $30K a month across Meta and Google.',
     question:
       'At that spend, every dollar has to turn into leads the sales team can close, and leaders need to see which channels are earning their budget.',
     responsibilities: [
@@ -267,7 +267,7 @@ export const career = [
 export const approach = [
   {
     t: 'A lead is worth what it closes for',
-    d: 'I spent almost two years in sales at Evitech — door to door, then B2B, then building a sales team — before moving into marketing. So I judge campaigns on qualified leads and cost per acquisition, not clicks.',
+    d: 'I spent almost two years in sales at Evitech before moving into marketing: door to door, then B2B, then building a sales team. So I judge campaigns on qualified leads and cost per acquisition, not clicks.',
   },
   {
     t: 'Reports should answer the sales team’s questions',

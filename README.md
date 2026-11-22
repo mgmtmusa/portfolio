@@ -10,4 +10,4 @@ npm run build    # static output in dist/
 
 Deploys to Vercel with zero config (framework preset: Astro).
 
-Live: https://portfolio-omega-gold-33.vercel.app — every push to `main` deploys automatically.
+Live: https://portfolio-omega-gold-33.vercel.app. Every push to `main` deploys automatically.
