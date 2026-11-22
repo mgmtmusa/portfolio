@@ -5,7 +5,10 @@ test.describe('home page', () => {
   test('first screen states name, role, angle and the route to work', async ({ page }) => {
     const errs = watchErrors(page);
     await page.goto('/');
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Musa\s*Abdullah\s*Walid/);
+    // The thesis line is the headline; the name and role sit directly above it.
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/I sell like a human\.\s*I measure like a machine\./);
+    await expect(page.locator('.hero-name')).toHaveText('Musa Abdullah Walid');
+    await expect(page.locator('.hero-name')).toBeInViewport();
     await expect(page.getByText('Marketing & Growth Specialist in Melbourne')).toBeInViewport();
     await expect(page.getByText(/came up through sales/)).toBeVisible();
     const cta = page.getByRole('link', { name: 'View selected work' });
@@ -86,7 +89,7 @@ test.describe('home page', () => {
 test.describe('layout across widths', () => {
   test.skip(({ browserName, isMobile }) => browserName !== 'chromium' || isMobile, 'width sweep runs once, in desktop Chromium');
   for (const [w, h] of [[320, 640], [390, 844], [844, 390], [768, 1024], [1024, 768], [1366, 700], [1440, 900], [1920, 1080]]) {
-    test(`no horizontal overflow and name inside the frame at ${w}×${h}`, async ({ page }) => {
+    test(`no horizontal overflow and headline inside the frame at ${w}×${h}`, async ({ page }) => {
       await page.setViewportSize({ width: w, height: h });
       for (const path of ['/', ...CASES.map((c) => `/work/${c.slug}/`)]) {
         await page.goto(path);
@@ -95,13 +98,13 @@ test.describe('layout across widths', () => {
       }
       await page.goto('/');
       const right = await page.evaluate(() =>
-        Math.max(...[...document.querySelectorAll('.hero-name span')].map((s) => {
+        Math.max(...[...document.querySelectorAll('.hero-title > span, .hero-name')].map((s) => {
           const r = document.createRange();
           r.selectNodeContents(s);
           return r.getBoundingClientRect().right;
         })),
       );
-      expect(right, 'hero name touches the right edge').toBeLessThanOrEqual(w - 12);
+      expect(right, 'hero headline touches the right edge').toBeLessThanOrEqual(w - 12);
       await expect(page.getByRole('link', { name: 'Work', exact: true })).toBeInViewport();
     });
   }

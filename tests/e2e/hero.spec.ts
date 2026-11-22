@@ -88,12 +88,40 @@ test.describe('hero cards under reduced motion', () => {
   });
 });
 
+test('all three hero cards show their text, fully on screen (iPhone regression)', async ({ page }) => {
+  await page.goto('/');
+  await page.waitForTimeout(900);
+  const vw = page.viewportSize()!.width;
+  const cards = page.locator('.card-hand');
+  await expect(cards).toHaveCount(3);
+  for (const card of await cards.all()) {
+    await card.scrollIntoViewIfNeeded();
+    for (const part of ['.card-org', '.card-title', '.card-stat', '.card-cta']) {
+      const el = card.locator(part);
+      await expect(el).toBeVisible();
+      const box = (await el.boundingBox())!;
+      expect(box.width, `${part} has no width`).toBeGreaterThan(20);
+      expect(box.x + box.width, `${part} runs off screen`).toBeLessThanOrEqual(vw);
+      // Text must actually be painted in a contrasting colour, not hidden behind a layer.
+      const hit = await el.evaluate((n) => {
+        const r = n.getBoundingClientRect();
+        const top = document.elementFromPoint(r.left + Math.min(10, r.width / 2), r.top + r.height / 2);
+        return !!top && (n === top || n.contains(top));
+      });
+      expect(hit, `${part} is covered by another element`).toBe(true);
+    }
+  }
+});
+
 test.describe('every hero card opens its case study by pointer or tap', () => {
   // Regression: a card placed behind the hand's 3D plane was unreachable by pointer and touch.
   for (const [i, slug] of ['evitech', 'i-heart-uni', 'the-lil-project'].entries()) {
     test(`card ${i + 1} → /work/${slug}/`, async ({ page, isMobile }) => {
       await page.goto('/');
       await page.waitForTimeout(900);
+      // On phones the cards sit below the portrait: bring this one on screen first.
+      await page.locator('.card-hand').nth(i).scrollIntoViewIfNeeded();
+      await page.waitForTimeout(300);
       // Find a point where this card is the topmost hit target.
       const pt = await page.evaluate((idx) => {
         const card = document.querySelectorAll('.card-hand')[idx];
