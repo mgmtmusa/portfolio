@@ -69,6 +69,7 @@ const homeHref = (hash: string) => (isHome ? hash : `/${hash}`);
         </p>
         <div class="contact-actions">
           <a class="btn btn-ink" href={`mailto:${site.email}`}>Email {site.email}</a>
+          <a class="btn btn-line" href={site.cv} download type="application/pdf">Download CV<span class="sr"> (PDF)</span></a>
           <a class="btn btn-line" href={site.linkedin} rel="noopener noreferrer" target="_blank">LinkedIn profile<span class="sr"> (opens in a new tab)</span></a>
         </div>
         <p class="contact-foot">© {new Date().getFullYear()} {site.name}</p>
