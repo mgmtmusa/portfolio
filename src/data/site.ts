@@ -15,6 +15,10 @@ export const site = {
     'Musa Abdullah Walid is a marketing and growth specialist in Melbourne. He came up through sales and now runs paid media, reporting and CRM: 28% lower cost per acquisition and 65% more qualified leads at Evitech.',
   /** Chosen by Musa. Deliberately promises no start date, which the resumes don't confirm. */
   availability: 'Based in Melbourne. Open to conversations about marketing, growth and business development opportunities.',
+  /** Approved wording, November 2026. Use this exact sentence wherever work rights are mentioned. */
+  workRights: 'Full work rights until January 2028 (subclass 485 visa), open to employer sponsorship.',
+  /** Placeholder PDF until the final CV is ready. To swap: replace public/cv/Musa-Walid-CV.pdf, keeping the name. */
+  cv: '/cv/Musa-Walid-CV.pdf',
   /** Confirmed by Musa on 23 November 2026. Business days are Monday to Friday, Melbourne time. */
   replyTime: { text: 'I aim to respond within two business days.', businessDays: 2, confirmed: true },
 };
