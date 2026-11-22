@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { CASES, EMAIL, LINKEDIN, watchErrors } from './helpers';
+import { CASES, CV, EMAIL, LINKEDIN, WORK_RIGHTS, watchErrors } from './helpers';
 
 test.describe('home page', () => {
   test('first screen states name, role, angle and the route to work', async ({ page }) => {
@@ -45,6 +45,24 @@ test.describe('home page', () => {
     await expect(email).toBeInViewport();
     await expect(email).toHaveAttribute('href', EMAIL);
     await expect(page.getByRole('link', { name: /LinkedIn profile/ })).toHaveAttribute('href', LINKEDIN);
+  });
+
+  test('Download CV buttons serve the PDF from /cv/Musa-Walid-CV.pdf', async ({ page, request }) => {
+    await page.goto('/');
+    const cvs = page.getByRole('link', { name: /Download CV/ });
+    await expect(cvs).toHaveCount(2); // hero and contact footer
+    for (const link of await cvs.all()) await expect(link).toHaveAttribute('href', CV);
+    await expect(cvs.first()).toBeInViewport();
+    const res = await request.get(CV);
+    expect(res.status()).toBe(200);
+    expect(res.headers()['content-type']).toContain('application/pdf');
+    expect((await res.body()).subarray(0, 5).toString()).toBe('%PDF-');
+  });
+
+  test('work rights use the approved 485 wording', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#contact')).toContainText(WORK_RIGHTS);
+    await expect(page.locator('body')).not.toContainText(/full Australian working rights/i);
   });
 
   test('metrics are plain, stable text (no counting in the accessibility tree)', async ({ page }) => {

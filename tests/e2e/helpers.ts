@@ -7,6 +7,8 @@ export const CASES = [
 ];
 export const EMAIL = 'mailto:mgmtmusa@gmail.com';
 export const LINKEDIN = 'https://www.linkedin.com/in/musa-abdullah-walid';
+export const CV = '/cv/Musa-Walid-CV.pdf';
+export const WORK_RIGHTS = 'Full work rights until January 2028 (subclass 485 visa), open to employer sponsorship.';
 
 /** Collect console errors and failed same-origin requests for the life of the page. */
 export function watchErrors(page: Page) {

@@ -23,6 +23,18 @@ for (const [i, c] of CASES.entries()) {
   });
 }
 
+for (const path of ['/', ...CASES.map((c) => `/work/${c.slug}/`), '/missing-page/']) {
+  test(`copy hygiene on ${path}: no em-dashes, no phone number or street address`, async ({ page }) => {
+    await page.goto(path);
+    const html = await page.content();
+    expect(html, 'em-dash in page source').not.toMatch(/—|&mdash;|&#8212;/);
+    expect(html, 'phone link').not.toMatch(/href="tel:/);
+    const text = await page.locator('body').innerText();
+    expect(text, 'Australian phone number').not.toMatch(/(\+61|\(0\d\)|\b04\d{2})[\s\d]{6,}/);
+    expect(text, 'street address').not.toMatch(/\b\d+\s+\w+\s+(Street|St|Road|Rd|Avenue|Ave|Drive|Dr|Lane|Ln|Court|Ct)\b/);
+  });
+}
+
 test('unknown routes show the 404 page with ways back', async ({ page }) => {
   const res = await page.goto('/missing-page/');
   expect(res?.status()).toBe(404);
