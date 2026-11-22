@@ -7,6 +7,8 @@ export const CASES = [
 ];
 export const EMAIL = 'mailto:mgmtmusa@gmail.com';
 export const LINKEDIN = 'https://www.linkedin.com/in/musa-abdullah-walid';
+export const CV = '/cv/Musa-Walid-CV.pdf';
+export const WORK_RIGHTS = 'Full work rights until January 2028 (subclass 485 visa), open to employer sponsorship.';
 
 /** Collect console errors and failed same-origin requests for the life of the page. */
 export function watchErrors(page: Page) {
@@ -17,7 +19,8 @@ export function watchErrors(page: Page) {
   });
   page.on('response', (r) => {
     const own = r.url().startsWith(new URL(page.url() || 'http://x').origin);
-    if (own && r.status() >= 400 && !/\/missing-page/.test(r.url())) errors.push(`${r.status()} ${r.url()}`);
+    // /_vercel/insights is Vercel Web Analytics: it only exists on Vercel, so it 404s on a local preview.
+    if (own && r.status() >= 400 && !/\/missing-page|\/_vercel\/insights\//.test(r.url())) errors.push(`${r.status()} ${r.url()}`);
   });
   return { assertClean: () => expect(errors, errors.join('\n')).toEqual([]) };
 }

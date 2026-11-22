@@ -13,7 +13,83 @@ export const site = {
   url: 'https://portfolio-omega-gold-33.vercel.app',
   description:
     'Musa Abdullah Walid is a marketing and growth specialist in Melbourne. He came up through sales and now runs paid media, reporting and CRM: 28% lower cost per acquisition and 65% more qualified leads at Evitech.',
+  /** Chosen by Musa. Deliberately promises no start date, which the resumes don't confirm. */
+  availability: 'Based in Melbourne. Open to conversations about marketing, growth and business development opportunities.',
+  /** Approved wording, November 2026. Use this exact sentence wherever work rights are mentioned. */
+  workRights: 'Full work rights until January 2028 (subclass 485 visa), open to employer sponsorship.',
+  /** Placeholder PDF until the final CV is ready. To swap: replace public/cv/Musa-Walid-CV.pdf, keeping the name. */
+  cv: '/cv/Musa-Walid-CV.pdf',
+  /** Confirmed by Musa on 23 November 2026. Business days are Monday to Friday, Melbourne time. */
+  replyTime: { text: 'I aim to respond within two business days.', businessDays: 2, confirmed: true },
 };
+
+/**
+ * Selected growth work, as documented in Musa's resumes. These are growth projects, not
+ * independently measured experiments: the resumes don't carry enough detail to call them tests.
+ * Keep each `note` wherever the item appears.
+ */
+export const growthWork: {
+  t: string;
+  org: string;
+  did: string;
+  results: Result[];
+  note?: string;
+  case?: string;
+}[] = [
+  {
+    t: 'Paid acquisition',
+    org: 'Evitech',
+    did: 'Restructured the Google Ads and Meta campaign accounts, audiences and budget allocation.',
+    results: [
+      { v: '28%', l: 'lower cost per acquisition' },
+      { v: '65%', l: 'more qualified leads' },
+    ],
+    note: 'Two results from the same initiative.',
+    case: 'evitech',
+  },
+  {
+    t: 'Lead qualification and CRM routing',
+    org: 'Evitech',
+    did: 'Revised the qualification criteria and lead routing while managing a 38-person offshore lead generation team.',
+    results: [{ v: '80%', l: 'pipeline volume growth, quarter on quarter' }],
+    case: 'evitech',
+  },
+  {
+    t: 'Organic audience growth',
+    org: 'I Heart Uni',
+    did: 'Led organic content and community building.',
+    results: [{ v: '400 → 13,200', l: 'social audience' }],
+    case: 'i-heart-uni',
+  },
+  {
+    t: 'Event marketing and brand development',
+    org: 'I Heart Uni',
+    did: 'Led brand positioning, content direction and event marketing, alongside hosting the events.',
+    results: [
+      { v: '70%', l: 'more revenue per event' },
+      { v: '280 → 650', l: 'average attendance' },
+      { v: '18', l: 'events sold out across five cities' },
+    ],
+    note: 'These outcomes overlap with the organic audience growth work.',
+    case: 'i-heart-uni',
+  },
+  {
+    t: 'Interstate expansion',
+    org: 'Evitech',
+    did: 'Helped establish the NSW operations hub: negotiated the warehouse lease, and recruited and placed 23 sales executives.',
+    results: [{ v: '4 months', l: 'to launch the hub' }],
+  },
+  {
+    t: 'B2B sales and commercial growth',
+    org: 'Evitech',
+    did: 'Personally closed B2B contracts, and contributed to the company’s revenue growth.',
+    results: [
+      { v: '$2M+', l: 'in B2B contracts personally closed' },
+      { v: '2.6×', l: 'company revenue growth in under three years', scope: 'Team outcome' },
+    ],
+    note: 'The company growth figure reflects a broader team outcome.',
+  },
+];
 
 export type Result = { v: string; l: string; scope?: string };
 
@@ -54,7 +130,7 @@ export const cases: Case[] = [
       { v: '2.6×', l: 'revenue growth in under three years', scope: 'Company revenue' },
     ],
     brief:
-      'Evitech sells energy-efficiency upgrades — solar, battery storage, HVAC and hot water — to homes and businesses in Victoria and New South Wales. Paid media runs at roughly $15K to $30K a month across Meta and Google.',
+      'Evitech sells energy-efficiency upgrades to homes and businesses in Victoria and New South Wales: solar, battery storage, HVAC and hot water. Paid media runs at roughly $15K to $30K a month across Meta and Google.',
     question:
       'At that spend, every dollar has to turn into leads the sales team can close, and leaders need to see which channels are earning their budget.',
     responsibilities: [
@@ -195,7 +271,7 @@ export const career = [
 export const approach = [
   {
     t: 'A lead is worth what it closes for',
-    d: 'I spent almost two years in sales at Evitech — door to door, then B2B, then building a sales team — before moving into marketing. So I judge campaigns on qualified leads and cost per acquisition, not clicks.',
+    d: 'I spent almost two years in sales at Evitech before moving into marketing: door to door, then B2B, then building a sales team. So I judge campaigns on qualified leads and cost per acquisition, not clicks.',
   },
   {
     t: 'Reports should answer the sales team’s questions',

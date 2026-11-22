@@ -3,7 +3,7 @@ import type { Case } from '../data/site';
 
 interface Props {
   c: Case;
-  /** Position in the hero hand (0-based) — only used by the hand layout. */
+  /** Position in the hero hand (0-based). Only used by the hand layout. */
   i?: number;
   /** hand: hero fan · flat: linked card in page flow · still: decorative copy on its own case page */
   variant?: 'hand' | 'flat' | 'still';

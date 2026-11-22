@@ -1,9 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
+import { Image, getImage } from 'astro:assets';
 import CaseCard from '../components/CaseCard.astro';
 import { site, cases, career, approach, experience, capabilities, tools, recognition, caseBySlug } from '../data/site';
+import portrait from '../assets/portrait/musa-portrait.jpg';
+import robotPng from '../assets/portrait/musa-robot.png';
 
 const [lead, ...rest] = cases;
+
+const portraitAlt =
+  'Studio portrait of Musa Abdullah Walid: a bearded man with swept-back black hair and gold wire-framed glasses, in a navy pinstripe double-breasted suit, white shirt and patterned tie, against a plain grey backdrop.';
+// The machine layer is fetched only when it's about to be used (see src/scripts/main.ts).
+const robot = await getImage({ src: robotPng, width: 550, format: 'webp', quality: 80 });
+const ogPortrait = await getImage({ src: portrait, width: 720, format: 'jpg', quality: 80 });
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -11,6 +20,7 @@ const jsonLd = {
   name: site.name,
   jobTitle: site.role,
   url: site.url,
+  image: new URL(ogPortrait.src, site.url).href,
   email: `mailto:${site.email}`,
   sameAs: [site.linkedin],
   worksFor: { '@type': 'Organization', name: 'Evitech Pty Ltd' },
@@ -20,25 +30,57 @@ const jsonLd = {
 };
 ---
 
-<Base title={`${site.name} — ${site.role}, ${site.city}`} path="/" jsonLd={jsonLd}>
+<Base title={`${site.name}, ${site.role}, ${site.city}`} path="/" jsonLd={jsonLd}>
   <!-- ───────── Hero ───────── -->
-  <section class="hero" id="top" aria-labelledby="hero-name">
+  <section class="hero" id="top" aria-labelledby="hero-h">
     <div class="hero-copy">
-      <h1 class="hero-name" id="hero-name">
-        <span>Musa</span>
-        <span>Abdullah</span>
-        <span>Walid</span>
+      <p class="hero-who">
+        <span class="hero-name">{site.name}</span>
+        <span class="hero-role">Marketing &amp; Growth Specialist in Melbourne</span>
+      </p>
+      <h1 class="hero-title" id="hero-h">
+        <span class="hero-human">I sell like a human.</span>
+        <span class="hero-machine">I measure like a machine.</span>
       </h1>
-      <p class="hero-role">Marketing &amp; Growth Specialist in Melbourne</p>
       <p class="hero-angle">
-        I came up through sales — door to door, then $2M+ in B2B contracts — so I build marketing around what a lead is
+        I came up through sales: door to door, then $2M+ in B2B contracts. So I build marketing around what a lead is
         actually worth.
       </p>
       <div class="hero-actions">
         <a class="btn btn-ink" href="#work">View selected work</a>
+        <a class="btn btn-line" href={site.cv} download type="application/pdf">Download CV<span class="sr"> (PDF)</span></a>
         <a class="link" href={`mailto:${site.email}`}>or email me</a>
       </div>
+      <p class="hero-rights">{site.workRights}</p>
     </div>
+
+    <!-- The portrait lens: a circle over the photo reveals the same portrait redrawn as a machine.
+         Fine pointers get the moving lens; touch, keyboard and reduced motion get the Machine view button.
+         Without JavaScript it is simply the portrait. -->
+    <figure class="lens" data-lens>
+      <div class="lens-stage">
+        <Image
+          class="lens-human"
+          src={portrait}
+          alt={portraitAlt}
+          widths={[480, 720, 960, 1254]}
+          sizes="(min-width: 960px) min(40vw, 34rem), (min-width: 640px) and (orientation: landscape) 40vw, min(calc(100vw - 2rem), 34rem)"
+          format="webp"
+          quality={78}
+          loading="eager"
+          fetchpriority="high"
+        />
+        <img class="lens-machine" data-src={robot.src} alt="" width="550" height="550" decoding="async" aria-hidden="true" />
+        <span class="lens-ring" aria-hidden="true"></span>
+      </div>
+      <figcaption class="lens-cap">
+        <button class="lens-toggle" type="button" aria-pressed="false" hidden>
+          <span class="lens-switch" aria-hidden="true"></span>Machine view
+        </button>
+        <span class="lens-hint">Studio portrait, Melbourne.</span>
+        <span class="sr" aria-live="polite" data-lens-status></span>
+      </figcaption>
+    </figure>
 
     <nav class="hand" aria-label="Case studies">
       <div class="hand-in">
