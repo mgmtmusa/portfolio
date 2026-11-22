@@ -3,40 +3,74 @@
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const finePointer = matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-/* Hero hand: tilts gently toward the pointer. Small range and easing so stray
-   mouse movement reads as life, not as a jolt. Resets when the pointer leaves. */
-const hand = document.querySelector<HTMLElement>('.hand-in');
-const hero = document.querySelector<HTMLElement>('.hero');
-if (hand && hero && finePointer && !reduce) {
-  let tx = 0;
-  let ty = 0;
-  let x = 0;
-  let y = 0;
-  let raf = 0;
-  const step = () => {
-    x += (tx - x) * 0.1;
-    y += (ty - y) * 0.1;
-    hand.style.setProperty('--ry', `${(-8 + x * 9).toFixed(2)}deg`);
-    hand.style.setProperty('--rx', `${(4 - y * 5).toFixed(2)}deg`);
-    raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.002 ? requestAnimationFrame(step) : 0;
+/* Portrait lens: a circle over the photo shows the same portrait redrawn as a machine.
+   - Mouse or trackpad (and motion allowed): the lens follows the pointer over the photo.
+   - Touch, keyboard, reduced motion: the Human / Machine button reveals the whole machine layer.
+   - No JavaScript: just the portrait, with the button left hidden.
+   The machine image is only fetched once the page is idle, or on first intent, whichever comes first. */
+const lens = document.querySelector<HTMLElement>('[data-lens]');
+if (lens) {
+  const stage = lens.querySelector<HTMLElement>('.lens-stage')!;
+  const machine = lens.querySelector<HTMLImageElement>('.lens-machine')!;
+  const toggle = lens.querySelector<HTMLButtonElement>('.lens-toggle')!;
+  const hint = lens.querySelector<HTMLElement>('.lens-hint')!;
+  const status = lens.querySelector<HTMLElement>('[data-lens-status]')!;
+  const pointerLens = finePointer && !reduce;
+  let on = false;
+
+  const load = () => {
+    if (!machine.getAttribute('src') && machine.dataset.src) machine.src = machine.dataset.src;
   };
-  const kick = () => {
-    if (!raf) raf = requestAnimationFrame(step);
+  addEventListener('load', () => ('requestIdleCallback' in window ? requestIdleCallback(load, { timeout: 3000 }) : setTimeout(load, 1500)), { once: true });
+
+  toggle.hidden = false;
+  hint.textContent = pointerLens
+    ? 'Move the lens across the portrait, or turn on Machine view.'
+    : 'Tap the portrait or turn on Machine view to see it redrawn as a robot.';
+
+  const place = (x: string, y: string) => {
+    stage.style.setProperty('--lx', x);
+    stage.style.setProperty('--ly', y);
   };
-  hero.addEventListener(
-    'pointermove',
-    (e) => {
-      tx = Math.max(-1, Math.min(1, (e.clientX / innerWidth) * 2 - 1));
-      ty = Math.max(-1, Math.min(1, (e.clientY / innerHeight) * 2 - 1));
-      kick();
-    },
-    { passive: true },
-  );
-  hero.addEventListener('pointerleave', () => {
-    tx = 0;
-    ty = 0;
-    kick();
-  });
+  const setMachine = (next: boolean) => {
+    on = next;
+    load();
+    toggle.setAttribute('aria-pressed', String(on));
+    stage.classList.remove('is-lens');
+    stage.classList.toggle('is-machine', on);
+    if (on) place('50%', '50%');
+    status.textContent = on ? 'Machine view: the same portrait, redrawn as a robot.' : 'Human view: the studio portrait.';
+  };
+  toggle.addEventListener('click', () => setMachine(!on));
+  // On touch screens a tap on the photo does the same as the button.
+  if (!pointerLens) stage.addEventListener('click', () => setMachine(!on));
+
+  if (pointerLens) {
+    stage.classList.add('can-lens');
+    let raf = 0;
+    let px = 0;
+    let py = 0;
+    stage.addEventListener('pointerenter', load, { passive: true });
+    stage.addEventListener(
+      'pointermove',
+      (e) => {
+        if (on || e.pointerType === 'touch') return;
+        const r = stage.getBoundingClientRect();
+        px = e.clientX - r.left;
+        py = e.clientY - r.top;
+        if (!raf)
+          raf = requestAnimationFrame(() => {
+            raf = 0;
+            place(`${px}px`, `${py}px`);
+            stage.classList.add('is-lens');
+          });
+      },
+      { passive: true },
+    );
+    stage.addEventListener('pointerleave', () => stage.classList.remove('is-lens'));
+  } else {
+    toggle.addEventListener('pointerdown', load, { passive: true });
+  }
 }
 
 /* Direct anchor loads (e.g. /#career): the web font can arrive after the browser
