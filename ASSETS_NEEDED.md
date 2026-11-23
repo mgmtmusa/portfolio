@@ -37,5 +37,5 @@ The mechanism is built, with one fake example key that is excluded from producti
 | **Vercel Web Analytics enabled** (Project, Analytics, Enable) | Page views and custom events | Check in the dashboard; custom events may need a paid plan |
 | **Realtime service account** (for example Liveblocks or Ably) | Opt-in live cursors, off by default | Not built |
 | **Email provider account and API key** (for example Resend) | A server route that sends the brief without opening the visitor's mail app | Not built; the brief uses `mailto:` |
-| **Deno** installed on this Mac | parallax-threejs visual-regression scenarios | Not installed; Playwright screenshot tests cover the signature moments |
-| **Figma connection** | Laying out the design system as frames | Not connected; not used |
+| **Deno** | parallax-threejs visual-regression scenarios | Installed (2.9.8) on 24 November. Not used: the brief ties that harness to three.js, and the hero bend is SVG, so Playwright screenshot tests cover the signature moments |
+| **Figma connection** | Laying out the design system as frames | Connected on 24 November (Starter plan, View seat, about 20 read calls a month). Optional per the brief; the build is code-first and doesn't depend on it |

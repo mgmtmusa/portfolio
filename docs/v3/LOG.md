@@ -39,3 +39,12 @@ Next steps, in order:
 2. Run `taste-skill` and Impeccable critique on all three; hand to the CD; the principal picks.
 3. Write the direction contract (surface brief + `DESIGN.md`), CD approves.
 4. Re-run the head-of-engineering plan review on `docs/plans/v3.md`, apply findings, then build (phase 4).
+
+## Resumed 24 November 05:21
+
+- The creative director's three hero directions arrived (A Cover, B Stage, C Cover line; display face Host Grotesk 540; dock bottom centre; `--ink-mast #E7E2D7`; CTA filled `#F3F1EC`, not champagne, to keep champagne under 1% on phones). The CD's lean: A if the shoulder matte passes at 200%; C has the strongest screen-recordable moment; B is the safe fallback.
+- Portrait grades per direction from the parametrised `grade.swift` (black lands exactly on the page colour; navy pulled 35% toward luminance so the suit reads as ink): A cut-out; B stage (key falls to 0.60 at the lower right); C lit wall (`#2A2520` glow up and left of his head).
+- Built all three behind the picker (`prototypes/v3-hero/`, `npm`-free, served on port 4411). Each works at rest and in motion in Chromium and WebKit at 1440×900 and iPhone 14: A scroll-scrubbed (the name slides through the fixed pane for 90px, then the pane morphs into the dock), B spring-to-dock at 64px with 24px hysteresis, C 1:1 drag with rubber-band and projected momentum plus fling-down or scroll to dock. Evidence: `.impeccable/review/directions/` (ignored by git).
+- Conflict for the principal: the CMO makes the positioning line the H1; the CD makes the name the H1. The prototypes use the name as the H1.
+- Strip: the full `site.availability` plus `site.replyTime` don't fit at 1440 in 11px mono, so the strip drops the "Based in Melbourne." clause (the clock already says Melbourne) and truncates on phones; the full sentence appears verbatim in the page's next step.
+- Deno 2.9.8 is now installed and Figma is connected (Starter, View seat). The brief ties the parallax-threejs harness to three.js; no three.js is used, so Playwright screenshot tests protect the signature moments. Figma stays optional and unused to save its read quota.
