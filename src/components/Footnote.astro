@@ -18,6 +18,7 @@ const { n, id, note } = Astro.props;
   .fn-pop {
     --rim: .35; width: min(340px, calc(100vw - 32px)); margin: 0; inset: auto; padding: 14px 16px; border: 0; border-radius: 16px;
     font: 400 14px / 1.45 var(--ui); color: var(--text); text-align: left; letter-spacing: 0; white-space: normal;
+    background: rgb(26 24 22 / .94); /* near-opaque: fixed contrast over any numeral behind it */
   }
   .fn-pop:popover-open { animation: fn-in var(--dur-ui) var(--ease-out); }
   @keyframes fn-in { from { opacity: 0; transform: translateY(4px); } }
