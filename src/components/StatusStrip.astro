@@ -1,0 +1,28 @@
+---
+import { site } from '../data/site';
+// The clock already says Melbourne, so the strip drops the availability sentence's first clause.
+// The full sentence appears verbatim in each page's next step.
+const availability = site.availability.replace(/^Based in Melbourne\.\s*/, '');
+---
+
+<div class="strip" transition:persist="strip">
+  <p class="strip-t">Melbourne <time class="strip-clock" data-clock></time></p>
+  <p class="strip-c">{availability}</p>
+  <p class="strip-r">{site.replyTime.text}</p>
+</div>
+
+<style>
+  .strip {
+    position: fixed; inset: 0 0 auto; z-index: 40; height: 32px;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px;
+    padding: 0 var(--margin);
+    font: 400 var(--fs-label) / 1 var(--mono); letter-spacing: .08em; color: var(--text-3);
+    pointer-events: none;
+  }
+  .strip p { margin: 0; white-space: nowrap; }
+  .strip-clock { color: var(--text-2); font-variant-numeric: tabular-nums; display: inline-block; min-width: 8ch; }
+  .strip-c { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .strip-r { justify-self: end; }
+  @media (max-width: 1100px) { .strip { grid-template-columns: auto 1fr; } .strip-c { justify-self: end; text-align: right; } .strip-r { display: none; } }
+  @media (max-width: 639px) { .strip { height: 28px; gap: 16px; } }
+</style>

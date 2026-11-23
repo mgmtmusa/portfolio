@@ -1,0 +1,96 @@
+---
+import { commandItems, type CommandGroup } from '../lib/command';
+const items = commandItems();
+const groups: CommandGroup[] = ['Pages', 'Cases', 'Actions'];
+---
+
+<dialog id="cmdk" class="cmdk glass glass--strong" aria-label="Search and shortcuts" transition:persist="cmdk">
+  <div class="cmdk-in">
+    <label class="sr" for="cmdk-q">Search pages, cases and actions</label>
+    <input
+      id="cmdk-q"
+      class="cmdk-q"
+      type="text"
+      role="combobox"
+      aria-expanded="true"
+      aria-controls="cmdk-list"
+      aria-autocomplete="list"
+      autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+      enterkeyhint="go"
+      placeholder="Search pages, cases and actions"
+    />
+    <div id="cmdk-list" class="cmdk-list" role="listbox" aria-label="Results">
+      {
+        groups.map((g) => (
+          <div class="cmdk-group" role="group" aria-labelledby={`cmdk-g-${g}`} data-group={g}>
+            <p id={`cmdk-g-${g}`} class="cmdk-gl label">{g}</p>
+            {items
+              .filter((i) => i.group === g)
+              .map((i) =>
+                i.href ? (
+                  <a
+                    class="cmdk-item"
+                    role="option"
+                    aria-selected="false"
+                    id={`cmdk-${i.id}`}
+                    data-id={i.id}
+                    href={i.href}
+                    {...(i.id === 'download-cv' ? { download: '', 'data-track': 'cv_download', 'data-from': 'command' } : {})}
+                    {...(i.id === 'linkedin' ? { target: '_blank', rel: 'noopener noreferrer', 'data-track': 'linkedin_click', 'data-from': 'command' } : {})}
+                  >
+                    {i.label}
+                    {i.id === 'linkedin' && <span class="sr"> (opens in a new tab)</span>}
+                  </a>
+                ) : (
+                  <button class="cmdk-item" type="button" role="option" aria-selected="false" id={`cmdk-${i.id}`} data-id={i.id} data-action={i.action}>
+                    {i.label}
+                  </button>
+                ),
+              )}
+          </div>
+        ))
+      }
+    </div>
+    <p class="cmdk-empty" hidden>Nothing matches. Try “work”, “cv” or “email”.</p>
+    <p class="cmdk-foot label" aria-hidden="true">Arrow keys to move, Enter to open, Esc to close</p>
+  </div>
+</dialog>
+
+<style>
+  .cmdk {
+    --rim: .35;
+    width: min(560px, calc(100vw - 32px)); max-height: min(560px, calc(100dvh - 120px));
+    margin: 14vh auto auto; padding: 0; border: 0; color: var(--text); overflow: hidden;
+    border-radius: 24px;
+  }
+  .cmdk::backdrop { background: rgb(var(--shadow-ink) / .55); }
+  .cmdk[open] { animation: cmdk-in var(--dur-ui) var(--ease-out); }
+  @keyframes cmdk-in { from { opacity: 0; transform: scale(.98); } }
+  .cmdk-in { display: grid; grid-template-rows: auto 1fr auto auto; max-height: inherit; }
+  .cmdk-q {
+    width: 100%; height: 60px; padding: 0 22px; border: 0; border-bottom: 1px solid var(--line);
+    background: transparent; font: 400 17px / 1 var(--ui); color: var(--text);
+  }
+  .cmdk-q::placeholder { color: var(--text-2); }
+  .cmdk-q:focus-visible { outline: none; }
+  .cmdk-list { overflow: auto; padding: 8px; overscroll-behavior: contain; }
+  .cmdk-group[hidden] { display: none; }
+  .cmdk-gl { padding: 12px 14px 6px; color: var(--text-2); }
+  .cmdk-item {
+    display: flex; align-items: center; width: 100%; min-height: 44px; padding: 0 14px; border-radius: 12px;
+    font: 400 15px / 1.3 var(--ui); color: var(--text); text-decoration: none; text-align: left;
+    background: none; border: 0; cursor: pointer;
+  }
+  .cmdk-item[aria-selected='true'] { background: rgb(255 250 240 / .07); }
+  .cmdk-item[hidden] { display: none; }
+  .cmdk-empty { padding: 16px 22px 20px; color: var(--text-2); font-size: 15px; }
+  .cmdk-foot { padding: 12px 22px; border-top: 1px solid var(--line); color: var(--text-2); }
+  @media (max-width: 639px) {
+    .cmdk { margin: auto auto 0; width: 100vw; max-width: 100vw; max-height: 78dvh; border-radius: 24px 24px 0 0; padding-bottom: env(safe-area-inset-bottom); }
+    .cmdk[open] { animation: cmdk-up var(--dur-spring) var(--spring); }
+    @keyframes cmdk-up { from { transform: translateY(24px); opacity: 0; } }
+    .cmdk-foot { display: none; }
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+// The floating glass dock: bottom centre on every screen (creative director, phase 2).
+// On phones it holds Menu and Get in touch; without JavaScript the page links show instead of Menu.
+---
+
+<div class="dock glass" transition:persist="dock" data-dock>
+  <nav class="dock-nav" aria-label="Main">
+    <a class="dock-link" href="/work/">Work</a>
+    <a class="dock-link" href="/about/">About</a>
+    <a class="dock-link" href="/contact/">Contact</a>
+    <button class="dock-k js-only" type="button" data-cmdk-open aria-haspopup="dialog" aria-controls="cmdk">
+      <span class="sr">Search and shortcuts</span><kbd aria-hidden="true">⌘K</kbd>
+    </button>
+    <button class="dock-menu js-only" type="button" data-cmdk-open aria-haspopup="dialog" aria-controls="cmdk">Menu</button>
+  </nav>
+  <a class="cta dock-cta" href="/contact/" data-track="contact_click" data-from="dock">Get in touch</a>
+</div>
+
+<style>
+  .dock {
+    --rim: .35;
+    position: fixed; z-index: 50; left: 50%; bottom: 24px; transform: translateX(-50%);
+    width: 460px; height: 56px; border-radius: 28px; padding: 0 8px 0 10px;
+    display: flex; align-items: center; justify-content: space-between; gap: 4px;
+    font: 500 14px / 1 var(--ui); white-space: nowrap;
+    transition: opacity var(--dur-ui) ease-out, transform var(--dur-spring) var(--spring);
+  }
+  .dock[data-hidden] { opacity: 0; pointer-events: none; transform: translateX(-50%) translateY(12px); }
+  .dock-nav { display: flex; align-items: center; }
+  .dock-link, .dock-k, .dock-menu {
+    display: inline-flex; align-items: center; height: 44px; padding: 0 12px; border-radius: 22px;
+    color: var(--text-2); text-decoration: none; background: none; border: 0; cursor: pointer;
+    transition: color var(--dur-fast) ease-out;
+  }
+  .dock-link[aria-current='page'] { color: var(--text); }
+  @media (hover: hover) and (pointer: fine) { .dock-link:hover, .dock-k:hover { color: var(--text); } }
+  .dock-k kbd { font: 500 12px / 1 var(--mono); padding: 5px 7px; border-radius: 7px; border: 1px solid var(--line-strong); color: var(--text-2); }
+  .dock-cta { height: 40px; padding: 0 18px; border-radius: 20px; }
+  .dock-menu { display: none; color: var(--text); }
+  :global(html:not(.js)) .js-only { display: none !important; }
+  @media (max-width: 639px) {
+    .dock { width: calc(100vw - 40px); left: 20px; transform: none; bottom: calc(12px + env(safe-area-inset-bottom)); }
+    .dock[data-hidden] { transform: translateY(12px); }
+    :global(html.js) .dock-link, :global(html.js) .dock-k { display: none; }
+    :global(html.js) .dock-menu { display: inline-flex; }
+    :global(html:not(.js)) .dock-link { padding: 0 9px; }
+  }
+</style>
