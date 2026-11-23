@@ -1,0 +1,32 @@
+<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bend test</title>
+<style>
+@font-face{font-family:Host;src:url(fonts/host-grotesk-latin-wght-normal.woff2) format('woff2');font-weight:300 800}
+html,body{margin:0;background:#121110;color:#F3F1EC;height:100%}
+.hero{position:relative;height:100vh;overflow:hidden}
+.name{position:absolute;left:56px;top:120px;font:560 220px/.86 Host;letter-spacing:-.045em;margin:0;white-space:nowrap}
+.pane{position:absolute;left:300px;top:250px;width:620px;height:300px;border-radius:32px;overflow:hidden;isolation:isolate;
+  box-shadow:0 0 0 1px rgb(0 0 0/.6), inset 0 1px 0 rgb(255 255 255/.22), inset 0 -1px 0 rgb(0 0 0/.35);
+  background:linear-gradient(180deg,rgb(255 255 255/.035),rgb(255 255 255/.012))}
+.pane::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;z-index:2;
+  background:linear-gradient(135deg,rgb(255 255 255/.42),rgb(255 255 255/.08) 35%,rgb(255 255 255/.08) 65%,rgb(255 255 255/.14));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude}
+.lens{position:absolute;inset:0;overflow:hidden;filter:url(#bend) brightness(1.04)}
+.copy{position:absolute}
+</style></head><body>
+<div class="hero" id="hero">
+  <h1 class="name">Musa<br>Abdullah Walid</h1>
+  <div class="pane" id="pane"><div class="lens"><div class="copy" id="copy" aria-hidden="true"></div></div></div>
+</div>
+<script type="module">
+import { ensureBendFilter } from './glass.js';
+const pane = document.getElementById('pane'), copy = document.getElementById('copy');
+const name = document.querySelector('.name');
+copy.appendChild(name.cloneNode(true));
+copy.style.left = -pane.offsetLeft + 'px'; copy.style.top = -pane.offsetTop + 'px';
+copy.style.width = innerWidth + 'px'; copy.style.height = innerHeight + 'px';
+await document.fonts.ready;
+const r = pane.getBoundingClientRect();
+const q = new URLSearchParams(location.search);
+ensureBendFilter('bend', r.width, r.height, 32, { band: +(q.get('band') ?? 22), strength: +(q.get('s') ?? 60) });
+document.documentElement.dataset.ready = '1';
+</script></body></html>

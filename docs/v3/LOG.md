@@ -26,3 +26,16 @@ Branch `redesign/v3-dark`. Brief: `docs/MASTER-PROMPT-v3.md`. Nothing pushed, no
   - CSS `filter: url(#svg-filter)` with `feDisplacementMap` on an HTML copy bends in Chromium, but WebKit ignores the `feImage` map (data URL, same-origin file, blob URL and in-SVG `<image>` reference all failed), so the copy slides out of line.
   - The same filter on **SVG-native content** (an inline SVG with `<text>` and `<image>`, clipped to the pane) bends identically in Chromium and WebKit.
   - Decision: the bend is an inline SVG lens inside the pane, built after load from the measured positions of the real HTML masthead and portrait. No WebGL, no `backdrop-filter`, nothing on the critical path. Without JS the Appendix B CSS pane shows with no bend. three.js is therefore not needed for the pane; the brief's three.js route stays unused unless the principal rejects the bend.
+- **Bend tuning:** sampling inward (magnify) folds and smears at strong settings. Switched to outward sampling (the rim gathers what lies just beyond the edge and compresses it) with the filter region grown by 2× the rim on each side; strength must stay under about 1.2× the rim width so the mapping never folds. Chosen: rim 36px, strength 42.
+- **⌘K:** the curated pick (cmdk) needs React, which this site doesn't otherwise load, so ⌘K is hand-built on a native `<dialog>` with the same keyboard model.
+- **find-skills (phase 0, report only, nothing installed):** `astrolicious/agent-skills@astro` (20.3K installs) could help with Astro view transitions; `affaan-m/ecc@liquid-glass-design` (14.1K) is general Liquid Glass guidance; the Lighthouse skills all have under 600 installs and aren't worth adding. Any install needs Musa's yes.
+- **Prototype harness:** `prototypes/v3-hero/` (picker `index.html`, `shared.css`, `shared.js` with `buildLens`, `glass.js`, `bend-svg.html` proof). Serve with the `v3-hero` launch config (port 4411). Directions `a.html`, `b.html`, `c.html` not built yet.
+- **Plan drafted:** `docs/plans/v3.md` (hero task defers to `DESIGN.md`). Head-of-engineering review started, then paused when usage ran out; re-run it.
+
+## Paused (usage limit), 24 November ~04:45
+
+Next steps, in order:
+1. Collect the creative director's three hero directions (re-run the CD brief if its report is missing), then build `a/b/c.html` behind the picker with the SVG lens, and rename the picker items.
+2. Run `taste-skill` and Impeccable critique on all three; hand to the CD; the principal picks.
+3. Write the direction contract (surface brief + `DESIGN.md`), CD approves.
+4. Re-run the head-of-engineering plan review on `docs/plans/v3.md`, apply findings, then build (phase 4).

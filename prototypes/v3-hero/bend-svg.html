@@ -1,0 +1,31 @@
+<!doctype html><html lang="en-AU"><head><meta charset="utf-8"><title>Bend SVG test</title>
+<style>
+@font-face{font-family:Host;src:url(fonts/host-grotesk-latin-wght-normal.woff2) format('woff2');font-weight:300 800}
+html,body{margin:0;background:#121110;height:100%}
+svg{display:block}
+.m{font:560 220px Host;letter-spacing:-.045em;fill:#F3F1EC}
+</style></head><body>
+<svg id="s" width="1440" height="900" viewBox="0 0 1440 900" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <g id="name"><text class="m" x="56" y="300">Musa</text><text class="m" x="56" y="490">Abdullah Walid</text></g>
+    <clipPath id="paneclip"><rect x="300" y="250" width="620" height="300" rx="32"/></clipPath>
+    <filter id="bend" x="240" y="190" width="740" height="420" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feImage id="fe" x="300" y="250" width="620" height="300" preserveAspectRatio="none" result="map"/>
+      <feDisplacementMap in="SourceGraphic" in2="map" scale="34" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <use href="#name"/>
+  <rect x="300" y="250" width="620" height="300" rx="32" fill="#121110"/>
+  <g clip-path="url(#paneclip)"><g filter="url(#bend)"><use href="#name"/></g></g>
+  <rect x="300.5" y="250.5" width="619" height="299" rx="31.5" fill="rgb(255 255 255 / .03)" stroke="rgb(255 255 255 / .25)"/>
+</svg>
+<script type="module">
+import { displacementMap } from './glass.js';
+await document.fonts.ready;
+const q = new URLSearchParams(location.search);
+const u = displacementMap(620, 300, 32, +(q.get('band') ?? 30));
+document.querySelector('feDisplacementMap').setAttribute('scale', q.get('s') ?? '34');
+const fe = document.getElementById('fe');
+fe.setAttribute('href', u); fe.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', u);
+document.documentElement.dataset.ready = '1';
+</script></body></html>
