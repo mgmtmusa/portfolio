@@ -1,3 +1,5 @@
+> **Partly superseded on 24 November 2026.** The robot render (section 1) is retired. For the turn film, use the dark version in Appendix A of `docs/MASTER-PROMPT-v3.md`.
+
 # Generation prompts: robot layer and the turn
 
 These are the real renders that replace the placeholders in `prototypes/portrait-lens/`. The page detects each file automatically, so you just reload once it's saved.

@@ -51,7 +51,7 @@ export const growthWork: {
     t: 'Lead qualification and CRM routing',
     org: 'Evitech',
     did: 'Revised the qualification criteria and lead routing while managing a 38-person offshore lead generation team.',
-    results: [{ v: '80%', l: 'pipeline volume growth, quarter on quarter' }],
+    results: [{ v: '80%', l: 'pipeline volume growth, quarter on quarter', scope: 'Company pipeline' }],
     case: 'evitech',
   },
   {

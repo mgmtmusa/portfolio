@@ -1,3 +1,5 @@
+> **Superseded on 24 November 2026 by `docs/MASTER-PROMPT-v3.md`.** The human-versus-machine concept is retired. Kept for history only; don't build from this file.
+
 # Master prompt: "The Seam", portfolio v2
 
 **How to use this file**

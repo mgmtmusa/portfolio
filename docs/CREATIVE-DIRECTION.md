@@ -1,3 +1,5 @@
+> **Superseded on 24 November 2026 by `docs/MASTER-PROMPT-v3.md`.** The human-versus-machine concept is retired. Kept for history only; don't build from this file.
+
 # Creative direction: The Seam, merged with the references
 
 This merges everything you've asked for in this project (the Seam, the lens and robot, the turn, the master prompt's features) with what works on two sites you like. I studied both live on 23 November 2026:

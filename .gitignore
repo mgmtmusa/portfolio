@@ -8,3 +8,6 @@ dist/
 test-results/
 playwright-report/
 docs/evidence/**/lh-*-[0-9].json
+
+# Reference-site screenshots for the v3 research (never published)
+docs/v3/research/
