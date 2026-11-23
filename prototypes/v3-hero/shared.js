@@ -109,19 +109,32 @@ export function buildLens(pane, root, o) {
     im.setAttribute('preserveAspectRatio', 'xMidYMid slice');
     g.appendChild(im);
   }
+  // WebKit ignores letter-spacing on SVG <text>, so every glyph gets its own x from the page's own layout.
   for (const line of o.lines ?? []) {
     const s = getComputedStyle(line);
-    const range = document.createRange();
-    range.selectNodeContents(line);
-    const r = range.getClientRects()[0];
-    if (!r) continue;
+    const xs = [], chars = [];
+    const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
+    let top = null;
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      for (let i = 0; i < node.length; i++) {
+        const r = document.createRange();
+        r.setStart(node, i); r.setEnd(node, i + 1);
+        const b = r.getBoundingClientRect();
+        if (!b.width && node.data[i] !== ' ') continue;
+        if (top === null) top = b.top;
+        xs.push((b.left - R.left).toFixed(2));
+        chars.push(node.data[i]);
+      }
+    }
+    if (top === null) continue;
     const t = document.createElementNS(SVG, 'text');
-    t.textContent = line.textContent;
-    t.setAttribute('x', r.left - R.left);
-    t.setAttribute('y', r.top - R.top + fontAscentPx(s));
+    t.textContent = chars.join('');
+    t.setAttribute('x', xs.join(' '));
+    t.setAttribute('y', top - R.top + fontAscentPx(s));
     t.setAttribute('fill', s.color);
     t.style.font = `${s.fontWeight} ${s.fontSize} ${s.fontFamily}`;
-    t.style.letterSpacing = s.letterSpacing;
+    t.style.letterSpacing = '0px';
+    t.style.whiteSpace = 'pre';
     g.appendChild(t);
   }
   pane.prepend(svg);

@@ -7,7 +7,8 @@
 <link rel="preload" href="fonts/host-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="shared.css">
 <style>
-:root { --u: calc(100vw / 1440); }
+:root { --u: min(calc(100vw / 1440), calc(100svh / 900)); }
+.hero { width: calc(1440 * var(--u)); margin-inline: auto; }
 .hero { position: relative; height: calc(900 * var(--u)); min-height: 640px; overflow: clip; }
 .hero::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
   background: radial-gradient(38vw 96vh at 20% -14%, rgb(255 208 158 / .10), transparent 64%), radial-gradient(30vw 9vh at 22% 92%, rgb(255 204 150 / .035), transparent 70%); }
