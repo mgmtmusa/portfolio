@@ -11,3 +11,4 @@ docs/evidence/**/lh-*-[0-9].json
 
 # Reference-site screenshots for the v3 research (never published)
 docs/v3/research/
+.impeccable/review/

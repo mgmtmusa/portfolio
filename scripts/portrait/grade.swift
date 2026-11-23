@@ -14,6 +14,12 @@ func rgba(_ img: CGImage) -> [UInt8] {
   ctx.draw(img, in: CGRect(x: 0, y: 0, width: w, height: h)); return buf
 }
 let photo = load(a[1]), maskImg = load(a[2]); let mode = a[4]
+let env = ProcessInfo.processInfo.environment
+func ef(_ k: String, _ d: Float) -> Float { Float(env[k] ?? "") ?? d }
+// Direction parameters (defaults = the A "Cover" grade)
+let poolRGB = SIMD3<Float>(ef("POOL_R", 16), ef("POOL_G", 13), ef("POOL_B", 9)) / 255
+let poolX = ef("POOL_X", 0.26), poolY = ef("POOL_Y", 0.16), poolS = ef("POOL_S", 0.10)
+let keyLow = ef("KEY_LOW", 0.74)
 let W = photo.width, H = photo.height
 let P = rgba(photo), M = rgba(maskImg)
 var alpha = [Float](repeating: 0, count: W*H)
@@ -58,17 +64,21 @@ for y in 0..<H { for x in 0..<W {
   c = SIMD3(pow(c.x,1.06), pow(c.y,1.06), pow(c.z,1.06)) // deepen mids
   // highlight roll-off so the white shirt sits below the page text
   for k in 0..<3 { let v = c[k]; if v > 0.62 { c[k] = 0.62 + (v-0.62)*0.55 } }
-  c = 0.032 + (1-0.032)*c                           // lifted blacks
-  c *= SIMD3(1.05, 1.0, 0.90)                      // warmth (red above blue)
+    c *= SIMD3(1.05, 1.0, 0.90)                      // warmth (red above blue)
+  // navy reads as ink, never blue: pull blue-dominant pixels 35% toward their luminance
+  let lum = c.x*0.2126 + c.y*0.7152 + c.z*0.0722
+  let blueness = min(max((c.z - c.x) * 4, 0), 1)
+  c = c + (SIMD3<Float>(lum, lum, lum) - c) * (0.35 * blueness)
   // key light high on the left: luminance falloff, no colour
   let fx = Float(x)/Float(W), fy = Float(y)/Float(H)
   let d2 = (fx-0.36)*(fx-0.36) + (fy-0.20)*(fy-0.20)*0.8
-  let key = 0.74 + 0.36*exp(-d2/0.16)
+  let key = keyLow + (1.10 - keyLow)*exp(-d2/0.16)
   c *= key
+  c = page + (SIMD3<Float>(1,1,1) - page) * c     // black lands exactly on the page colour
   // ---- composite ----
   var oa: Float
   // backdrop: warm dark pool, lit from the same side
-  let pool = page + SIMD3<Float>(16,13,9)/255 * exp(-((fx-0.26)*(fx-0.26)+(fy-0.16)*(fy-0.16))/0.10)
+  let pool = page + poolRGB * exp(-((fx-poolX)*(fx-poolX)+(fy-poolY)*(fy-poolY))/poolS)
   // bottom dissolve: body fades into the page over the lowest 24%
   let bottom = 1 - smooth(0.74, 1.0, fy)
   // lower-corner dissolve so the frame edge never shows

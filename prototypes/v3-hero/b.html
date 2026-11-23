@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stage: v3 hero direction B</title>
+<link rel="preload" href="fonts/host-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="shared.css">
+<style>
+:root { --u: calc(100vw / 1440); }
+.hero { position: relative; height: calc(900 * var(--u)); min-height: 640px; overflow: clip; }
+.hero::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background: radial-gradient(38vw 96vh at 20% -14%, rgb(255 208 158 / .10), transparent 64%), radial-gradient(30vw 9vh at 22% 92%, rgb(255 204 150 / .035), transparent 70%); }
+.house { position: absolute; inset: 0; background: #121110; opacity: 0; z-index: 9; pointer-events: none; }
+.stage { position: absolute; inset: 0; z-index: 2; }
+.portrait { position: absolute; left: calc(58 * var(--u)); top: calc(88 * var(--u)); width: calc(520 * var(--u)); height: calc(520 * var(--u)); z-index: 2;
+  -webkit-mask-image: linear-gradient(90deg, #000 82%, transparent); mask-image: linear-gradient(90deg, #000 82%, transparent); }
+.mast { position: absolute; left: calc(620 * var(--u)); top: calc(150 * var(--u)); z-index: 3; }
+.foot { position: absolute; left: calc(58 * var(--u)); top: calc(760 * var(--u)); width: calc(1324 * var(--u)); z-index: 7; display: grid; grid-template-columns: calc(502 * var(--u)) 1fr; column-gap: calc(62 * var(--u)); }
+.foot .copy { display: grid; gap: 10px; align-content: start; }
+.proof { display: flex; gap: 40px; align-items: flex-start; }
+.proof .cap { font: 400 13px/18px var(--ui); color: var(--text-2); margin: 6px 0 0; max-width: 34ch; }
+.pair { display: flex; gap: 24px; }
+.pane { --rim: .70; left: calc(80 * var(--u)); top: calc(604 * var(--u)); width: calc(860 * var(--u)); height: calc(120 * var(--u)); border-radius: calc(36 * var(--u)); }
+.pane-shadow { left: calc(80 * var(--u)); top: calc(604 * var(--u)); width: calc(860 * var(--u)); height: calc(120 * var(--u)); border-radius: calc(36 * var(--u)); }
+.pane-ctl { position: fixed; z-index: 8; display: flex; align-items: center; gap: 4px; font: 500 15px/1 var(--ui); letter-spacing: .01em; transition: opacity .12s ease-out; }
+.pane-ctl a:not(.cta), .pane-ctl button { all: unset; cursor: pointer; display: inline-flex; align-items: center; height: 44px; padding: 0 14px; border-radius: 22px; color: var(--text); }
+.pane-ctl a:not(.cta):hover { background: rgb(255 255 255 / .06); }
+.pane-ctl .cta { margin-left: 10px; }
+.pane-ctl button.phone-only { display: none; }
+.after { padding: 120px calc(58 * var(--u)) 200px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+.after h2 { grid-column: 1 / 7; font: 520 clamp(44px, 6vw, 80px) / .98 var(--display); letter-spacing: -.03em; margin: 0 0 40px; }
+.after ol { grid-column: 1 / 13; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.after li { border-top: 1px solid var(--line); padding-top: 18px; }
+.after li b { display: block; font: 500 12px/1 var(--mono); letter-spacing: .08em; color: var(--text-3); margin-bottom: 14px; }
+.after li p { margin: 8px 0 0; color: var(--text-2); font-size: 15px; line-height: 1.5; }
+.notes { grid-column: 1 / 13; margin-top: 80px; padding: 0; list-style: none; display: grid; gap: 10px; font-size: 13px; color: var(--text-2); }
+.notes span { font: 500 11px var(--mono); color: var(--accent); margin-right: 10px; }
+@media (max-width: 639px) {
+  :root { --u: calc(100vw / 390); }
+  .hero { height: auto; min-height: 0; }
+  .stage { position: relative; height: calc(800 * var(--u)); }
+  .portrait { left: calc(-20 * var(--u)); top: calc(28 * var(--u)); width: calc(390 * var(--u)); height: calc(390 * var(--u)); -webkit-mask-image: none; mask-image: none; }
+  .mast { left: calc(20 * var(--u)); top: calc(396 * var(--u)); font-size: calc(90 * var(--u)); letter-spacing: -.04em; }
+  .pane, .pane-shadow { left: calc(20 * var(--u)); top: calc(600 * var(--u)); width: calc(350 * var(--u)); height: calc(88 * var(--u)); border-radius: 28px; }
+  .pane-ctl a.desk-only { display: none; } .pane-ctl button.phone-only { display: inline-flex; }
+  .foot { position: relative; left: auto; top: auto; width: auto; display: block; padding: 0 20px; margin-top: calc(-88 * var(--u)); }
+  .line { font-size: 22px; }
+  .proof { flex-direction: column; gap: 24px; margin-top: 40px; }
+  .after { padding: 80px 20px 160px; } .after ol { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="strip" role="status" aria-live="off">
+  <span>Melbourne <span class="t" data-clock>00:00:00</span></span>
+  <span class="c"><span class="long">Based in Melbourne. </span>Open to conversations about marketing, growth and business development opportunities.</span>
+  <span class="r">I aim to respond within two business days.</span>
+</div>
+<header class="hero" id="top">
+  <div class="house" aria-hidden="true"></div>
+  <div class="stage">
+    <img class="portrait" src="img/portrait-b.webp" width="520" height="520" alt="Studio portrait of Musa Abdullah Walid: a bearded man with swept-back black hair and gold wire-framed glasses, in a navy pinstripe double-breasted suit, white shirt and patterned tie." fetchpriority="high">
+    <h1 class="mast" aria-label="Musa Abdullah Walid"><span>Musa</span><span>Abdullah</span><span>Walid</span></h1>
+    <div class="pane-shadow" aria-hidden="true"></div>
+    <div class="pane" aria-hidden="true"></div>
+  </div>
+  <div class="foot">
+    <div class="copy">
+      <p class="role">Marketing &amp; Growth Specialist, Melbourne</p>
+      <p class="line">I carried a sales target first,<br class="d"> so I judge marketing by what closes.</p>
+    </div>
+    <div class="proof" aria-label="Results">
+      <div>
+        <div class="pair">
+          <div><div class="fig">28%<a class="fn" href="#n1" aria-label="Note 1">1</a></div><div class="lab">lower cost per acquisition</div></div>
+          <div><div class="fig">65%<a class="fn" href="#n1" aria-label="Note 1">1</a></div><div class="lab">more qualified leads</div></div>
+        </div>
+        <p class="cap">Two results from the same initiative at Evitech, on paid media of roughly $15K to $30K a month.</p>
+      </div>
+      <div><div class="fig">$2M+<a class="fn" href="#n2" aria-label="Note 2">2</a></div><div class="lab">in B2B contracts<br>personally closed</div></div>
+      <div><div class="fig">13,200<a class="fn" href="#n3" aria-label="Note 3">3</a></div><div class="lab">social audience for I Heart Uni,<br>grown from 400</div></div>
+    </div>
+  </div>
+</header>
+<nav class="pane-ctl" aria-label="Main">
+  <a class="desk-only" href="#work">Work</a><a class="desk-only" href="#about">About</a><a class="desk-only" href="#contact">Contact</a><button class="phone-only" type="button">Menu</button>
+  <a class="cta" href="#contact">Get in touch</a>
+</nav>
+<main class="after">
+  <h2>From field sales to marketing, in four roles</h2>
+  <ol>
+    <li><b>April 2021</b>Field Sales Representative<p>Door-to-door sales of solar, battery and HVAC upgrades. Set the company’s highest day-one sales record.</p></li>
+    <li><b>July 2021</b>B2B Sales Executive &amp; Team Leader<p>Promoted to team leader within six months. More than $2M personally closed to date.</p></li>
+    <li><b>January 2022</b>Business Development &amp; People Operations Manager<p>Helped establish the NSW hub. Recruited 23 sales executives.</p></li>
+    <li><b>January 2023</b>Marketing &amp; Growth Specialist<p>Paid media, reporting and CRM, at roughly $15K to $30K a month across Meta and Google.</p></li>
+  </ol>
+  <ol class="notes">
+    <li id="n1"><span>1</span>My work at Evitech: I restructured the Google Ads and Meta accounts, audiences and budget allocation. The ad accounts belong to Evitech, so they aren’t shown here.</li>
+    <li id="n2"><span>2</span>Contracts I closed myself at Evitech, total to date. The company’s revenue growth is a team outcome and appears only in the Evitech case.</li>
+    <li id="n3"><span>3</span>Start and current figures from my time running the brand, grown mostly through organic content and community building.</li>
+  </ol>
+</main>
+
+<div class="dock glass" data-hidden>
+  <nav aria-label="Main"><a class="desk-only" href="#work">Work</a><a class="desk-only" href="#about">About</a><a class="desk-only" href="#contact">Contact</a><button class="phone-only" type="button">Menu</button><button type="button" class="desk-only" aria-label="Search (Command K)"><span class="k">⌘K</span></button></nav>
+  <a class="cta" href="#contact">Get in touch</a>
+</div>
+
+<script type="module">
+import { startClock, buildLens, spring, ease, lerp, clamp, rectOf, placeFixed, reduced } from './shared.js';
+startClock();
+const hero = document.querySelector('.hero'), pane = document.querySelector('.pane'), shadow = document.querySelector('.pane-shadow');
+const ctl = document.querySelector('.pane-ctl'), dock = document.querySelector('.dock'), img = document.querySelector('.portrait');
+const lines = [...document.querySelectorAll('.mast span')];
+const phone = matchMedia('(max-width: 639px)').matches;
+const BAND = phone ? 14 : 24, STR = phone ? 16 : 28;
+await document.fonts.ready; await img.decode().catch(() => {});
+const rest = rectOf(pane), R0 = parseFloat(getComputedStyle(pane).borderTopLeftRadius);
+placeFixed(pane, rest, R0); placeFixed(shadow, rest, R0);
+const placeCtl = (r) => { const c = ctl.getBoundingClientRect(); ctl.style.left = `${r.x + (phone ? (r.w - c.width) / 2 : 32 * innerWidth / 1440)}px`; ctl.style.top = `${r.y + (phone ? r.h * .58 : r.h / 2) - c.height / 2}px`; };
+placeCtl(rest);
+let lens = buildLens(pane, hero, { lines, images: [img], band: BAND, strength: STR });
+
+// Load: the house lights go down, the spot comes up a beat later, then the bar rises.
+if (!reduced) {
+  document.querySelector('.house').animate([{ opacity: .55 }, { opacity: 0 }], { duration: 1100, easing: 'cubic-bezier(.4,0,.2,1)' });
+  hero.animate([{ '--x': 0 }, { '--x': 1 }], { duration: 1 });
+  document.styleSheets; // no-op
+  const items = [pane, shadow];
+  items.forEach((el) => el.animate([{ opacity: 0, transform: 'translateY(48px) scale(.97)' }, { opacity: 1, transform: 'none' }], { duration: 800, delay: 600, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' }));
+  ctl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, delay: 1200, fill: 'backwards' });
+  document.querySelector('.foot').animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 500, delay: 900, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
+}
+
+// Scroll: the name slides under the bar for 64px, then the bar springs to the dock (and back below 24px).
+let docked = false, stop = null, prog = 0;
+const apply = (p) => {
+  prog = p; const d = rectOf(dock);
+  const r = { x: lerp(rest.x, d.x, p), y: lerp(rest.y, d.y, p), w: lerp(rest.w, d.w, p), h: lerp(rest.h, d.h, p) };
+  placeFixed(pane, r, lerp(R0, 28, p)); placeFixed(shadow, r, lerp(R0, 28, p));
+  pane.style.setProperty('--rim', lerp(.70, .35, p));
+  shadow.style.transform = `translate(${lerp(12, 0, p)}px, ${lerp(18, 6, p)}px)`;
+  placeCtl(r);
+  const end = clamp((p - .8) / .2, 0, 1);
+  dock.style.opacity = end; end > 0 ? delete dock.dataset.hidden : (dock.dataset.hidden = '');
+  pane.style.opacity = shadow.style.opacity = p > .995 ? 0 : 1;
+};
+function go(to) {
+  const cur = stop ? stop() : { v: 0 };
+  if (to === 1 && lens) { lens.destroy(); lens = null; pane.dataset.moving = ''; }
+  ctl.style.opacity = 0;
+  if (reduced) { apply(to); after(to); return; }
+  stop = spring(prog, to, { response: .55, damping: 1, velocity: cur.v ?? 0 }, apply, () => { stop = null; after(to); });
+}
+function after(to) {
+  if (to === 0) { delete pane.dataset.moving; ctl.style.opacity = 1; if (!lens) lens = buildLens(pane, hero, { lines, images: [img], band: BAND, strength: STR }); lens.shift(0, scrollY); }
+}
+addEventListener('scroll', () => {
+  const s = scrollY;
+  if (!docked && s > 64) { docked = true; go(1); }
+  else if (docked && s < 24) { docked = false; go(0); }
+  else if (!docked && lens) lens.shift(0, s);
+}, { passive: true });
+document.documentElement.dataset.ready = '1';
+</script>
+</body>
+</html>

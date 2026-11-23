@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cover: v3 hero direction A</title>
+<link rel="preload" href="fonts/host-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="shared.css">
+<style>
+:root { --u: calc(100vw / 1440); }
+.hero { position: relative; height: calc(900 * var(--u)); min-height: 640px; }
+.hero::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(52vw 60vh at 20% 14%, rgb(var(--key) / .07), transparent 66%); }
+.stage { position: absolute; inset: 0; }
+.portrait { position: absolute; left: calc(633 * var(--u)); top: calc(83 * var(--u)); width: calc(620 * var(--u)); height: calc(620 * var(--u)); z-index: 4; }
+.mast { position: absolute; left: calc(58 * var(--u)); top: calc(211 * var(--u)); z-index: 3; }
+.proof { position: absolute; left: calc(1090 * var(--u)); top: calc(140 * var(--u)); width: calc(292 * var(--u)); z-index: 7; display: grid; gap: 24px; }
+.pair { display: flex; gap: 28px; }
+.cap { font: 400 13px/18px var(--ui); color: var(--text-2); margin-top: 10px; max-width: 30ch; }
+.foot { position: absolute; left: calc(58 * var(--u)); top: calc(762 * var(--u)); width: calc(1324 * var(--u)); z-index: 7; display: flex; align-items: flex-end; gap: calc(42 * var(--u)); }
+.foot .copy { width: calc(632 * var(--u)); display: grid; gap: 10px; }
+.foot .acts { display: flex; align-items: center; gap: 24px; padding-bottom: 4px; }
+.pane { left: calc(150 * var(--u)); top: calc(600 * var(--u)); width: calc(400 * var(--u)); height: calc(156 * var(--u)); }
+.pane-shadow { left: calc(150 * var(--u)); top: calc(600 * var(--u)); width: calc(400 * var(--u)); height: calc(156 * var(--u)); }
+.after { padding: 120px calc(58 * var(--u)) 200px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+.after h2 { grid-column: 1 / 7; font: 520 clamp(44px, 6vw, 80px) / .98 var(--display); letter-spacing: -.03em; margin: 0 0 40px; }
+.after ol { grid-column: 1 / 13; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.after li { border-top: 1px solid var(--line); padding-top: 18px; }
+.after li b { display: block; font: 500 12px/1 var(--mono); letter-spacing: .08em; color: var(--text-3); margin-bottom: 14px; font-weight: 500; }
+.after li p { margin: 8px 0 0; color: var(--text-2); font-size: 15px; line-height: 1.5; }
+.notes { grid-column: 1 / 13; margin-top: 80px; padding: 0; list-style: none; display: grid; gap: 10px; font-size: 13px; color: var(--text-2); }
+.notes span { font: 500 11px var(--mono); color: var(--accent); margin-right: 10px; }
+
+@media (max-width: 639px) {
+  :root { --u: calc(100vw / 390); }
+  .hero { height: auto; min-height: 0; }
+  .stage { position: relative; height: calc(780 * var(--u)); }
+  .portrait { left: calc(50 * var(--u)); top: calc(24 * var(--u)); width: calc(360 * var(--u)); height: calc(360 * var(--u)); }
+  .mast { left: calc(20 * var(--u)); top: calc(392 * var(--u)); font-size: calc(90 * var(--u)); letter-spacing: -.04em; }
+  .pane, .pane-shadow { left: calc(176 * var(--u)); top: calc(470 * var(--u)); width: calc(186 * var(--u)); height: calc(84 * var(--u)); border-radius: 28px; }
+  .foot { left: calc(20 * var(--u)); top: calc(628 * var(--u)); width: calc(350 * var(--u)); flex-direction: column; align-items: flex-start; gap: 18px; }
+  .foot .copy { width: 100%; }
+  .line { font-size: 22px; }
+  .proof { position: relative; left: auto; top: auto; width: auto; padding: 8px 20px 0; }
+  .after { padding: 80px 20px 160px; }
+  .after ol { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="strip" role="status" aria-live="off">
+  <span>Melbourne <span class="t" data-clock>00:00:00</span></span>
+  <span class="c"><span class="long">Based in Melbourne. </span>Open to conversations about marketing, growth and business development opportunities.</span>
+  <span class="r">I aim to respond within two business days.</span>
+</div>
+
+<header class="hero" id="top">
+  <div class="stage">
+    <h1 class="mast" aria-label="Musa Abdullah Walid"><span>Musa</span><span>Abdullah</span><span>Walid</span></h1>
+    <img class="portrait" src="img/portrait-a.webp" width="620" height="620" alt="Studio portrait of Musa Abdullah Walid: a bearded man with swept-back black hair and gold wire-framed glasses, in a navy pinstripe double-breasted suit, white shirt and patterned tie." fetchpriority="high">
+    <div class="pane-shadow" aria-hidden="true"></div>
+    <div class="pane" aria-hidden="true"></div>
+    <div class="foot">
+      <div class="copy">
+        <p class="role">Marketing &amp; Growth Specialist, Melbourne</p>
+        <p class="line">I carried a sales target first,<br class="d"> so I judge marketing by what closes.</p>
+      </div>
+      <div class="acts">
+        <a class="cta" href="#contact">Get in touch</a>
+        <a class="textlink" href="#cv">Download CV</a>
+      </div>
+    </div>
+  </div>
+  <div class="proof" aria-label="Results">
+    <div>
+      <div class="pair">
+        <div><div class="fig">28%<a class="fn" href="#n1" aria-label="Note 1">1</a></div><div class="lab">lower cost per acquisition</div></div>
+        <div><div class="fig">65%<a class="fn" href="#n1" aria-label="Note 1">1</a></div><div class="lab">more qualified leads</div></div>
+      </div>
+      <p class="cap">Two results from the same initiative at Evitech, on paid media of roughly $15K to $30K a month.</p>
+    </div>
+    <div><div class="fig">$2M+<a class="fn" href="#n2" aria-label="Note 2">2</a></div><div class="lab">in B2B contracts personally closed</div></div>
+    <div><div class="fig">13,200<a class="fn" href="#n3" aria-label="Note 3">3</a></div><div class="lab">social audience for I Heart Uni, grown from 400</div></div>
+  </div>
+</header>
+
+<main class="after">
+  <h2>From field sales to marketing, in four roles</h2>
+  <ol>
+    <li><b>April 2021</b>Field Sales Representative<p>Door-to-door sales of solar, battery and HVAC upgrades. Set the company’s highest day-one sales record.</p></li>
+    <li><b>July 2021</b>B2B Sales Executive &amp; Team Leader<p>Promoted to team leader within six months. More than $2M personally closed to date.</p></li>
+    <li><b>January 2022</b>Business Development &amp; People Operations Manager<p>Helped establish the NSW hub. Recruited 23 sales executives.</p></li>
+    <li><b>January 2023</b>Marketing &amp; Growth Specialist<p>Paid media, reporting and CRM, at roughly $15K to $30K a month across Meta and Google.</p></li>
+  </ol>
+  <ol class="notes">
+    <li id="n1"><span>1</span>My work at Evitech: I restructured the Google Ads and Meta accounts, audiences and budget allocation. The ad accounts belong to Evitech, so they aren’t shown here.</li>
+    <li id="n2"><span>2</span>Contracts I closed myself at Evitech, total to date. The company’s revenue growth is a team outcome and appears only in the Evitech case.</li>
+    <li id="n3"><span>3</span>Start and current figures from my time running the brand, grown mostly through organic content and community building.</li>
+  </ol>
+</main>
+
+<div class="dock glass" data-hidden>
+  <nav aria-label="Main"><a class="desk-only" href="#work">Work</a><a class="desk-only" href="#about">About</a><a class="desk-only" href="#contact">Contact</a><button class="phone-only" type="button">Menu</button><button type="button" class="desk-only" aria-label="Search (Command K)"><span class="k">⌘K</span></button></nav>
+  <a class="cta" href="#contact">Get in touch</a>
+</div>
+
+<script type="module">
+import { startClock, buildLens, bendIn, ease, lerp, clamp, rectOf, placeFixed, reduced } from './shared.js';
+startClock();
+const hero = document.querySelector('.hero'), pane = document.querySelector('.pane'), shadow = document.querySelector('.pane-shadow');
+const dock = document.querySelector('.dock'), img = document.querySelector('.portrait'), mast = document.querySelector('.mast');
+const lines = [...mast.querySelectorAll('span')];
+const phone = matchMedia('(max-width: 639px)').matches;
+const BAND = phone ? 14 : 24, STR = phone ? 16 : 28;
+await document.fonts.ready; await img.decode().catch(() => {});
+
+// Load: masthead fades (240ms), he steps 8px in front of his name, then the pane materialises.
+if (!reduced) {
+  mast.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 240, easing: 'linear' });
+  img.animate([{ transform: 'translateX(8px)' }, { transform: 'none' }], { duration: 1200, delay: 120, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'backwards' });
+}
+const rest = rectOf(pane), R0 = parseFloat(getComputedStyle(pane).borderTopLeftRadius);
+placeFixed(pane, rest, R0); placeFixed(shadow, rest, R0);
+let lens = buildLens(pane, hero, { lines, images: [img], band: BAND, strength: reduced ? STR : 0 });
+if (!reduced) {
+  pane.style.opacity = 0;
+  await new Promise((r) => setTimeout(r, 520));
+  const t0 = performance.now();
+  await new Promise((done) => { const f = (now) => {
+    const t = clamp((now - t0) / 900, 0, 1), e = ease.expoOut(t), dx = -56 * (1 - e);
+    pane.style.opacity = clamp(t / .3, 0, 1); shadow.style.opacity = pane.style.opacity;
+    pane.style.transform = `translateX(${dx}px) scale(${.965 + .035 * e})`; shadow.style.transform = `translate(${12 + dx}px, 18px)`;
+    lens.shift(dx, 0); lens.setStrength(STR * e);
+    t < 1 ? requestAnimationFrame(f) : done(); }; requestAnimationFrame(f); });
+  pane.style.transform = '';
+}
+
+// Scroll: the pane holds still while the name slides up through its edges (0 to 90px),
+// then morphs into the dock (90 to 360px). Reverses exactly.
+const dockRect = () => rectOf(dock);
+function frame() {
+  const s = scrollY, p = clamp(s / 360, 0, 1);
+  if (reduced) { const on = s > 120; pane.style.opacity = shadow.style.opacity = on ? 0 : 1; on ? delete dock.dataset.hidden : (dock.dataset.hidden = ''); return; }
+  const m = clamp((p - .25) / .75, 0, 1), e = ease.p3inOut(m), d = dockRect();
+  if (m === 0) {
+    if (!lens) lens = buildLens(pane, hero, { lines, images: [img], band: BAND, strength: STR });
+    lens.shift(0, s);
+    delete pane.dataset.moving;
+  } else if (lens) { lens.destroy(); lens = null; pane.dataset.moving = ''; }
+  const r = { x: lerp(rest.x, d.x, e), y: lerp(rest.y, d.y, e), w: lerp(rest.w, d.w, e), h: lerp(rest.h, d.h, e) };
+  placeFixed(pane, r, lerp(R0, 28, e));
+  pane.style.setProperty('--rim', lerp(.62, .35, e));
+  placeFixed(shadow, r, lerp(R0, 28, e));
+  shadow.style.transform = `translate(${lerp(12, 0, e)}px, ${lerp(18, 6, e)}px)`; shadow.style.opacity = lerp(1, .6, e);
+  img.style.transform = `translateY(${8 * p}px)`;
+  const dk = clamp((m - .8) / .2, 0, 1);
+  dock.style.opacity = dk; dk > 0 ? delete dock.dataset.hidden : (dock.dataset.hidden = '');
+  pane.style.opacity = shadow.style.opacity = m === 1 ? 0 : 1;
+}
+addEventListener('scroll', () => requestAnimationFrame(frame), { passive: true });
+frame();
+document.documentElement.dataset.ready = '1';
+</script>
+</body>
+</html>

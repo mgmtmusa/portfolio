@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cover line: v3 hero direction C</title>
+<link rel="preload" href="fonts/host-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="shared.css">
+<style>
+:root { --u: calc(100vw / 1440); }
+.hero { position: relative; height: calc(900 * var(--u)); min-height: 640px; }
+.hero::before { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1; background: radial-gradient(46vw 52vh at 38% 10%, rgb(var(--key) / .065), transparent 68%); }
+.stage { position: absolute; inset: 0; z-index: 2; }
+.pwrap { position: absolute; left: calc(435 * var(--u)); top: calc(3 * var(--u)); width: calc(620 * var(--u)); height: calc(620 * var(--u)); overflow: hidden; z-index: 2; }
+.portrait { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+.mast { position: absolute; left: calc(58 * var(--u)); top: calc(504 * var(--u)); z-index: 3; }
+.mast .sp { display: inline; }
+.lead { position: absolute; left: calc(58 * var(--u)); top: calc(124 * var(--u)); width: calc(520 * var(--u)); z-index: 7; display: grid; gap: 12px; }
+.lead .line { font-size: calc(30 * var(--u)); line-height: 1.2; }
+.lead .acts { display: flex; align-items: center; gap: 24px; margin-top: 20px; }
+.proof { position: absolute; left: calc(732 * var(--u)); top: calc(700 * var(--u)); width: calc(650 * var(--u)); z-index: 7; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.proof .fig { font-size: calc(40 * var(--u)); }
+.proof .cap { font: 400 13px/18px var(--ui); color: var(--text-2); margin: 8px 0 0; }
+.pair { display: flex; gap: 18px; }
+.pane { --rim: .55; left: calc(540 * var(--u)); top: calc(506 * var(--u)); width: calc(360 * var(--u)); height: calc(168 * var(--u)); cursor: grab; transition: --rim .15s; }
+.pane:hover { --rim: .70; }
+.pane:active { cursor: grabbing; }
+.pane-shadow { left: calc(540 * var(--u)); top: calc(506 * var(--u)); width: calc(360 * var(--u)); height: calc(168 * var(--u)); }
+.after { padding: 120px calc(58 * var(--u)) 200px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 24px; }
+.after h2 { grid-column: 1 / 7; font: 520 clamp(44px, 6vw, 80px) / .98 var(--display); letter-spacing: -.03em; margin: 0 0 40px; }
+.after ol { grid-column: 1 / 13; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.after li { border-top: 1px solid var(--line); padding-top: 18px; }
+.after li b { display: block; font: 500 12px/1 var(--mono); letter-spacing: .08em; color: var(--text-3); margin-bottom: 14px; }
+.after li p { margin: 8px 0 0; color: var(--text-2); font-size: 15px; line-height: 1.5; }
+.notes { grid-column: 1 / 13; margin-top: 80px; padding: 0; list-style: none; display: grid; gap: 10px; font-size: 13px; color: var(--text-2); }
+.notes span { font: 500 11px var(--mono); color: var(--accent); margin-right: 10px; }
+@media (max-width: 639px) {
+  :root { --u: calc(100vw / 390); }
+  .hero { height: auto; min-height: 0; }
+  .stage { position: relative; height: calc(790 * var(--u)); }
+  .pwrap { left: 0; top: calc(28 * var(--u)); width: calc(390 * var(--u)); height: calc(390 * var(--u)); -webkit-mask-image: linear-gradient(#000 72%, transparent); mask-image: linear-gradient(#000 72%, transparent); }
+  .portrait { left: calc(-45 * var(--u)); top: calc(-23 * var(--u)); width: calc(479 * var(--u)); height: calc(479 * var(--u)); }
+  .mast { left: calc(20 * var(--u)); top: calc(400 * var(--u)); font-size: calc(90 * var(--u)); letter-spacing: -.04em; }
+  .mast .sp { display: block; }
+  .pane, .pane-shadow { left: calc(95 * var(--u)); top: calc(466 * var(--u)); width: calc(200 * var(--u)); height: calc(92 * var(--u)); border-radius: 28px; }
+  .lead { position: absolute; left: calc(20 * var(--u)); top: calc(646 * var(--u)); width: calc(350 * var(--u)); }
+  .lead .line { font-size: 22px; } .lead .role { display: none; }
+  .lead .acts { margin-top: 8px; }
+  .proof { position: relative; left: auto; top: auto; width: auto; grid-template-columns: 1fr; padding: 0 20px; }
+  .proof .fig { font-size: 30px; }
+  .after { padding: 80px 20px 160px; } .after ol { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+<div class="strip" role="status" aria-live="off">
+  <span>Melbourne <span class="t" data-clock>00:00:00</span></span>
+  <span class="c"><span class="long">Based in Melbourne. </span>Open to conversations about marketing, growth and business development opportunities.</span>
+  <span class="r">I aim to respond within two business days.</span>
+</div>
+<header class="hero" id="top">
+  <div class="stage">
+    <div class="pwrap"><img class="portrait" src="img/portrait-c.webp" width="620" height="620" alt="Studio portrait of Musa Abdullah Walid: a bearded man with swept-back black hair and gold wire-framed glasses, in a navy pinstripe double-breasted suit, white shirt and patterned tie." fetchpriority="high"></div>
+    <h1 class="mast" aria-label="Musa Abdullah Walid"><span class="l1"><span class="sp">Musa</span> <span class="sp">Abdullah</span></span><span>Walid</span></h1>
+    <div class="pane-shadow" aria-hidden="true"></div>
+    <div class="pane" aria-hidden="true"></div>
+    <div class="lead">
+      <p class="role">Marketing &amp; Growth Specialist, Melbourne</p>
+      <p class="line">I carried a sales target first,<br class="d"> so I judge marketing by what closes.</p>
+      <div class="acts"><a class="cta" href="#contact">Get in touch</a><a class="textlink" href="#cv">Download CV</a></div>
+    </div>
+  </div>
+  <div class="proof" aria-label="Results">
+    <div>
+      <div class="pair">
+        <div><div class="fig">28%<a class="fn" href="#n1" aria-label="Note 1">1</a></div><div class="lab">lower cost per acquisition</div></div>
+        <div><div class="fig">65%<a class="fn" href="#n1" aria-label="Note 1">1</a></div><div class="lab">more qualified leads</div></div>
+      </div>
+      <p class="cap">Two results from the same initiative at Evitech, on paid media of roughly $15K to $30K a month.</p>
+    </div>
+    <div><div class="fig">$2M+<a class="fn" href="#n2" aria-label="Note 2">2</a></div><div class="lab">in B2B contracts personally closed</div></div>
+    <div><div class="fig">13,200<a class="fn" href="#n3" aria-label="Note 3">3</a></div><div class="lab">social audience for I Heart Uni, grown from 400</div></div>
+  </div>
+</header>
+<main class="after">
+  <h2>From field sales to marketing, in four roles</h2>
+  <ol>
+    <li><b>April 2021</b>Field Sales Representative<p>Door-to-door sales of solar, battery and HVAC upgrades. Set the company’s highest day-one sales record.</p></li>
+    <li><b>July 2021</b>B2B Sales Executive &amp; Team Leader<p>Promoted to team leader within six months. More than $2M personally closed to date.</p></li>
+    <li><b>January 2022</b>Business Development &amp; People Operations Manager<p>Helped establish the NSW hub. Recruited 23 sales executives.</p></li>
+    <li><b>January 2023</b>Marketing &amp; Growth Specialist<p>Paid media, reporting and CRM, at roughly $15K to $30K a month across Meta and Google.</p></li>
+  </ol>
+  <ol class="notes">
+    <li id="n1"><span>1</span>My work at Evitech: I restructured the Google Ads and Meta accounts, audiences and budget allocation. The ad accounts belong to Evitech, so they aren’t shown here.</li>
+    <li id="n2"><span>2</span>Contracts I closed myself at Evitech, total to date. The company’s revenue growth is a team outcome and appears only in the Evitech case.</li>
+    <li id="n3"><span>3</span>Start and current figures from my time running the brand, grown mostly through organic content and community building.</li>
+  </ol>
+</main>
+
+<div class="dock glass" data-hidden>
+  <nav aria-label="Main"><a class="desk-only" href="#work">Work</a><a class="desk-only" href="#about">About</a><a class="desk-only" href="#contact">Contact</a><button class="phone-only" type="button">Menu</button><button type="button" class="desk-only" aria-label="Search (Command K)"><span class="k">⌘K</span></button></nav>
+  <a class="cta" href="#contact">Get in touch</a>
+</div>
+
+<script type="module">
+import { startClock, buildLens, spring, project, rubberband, lerp, clamp, rectOf, placeFixed, reduced } from './shared.js';
+startClock();
+const hero = document.querySelector('.hero'), pane = document.querySelector('.pane'), shadow = document.querySelector('.pane-shadow');
+const dock = document.querySelector('.dock'), img = document.querySelector('.portrait');
+const phone = matchMedia('(max-width: 639px)').matches;
+const lines = phone ? [...document.querySelectorAll('.mast .sp'), document.querySelector('.mast > span:last-child')] : [document.querySelector('.mast .l1'), document.querySelector('.mast > span:last-child')];
+const BAND = phone ? 14 : 24, STR = phone ? 16 : 28;
+await document.fonts.ready; await img.decode().catch(() => {});
+const restLeft = pane.offsetLeft, restTop = pane.offsetTop, W = pane.offsetWidth;
+const l1 = document.querySelector(phone ? '.mast .sp:nth-of-type(2)' : '.mast .l1');
+const range = document.createRange(); range.selectNodeContents(l1);
+const lr = range.getBoundingClientRect(), hr = hero.getBoundingClientRect();
+const minX = lr.left - hr.left, maxX = lr.right - hr.left - W;
+let x = restLeft, lens = buildLens(pane, hero, { lines, images: [img], band: BAND, strength: STR });
+const setX = (v) => { x = v; pane.style.left = shadow.style.left = `${v}px`; lens?.shift(v - restLeft, 0); };
+
+// Load: the slab slides in from 240px left along line 1; the bend sweeps across the letters.
+if (!reduced) {
+  pane.style.opacity = shadow.style.opacity = 0;
+  await new Promise((r) => setTimeout(r, 400));
+  pane.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: 'forwards' }); shadow.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, fill: 'forwards' });
+  setX(restLeft - 240);
+  await new Promise((done) => spring(restLeft - 240, restLeft, { response: 1.1, damping: 1 }, setX, done));
+  pane.getAnimations().forEach((a) => a.commitStyles?.()); pane.style.opacity = shadow.style.opacity = 1;
+}
+
+// Drag: 1:1 with the grab offset, rubber-banded past line 1, momentum projected on release.
+let drag = null, stop = null;
+pane.addEventListener('pointerdown', (e) => {
+  if (docked) return;
+  stop?.(); pane.setPointerCapture(e.pointerId);
+  drag = { sx: e.clientX, sy: e.clientY, x0: x, hist: [{ t: e.timeStamp, x: e.clientX, y: e.clientY }], dy: 0 };
+});
+pane.addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  drag.hist.push({ t: e.timeStamp, x: e.clientX, y: e.clientY }); if (drag.hist.length > 6) drag.hist.shift();
+  let nx = drag.x0 + (e.clientX - drag.sx);
+  if (nx < minX) nx = minX - rubberband(minX - nx, innerWidth); else if (nx > maxX) nx = maxX + rubberband(nx - maxX, innerWidth);
+  setX(nx);
+  drag.dy = Math.max(0, e.clientY - drag.sy);
+  if (e.pointerType === 'mouse' && drag.dy > 0) { const d = rubberband(drag.dy, 300); pane.style.transform = shadow.style.transform = `translateY(${d}px)`; }
+});
+pane.addEventListener('pointerup', (e) => {
+  if (!drag) return;
+  const h = drag.hist, a = h[0], b = h[h.length - 1], dt = Math.max(1, b.t - a.t);
+  const vx = ((b.x - a.x) / dt) * 1000, vy = ((b.y - a.y) / dt) * 1000;
+  const flingDown = drag.dy + project(vy) > 140;
+  pane.style.transform = shadow.style.transform = '';
+  drag = null;
+  if (flingDown) { dockIt(); return; }
+  const target = clamp(reduced ? x : x + project(vx), minX, maxX);
+  stop = spring(x, target, { response: .6, damping: 1, velocity: vx }, setX, () => (stop = null));
+});
+
+// Dock: a downward fling or scrolling past 48px; back below 16px to wherever it was left.
+let docked = false, morph = null;
+function dockIt(back = false) {
+  docked = !back;
+  const from = rectOf(pane), R0 = parseFloat(getComputedStyle(pane).borderTopLeftRadius);
+  if (!back) { lens?.destroy(); lens = null; pane.dataset.moving = ''; }
+  const to = back ? { x: hero.getBoundingClientRect().left + x, y: hero.getBoundingClientRect().top + restTop, w: W, h: pane.offsetHeight || from.h } : rectOf(dock);
+  const restR = phone ? 28 : 44 * innerWidth / 1440;
+  placeFixed(pane, from, R0); placeFixed(shadow, from, R0);
+  const apply = (p) => {
+    const r = { x: lerp(from.x, to.x, p), y: lerp(from.y, to.y, p), w: lerp(from.w, to.w, p), h: lerp(from.h, to.h, p) };
+    placeFixed(pane, r, lerp(R0, back ? restR : 28, p)); placeFixed(shadow, r, lerp(R0, back ? restR : 28, p));
+    const end = back ? 0 : clamp((p - .8) / .2, 0, 1); dock.style.opacity = end; end > 0 ? delete dock.dataset.hidden : (dock.dataset.hidden = '');
+    pane.style.opacity = shadow.style.opacity = !back && p > .995 ? 0 : 1;
+  };
+  morph?.();
+  const done = () => { if (back) { pane.removeAttribute('style'); shadow.removeAttribute('style'); setX(x); delete pane.dataset.moving; lens = buildLens(pane, hero, { lines, images: [img], band: BAND, strength: STR }); lens.shift(x - restLeft, 0); } };
+  if (reduced) { apply(1); done(); return; }
+  morph = spring(0, 1, { response: back ? .55 : .5, damping: back ? 1 : .85 }, apply, done);
+}
+addEventListener('scroll', () => { if (!docked && scrollY > 48) dockIt(); else if (docked && scrollY < 16) dockIt(true); }, { passive: true });
+document.documentElement.dataset.ready = '1';
+</script>
+</body>
+</html>
