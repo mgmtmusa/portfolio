@@ -1,0 +1,27 @@
+---
+import { site } from '../data/site';
+interface Props { from?: string }
+const { from = 'home' } = Astro.props;
+---
+
+<section class="next wrap" aria-labelledby="next-h">
+  <h2 class="next-h" id="next-h">Send me the brief.</h2>
+  <div class="next-facts">
+    <p>{site.availability}</p>
+    <p>{site.workRights}</p>
+    <p>{site.replyTime.text}</p>
+  </div>
+  <div class="next-acts">
+    <a class="cta" href="/contact/" data-track="contact_click" data-from={from}>Get in touch</a>
+    <a class="textlink" href={site.cv} download data-track="cv_download" data-from={from}>Download CV (PDF)</a>
+    <a class="textlink" href={site.linkedin} target="_blank" rel="noopener noreferrer" data-track="linkedin_click" data-from={from}>LinkedIn<span class="sr"> (opens in a new tab)</span></a>
+  </div>
+</section>
+
+<style>
+  .next { padding-top: 200px; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); row-gap: 40px; }
+  .next-h { grid-column: 1 / -1; font: 540 clamp(56px, 9vw, 152px) / .9 var(--display); letter-spacing: -.045em; color: var(--ink-mast); }
+  .next-facts { grid-column: 1 / 7; display: grid; gap: 10px; color: var(--text-2); max-width: 52ch; }
+  .next-acts { grid-column: 7 / 13; display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; align-self: end; }
+  @media (max-width: 899px) { .next-facts, .next-acts { grid-column: 1 / -1; } }
+</style>

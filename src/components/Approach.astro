@@ -1,0 +1,28 @@
+---
+import { approach } from '../data/site';
+---
+
+<section class="approach wrap" aria-labelledby="approach-h">
+  <h2 class="h1" id="approach-h">How I work</h2>
+  <p class="body approach-intro">Each rule I work by comes back to the sales team.</p>
+  <ul class="rules">
+    {
+      approach.map((a) => (
+        <li>
+          <h3 class="rule-t">{a.t}</h3>
+          <p class="body">{a.d}</p>
+        </li>
+      ))
+    }
+  </ul>
+</section>
+
+<style>
+  .approach { padding-top: 160px; }
+  .approach-intro { margin-top: 24px; }
+  .rules { margin-top: 56px; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gutter); }
+  .rules li { border-top: 1px solid var(--line); padding-top: 24px; display: grid; gap: 14px; align-content: start; }
+  .rule-t { font: 460 clamp(22px, 1.8vw, 28px) / 1.15 var(--display); letter-spacing: -.018em; text-wrap: balance; }
+  .rules .body { font-size: 15px; }
+  @media (max-width: 899px) { .rules { grid-template-columns: 1fr; gap: 36px; } }
+</style>

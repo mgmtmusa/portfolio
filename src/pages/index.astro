@@ -1,7 +1,22 @@
 ---
-// Temporary stub while the hero direction is chosen. Replaced in Task 5.
+// Home. The hero is a temporary stub while the principal picks a direction (Task 5 replaces it).
 import Base from '../layouts/Base.astro';
+import Path from '../components/Path.astro';
+import Approach from '../components/Approach.astro';
+import CaseTeasers from '../components/CaseTeasers.astro';
+import NextStep from '../components/NextStep.astro';
+import Notes from '../components/Notes.astro';
 import { site } from '../data/site';
+import { notes } from '../data/notes';
+const pageNotes = [
+  { n: 1, id: 'fn-1', note: notes.evitechPair },
+  { n: 2, id: 'fn-2', note: notes.closed },
+  { n: 3, id: 'fn-3', note: notes.audience },
+  { n: 4, id: 'fn-4', note: notes.hub },
+  { n: 5, id: 'fn-5', note: notes.spend },
+  { n: 6, id: 'fn-6', note: notes.events },
+  { n: 7, id: 'fn-7', note: notes.lil },
+];
 ---
 
 <Base title={`${site.name}, ${site.role}`} path="/">
@@ -9,4 +24,12 @@ import { site } from '../data/site';
     <h1 class="h1">{site.name}</h1>
     <p class="lede" style="margin-top: 24px">{site.line}</p>
   </section>
+  <Path />
+  <Approach />
+  <CaseTeasers />
+  <NextStep />
+  <section class="wrap" style="padding-top: 120px" aria-label="Notes"><Notes notes={pageNotes} /></section>
 </Base>
+<script>
+  import '../scripts/footnotes';
+</script>

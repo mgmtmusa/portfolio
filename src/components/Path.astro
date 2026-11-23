@@ -1,0 +1,50 @@
+---
+// The path: four roles at Evitech, set as a staircase. Each rung carries the metric earned in that role.
+import { career } from '../data/site';
+import Footnote from './Footnote.astro';
+import { notes } from '../data/notes';
+const rungs = [
+  { fig: 'Day one', unit: 'the company’s highest day-one sales record' },
+  { fig: '$2M+', unit: 'in B2B contracts personally closed to date', note: { n: 2, id: 'fn-path-closed', note: notes.closed } },
+  { fig: '23', unit: 'sales executives recruited for the NSW hub', note: { n: 4, id: 'fn-path-hub', note: notes.hub } },
+  { fig: '$15K to $30K', unit: 'a month in paid media, across Meta and Google', note: { n: 5, id: 'fn-path-spend', note: notes.spend } },
+];
+---
+
+<section class="path wrap" aria-labelledby="path-h">
+  <h2 class="h1 path-h" id="path-h">From door-to-door sales to marketing, in four roles</h2>
+  <p class="body path-intro">I joined Evitech in field sales and held three roles there before moving into marketing.</p>
+  <ol class="rungs">
+    {
+      career.map((r, i) => (
+        <li class="rung" style={`--i:${i}`}>
+          <div class="rung-in">
+            <p class="label rung-when">{r.when}</p>
+            <p class="rung-fig">{rungs[i].fig}{rungs[i].note && <Footnote {...rungs[i].note} />}</p>
+            <p class="rung-unit">{rungs[i].unit}</p>
+            <h3 class="rung-t">{r.t}</h3>
+            <p class="body rung-d">{r.short}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .path { padding-top: 160px; }
+  .path-h { max-width: 14ch; }
+  .path-intro { margin-top: 24px; }
+  .rungs { margin-top: 72px; }
+  .rung { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); border-top: 1px solid var(--line); }
+  .rung-in { grid-column: calc(1 + var(--i) * 2) / span 6; display: grid; gap: 10px; padding: 28px 0 36px; }
+  .rung-fig { margin-top: 12px; font: 500 clamp(44px, 5.4vw, 80px) / .95 var(--display); letter-spacing: -.04em; white-space: nowrap; }
+  .rung-fig :global(.fn) { vertical-align: top; margin-top: .1em; margin-left: .06em; }
+  .rung-unit { color: var(--text-2); font-size: 15px; }
+  .rung-t { font: 500 18px / 1.3 var(--ui); margin-top: 14px; }
+  .rung-d { font-size: 15px; max-width: 48ch; }
+  @media (max-width: 1023px) {
+    .rung-in { grid-column: 1 / -1; padding-left: calc(var(--i) * 14px); }
+    .rung-fig { font-size: clamp(44px, 12vw, 72px); }
+  }
+</style>

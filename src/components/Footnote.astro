@@ -1,0 +1,25 @@
+---
+// A footnote marker that opens its scope note. Native popover (no JS needed in current browsers);
+// the same note is also listed in the section's <Notes> for older browsers and print.
+interface Props { n: number | string; id: string; note: string }
+const { n, id, note } = Astro.props;
+---
+
+<button class="fn" type="button" popovertarget={id} aria-label={`Note ${n}`} data-fn={id}>{n}</button>
+<span id={id} popover class="fn-pop glass" role="note"><span class="fn-n">{n}</span>{note}</span>
+
+<style>
+  .fn {
+    position: relative; display: inline-block; vertical-align: super; margin-left: .08em; padding: 0; border: 0; background: none; cursor: pointer;
+    font: 500 11px / 1 var(--mono); letter-spacing: 0; color: var(--accent); transition: color var(--dur-fast) ease-out;
+  }
+  .fn::after { content: ''; position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; transform: translate(-50%, -50%); }
+  @media (hover: hover) and (pointer: fine) { .fn:hover { color: var(--text); } }
+  .fn-pop {
+    --rim: .35; width: min(340px, calc(100vw - 32px)); margin: 0; inset: auto; padding: 14px 16px; border: 0; border-radius: 16px;
+    font: 400 14px / 1.45 var(--ui); color: var(--text); text-align: left; letter-spacing: 0; white-space: normal;
+  }
+  .fn-pop:popover-open { animation: fn-in var(--dur-ui) var(--ease-out); }
+  @keyframes fn-in { from { opacity: 0; transform: translateY(4px); } }
+  .fn-n { font: 500 11px / 1.45 var(--mono); color: var(--accent); margin-right: 10px; }
+</style>

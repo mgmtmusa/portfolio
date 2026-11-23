@@ -245,27 +245,31 @@ export const cases: Case[] = [
   },
 ];
 
-/** Evitech path, first role first. Each rung carries the metric earned in that role. */
+/** Evitech path, first role first. Each rung carries the metric earned in that role. `short` drops the metric for layouts that show it as a figure. */
 export const career = [
   {
     when: 'April 2021',
     t: 'Field Sales Representative',
     d: 'Door-to-door sales of solar, battery and HVAC upgrades. Set the company’s highest day-one sales record.',
+    short: 'Door-to-door sales of solar, battery and HVAC upgrades.',
   },
   {
     when: 'July 2021',
     t: 'B2B Sales Executive & Team Leader',
     d: 'Promoted to team leader within six months. Closed high-ticket B2B contracts; more than $2M personally closed to date.',
+    short: 'Promoted to team leader within six months. Closed high-ticket B2B contracts.',
   },
   {
     when: 'January 2022',
     t: 'Business Development & People Operations Manager',
     d: 'Helped establish the NSW hub and had it fully operational in four months. Recruited 23 sales executives and coached a team that grew to 35.',
+    short: 'Helped establish the NSW hub and had it fully operational in four months. Coached a team that grew to 35.',
   },
   {
     when: 'January 2023',
     t: 'Marketing & Growth Specialist',
     d: 'Took on paid media, reporting and CRM. Paid media runs at roughly $15K to $30K a month across Meta and Google.',
+    short: 'Took on paid media, reporting and CRM.',
     link: { href: '/work/evitech/', label: 'Read the Evitech case study' },
   },
 ];

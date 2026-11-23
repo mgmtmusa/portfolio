@@ -1,0 +1,81 @@
+---
+// Three cases on the home page. Each figure is display type with its footnote; the figure is also the
+// shared element that lifts into the case sheet (transition:name).
+import { cases } from '../data/site';
+import Footnote from './Footnote.astro';
+import { notes } from '../data/notes';
+const teasers = [
+  { slug: 'evitech', figs: ['28%', '65%'], label: 'lower cost per acquisition, and more qualified leads', caption: 'Two results from the same initiative.', note: { n: 1, id: 'fn-t-evitech', note: notes.evitechPair } },
+  { slug: 'i-heart-uni', figs: ['18'], label: 'sold-out events hosted as lead MC, across five cities', note: { n: 6, id: 'fn-t-ihu', note: notes.events } },
+  { slug: 'the-lil-project', figs: ['768'], label: 'children reached to date', scope: 'Organisation total', note: { n: 7, id: 'fn-t-lil', note: notes.lil } },
+];
+---
+
+<section class="teasers wrap" aria-labelledby="work-h">
+  <div class="teasers-head">
+    <h2 class="h1" id="work-h">Work</h2>
+    <p class="body">Three cases, and each figure’s footnote says whose result it is.</p>
+  </div>
+  <ol class="cases">
+    {
+      teasers.map((t) => {
+        const c = cases.find((x) => x.slug === t.slug)!;
+        return (
+          <li class="case">
+            <p class="case-fig" transition:name={`fig-${t.slug}`}>
+              {t.figs.map((f, i) => (
+                <span class="case-n">{f}{i === t.figs.length - 1 && <Footnote {...t.note} />}</span>
+              ))}
+            </p>
+            <div class="case-body">
+              <p class="case-label">
+                {t.label}
+                {t.scope && <span class="case-scope label">{t.scope}</span>}
+              </p>
+              {t.caption && <p class="case-cap">{t.caption}</p>}
+              <h3 class="case-t">
+                <a href={`/work/${t.slug}/`} data-track="case_open" data-slug={t.slug} data-from="home">
+                  {c.org}: {c.title}
+                </a>
+              </h3>
+              <p class="body case-sum">{c.summary}</p>
+            </div>
+          </li>
+        );
+      })
+    }
+  </ol>
+  <a class="textlink teasers-all" href="/work/">See all work and growth projects</a>
+</section>
+
+<style>
+  .teasers { padding-top: 160px; }
+  .teasers-head { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); align-items: end; }
+  .teasers-head .h1 { grid-column: 1 / 7; }
+  .teasers-head .body { grid-column: 7 / 13; }
+  .cases { margin-top: 56px; }
+  .case { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); padding: 40px 0 48px; border-top: 1px solid var(--line); align-items: start; position: relative; }
+  .case-fig { grid-column: 1 / 7; display: flex; gap: .28em; font: 500 var(--fs-fig) / .86 var(--display); letter-spacing: -.045em; color: var(--text); white-space: nowrap; }
+  .case-n { display: inline-flex; align-items: flex-start; }
+  .case-n :global(.fn) { vertical-align: top; margin-top: .08em; margin-left: .04em; }
+  .case-body { grid-column: 7 / 13; display: grid; gap: 12px; padding-top: 8px; }
+  .case-label { font: 460 var(--fs-line) / 1.2 var(--display); letter-spacing: -.018em; text-wrap: balance; }
+  .case-scope { display: inline-block; margin-left: 10px; vertical-align: middle; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--text-2); }
+  .case-cap { color: var(--text-2); font-size: 15px; }
+  .case-t { font: 500 17px / 1.35 var(--ui); margin-top: 16px; }
+  .case-t a { text-decoration: none; }
+  .case-t a::after { content: ''; position: absolute; inset: 0; }
+  .case-sum { font-size: 15px; }
+  @media (hover: hover) and (pointer: fine) {
+    .case { transition: background-color var(--dur-fast) ease-out; }
+    .case:hover .case-t a { text-decoration: underline; text-decoration-color: var(--accent); }
+  }
+  .case :global(.fn) { position: relative; z-index: 2; }
+  .teasers-all { display: inline-flex; margin-top: 24px; }
+  @media (max-width: 899px) {
+    .teasers-head .h1, .teasers-head .body, .case-fig, .case-body { grid-column: 1 / -1; }
+    .teasers-head .body { margin-top: 16px; }
+    .case-fig { font-size: clamp(72px, 24vw, 120px); }
+    .case-body { margin-top: 20px; }
+  }
+</style>

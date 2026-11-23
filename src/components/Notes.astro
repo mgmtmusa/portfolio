@@ -1,0 +1,15 @@
+---
+// The in-page footnote list: every scope note, always in the HTML.
+interface Props { notes: { n: number | string; id: string; note: string }[] }
+const { notes } = Astro.props;
+---
+
+<ol class="notes">
+  {notes.map((x) => <li id={`${x.id}-text`}><span class="notes-n">{x.n}</span>{x.note}</li>)}
+</ol>
+
+<style>
+  .notes { display: grid; gap: 8px; font: 400 13px / 1.5 var(--ui); color: var(--text-2); max-width: 78ch; }
+  .notes li { display: grid; grid-template-columns: 22px 1fr; }
+  .notes-n { font: 500 11px / 1.9 var(--mono); color: var(--accent); }
+</style>
