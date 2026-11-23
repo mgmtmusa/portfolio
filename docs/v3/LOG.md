@@ -48,3 +48,7 @@ Next steps, in order:
 - Conflict for the principal: the CMO makes the positioning line the H1; the CD makes the name the H1. The prototypes use the name as the H1.
 - Strip: the full `site.availability` plus `site.replyTime` don't fit at 1440 in 11px mono, so the strip drops the "Based in Melbourne." clause (the clock already says Melbourne) and truncates on phones; the full sentence appears verbatim in the page's next step.
 - Deno 2.9.8 is now installed and Figma is connected (Starter, View seat). The brief ties the parallax-threejs harness to three.js; no three.js is used, so Playwright screenshot tests protect the signature moments. Figma stays optional and unused to save its read quota.
+
+## Phase 3: plan review, round 0
+
+- **Head of engineering: CHANGES REQUIRED** (23 findings; architecture sound, gaps in measurement, view-transition and lifecycle details). Two live bugs confirmed and fixed: Astro's swap wiped `<html>` classes and `data-motion` after the first navigation (verified in `swap-functions.js`), and the grain was a blended layer over the page. Also fixed: analytics only on Vercel (protects Best Practices headroom), `three` removed, `.vercelignore` widened, near-opaque footnote notes. Every other finding is written into `docs/plans/v3.md` as an amendment. Build paused until re-approval; plan resubmitted.
