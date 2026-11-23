@@ -33,6 +33,17 @@
   mask-composite: exclude;
 }
 
+/* Rim only: the specular edge without a backdrop blur, for surfaces with a near-opaque fill. */
+.glass-rim { position: relative; box-shadow: 0 0 0 1px rgb(var(--shadow-ink) / .6); }
+.glass-rim::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: linear-gradient(135deg, rgb(var(--rim-catch) / .35), rgb(255 255 255 / .1) 30%, rgb(255 255 255 / .07) 60%, rgb(255 255 255 / .16));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
 /* The hero pane: a thick, near-clear slab. */
 .glass--slab {
   --rim: .62;

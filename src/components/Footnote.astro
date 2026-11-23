@@ -6,7 +6,7 @@ const { n, id, note } = Astro.props;
 ---
 
 <button class="fn" type="button" popovertarget={id} aria-label={`Note ${n}`} data-fn={id}>{n}</button>
-<span id={id} popover class="fn-pop glass" role="note"><span class="fn-n">{n}</span>{note}</span>
+<span id={id} popover class="fn-pop glass-rim" role="note"><span class="fn-n">{n}</span>{note}</span>
 
 <style>
   .fn {
@@ -16,7 +16,7 @@ const { n, id, note } = Astro.props;
   .fn::after { content: ''; position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; transform: translate(-50%, -50%); }
   @media (hover: hover) and (pointer: fine) { .fn:hover { color: var(--text); } }
   .fn-pop {
-    --rim: .35; width: min(340px, calc(100vw - 32px)); margin: 0; inset: auto; padding: 14px 16px; border: 0; border-radius: 16px;
+    position: fixed; width: min(340px, calc(100vw - 32px)); margin: 0; inset: auto; padding: 14px 16px; border: 0; border-radius: 16px;
     font: 400 14px / 1.45 var(--ui); color: var(--text); text-align: left; letter-spacing: 0; white-space: normal;
     background: rgb(26 24 22 / .94); /* near-opaque: fixed contrast over any numeral behind it */
   }
