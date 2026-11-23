@@ -16,3 +16,13 @@ Branch `redesign/v3-dark`. Brief: `docs/MASTER-PROMPT-v3.md`. Nothing pushed, no
 
 - Live study of both references at 1440×900 and iPhone 14, plus Carter's ⌘K. Screenshots in `docs/v3/research/` (ignored by git and Vercel).
 - Synthesis: `docs/v3/research-synthesis.md`.
+
+## Phase 2: direction (in progress)
+
+- **Story:** the CMO set the positioning and story order. Chosen line: "I carried a sales target first, so I judge marketing by what closes." Full document: `docs/v3/story.md`.
+- **Portrait:** graded on-device. Apple Vision person segmentation (`scripts/portrait/mask.swift`) gives the matte; `scripts/portrait/grade.swift` erodes the outer 2px, decontaminates edge pixels from the grey backdrop, then applies one whole-image grade (exposure 0.90, mids gamma 1.06, highlight roll-off above 0.62, blacks lifted to 0.032, warmth R×1.05 B×0.90, a luminance-only key falloff from the upper left). Two outputs: `frame` (backdrop kept, graded into a warm dark pool, fading to transparent at the frame) and `cut` (subject only). The portrait never left the machine. At 200%: no grey in the lenses, no fringe on hair, beard or cheek.
+- **Display faces** compared at 200px: `docs/v3/research/font-compare.jpg`.
+- **Hero pane bend, engine evidence:**
+  - CSS `filter: url(#svg-filter)` with `feDisplacementMap` on an HTML copy bends in Chromium, but WebKit ignores the `feImage` map (data URL, same-origin file, blob URL and in-SVG `<image>` reference all failed), so the copy slides out of line.
+  - The same filter on **SVG-native content** (an inline SVG with `<text>` and `<image>`, clipped to the pane) bends identically in Chromium and WebKit.
+  - Decision: the bend is an inline SVG lens inside the pane, built after load from the measured positions of the real HTML masthead and portrait. No WebGL, no `backdrop-filter`, nothing on the critical path. Without JS the Appendix B CSS pane shows with no bend. three.js is therefore not needed for the pane; the brief's three.js route stays unused unless the principal rejects the bend.

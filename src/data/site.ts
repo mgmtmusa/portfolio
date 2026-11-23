@@ -12,7 +12,9 @@ export const site = {
   linkedin: 'https://www.linkedin.com/in/musa-abdullah-walid',
   url: 'https://portfolio-omega-gold-33.vercel.app',
   description:
-    'Musa Abdullah Walid is a marketing and growth specialist in Melbourne. He came up through sales and now runs paid media, reporting and CRM: 28% lower cost per acquisition and 65% more qualified leads at Evitech.',
+    'Musa Abdullah Walid is a Marketing & Growth Specialist in Melbourne. He came to marketing from sales, where he personally closed more than $2M in B2B contracts.',
+  /** The positioning line (CMO, v3). First person; used as the home H1. */
+  line: 'I carried a sales target first, so I judge marketing by what closes.',
   /** Chosen by Musa. Deliberately promises no start date, which the resumes don't confirm. */
   availability: 'Based in Melbourne. Open to conversations about marketing, growth and business development opportunities.',
   /** Approved wording, November 2026. Use this exact sentence wherever work rights are mentioned. */
@@ -142,11 +144,11 @@ export const cases: Case[] = [
     ],
     decisions: [
       {
-        t: 'Restructure the account, not just the ads',
+        t: 'Start with the account structure',
         d: 'I rebuilt the account architecture, audiences and budget split across Meta and Google.',
       },
       {
-        t: 'Report on qualified leads and pipeline, not clicks',
+        t: 'Report on qualified leads and pipeline',
         d: 'Dashboards track leads by source, spend, CPA and pipeline movement, and each report ends in a recommendation for sales and management.',
       },
       {
@@ -172,7 +174,7 @@ export const cases: Case[] = [
   {
     slug: 'i-heart-uni',
     org: 'I Heart Uni',
-    card: { tone: 'red', v: '13.2K', l: 'audience, built from 400' },
+    card: { tone: 'red', v: '18', l: 'sold-out events hosted as lead MC' },
     title: 'A student brand grown city by city',
     summary:
       'I set the brand’s positioning and content, ran the event marketing calendar across five cities, and hosted the events as lead MC.',
@@ -258,12 +260,12 @@ export const career = [
   {
     when: 'January 2022',
     t: 'Business Development & People Operations Manager',
-    d: 'Opened the NSW hub and had it fully operational in four months. Recruited 23 sales executives and coached a team that grew to 35.',
+    d: 'Helped establish the NSW hub and had it fully operational in four months. Recruited 23 sales executives and coached a team that grew to 35.',
   },
   {
     when: 'January 2023',
     t: 'Marketing & Growth Specialist',
-    d: 'Took on paid media, reporting and CRM.',
+    d: 'Took on paid media, reporting and CRM. Paid media runs at roughly $15K to $30K a month across Meta and Google.',
     link: { href: '/work/evitech/', label: 'Read the Evitech case study' },
   },
 ];
@@ -271,7 +273,7 @@ export const career = [
 export const approach = [
   {
     t: 'A lead is worth what it closes for',
-    d: 'I spent almost two years in sales at Evitech before moving into marketing: door to door, then B2B, then building a sales team. So I judge campaigns on qualified leads and cost per acquisition, not clicks.',
+    d: 'I spent almost two years in sales at Evitech before moving into marketing: door to door, then B2B, then building a sales team. So I judge campaigns on qualified leads and cost per acquisition.',
   },
   {
     t: 'Reports should answer the sales team’s questions',
