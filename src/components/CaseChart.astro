@@ -1,0 +1,81 @@
+---
+// One chart per case, drawn from site.ts figures only. Static SVG with native tooltips and a text equivalent.
+interface Props { slug: 'evitech' | 'i-heart-uni' | 'the-lil-project' }
+const { slug } = Astro.props;
+const W = 480, H = 220;
+
+// Evitech: two results from one initiative, each indexed to 100 before the restructure.
+const ev = [
+  { name: 'Cost per acquisition', before: 100, after: 72, text: '28% lower' },
+  { name: 'Qualified leads', before: 100, after: 165, text: '65% more' },
+];
+const evMax = 165, evBase = 172, evTop = 28, scale = (v: number) => ((evBase - evTop) * v) / evMax;
+const bw = 44;
+// Lil Project unit chart: 768 = 48 × 16.
+const dots = Array.from({ length: 768 }, (_, i) => ({ x: 8 + (i % 48) * 9.6, y: 40 + Math.floor(i / 48) * 9.6 }));
+---
+
+<figure class={`chart chart--${slug}`}>
+  {
+    slug === 'evitech' && (
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="ch-ev-t ch-ev-d">
+        <title id="ch-ev-t">Evitech: two results from the same initiative</title>
+        <desc id="ch-ev-d">Indexed to 100 before the restructure. Cost per acquisition fell to 72, 28% lower. Qualified leads rose to 165, 65% more.</desc>
+        <line x1="0" x2={W} y1={evBase} y2={evBase} class="axis" />
+        {ev.map((g, i) => {
+          const x0 = 56 + i * 220;
+          const hb = scale(g.before), ha = scale(g.after);
+          return (
+            <g>
+              <path class="bar bar--before" d={`M${x0},${evBase} V${evBase - hb + 4} q0,-4 4,-4 h${bw - 8} q4,0 4,4 V${evBase} Z`}><title>{`${g.name}, before: 100`}</title></path>
+              <path class="bar bar--after" d={`M${x0 + bw + 2},${evBase} V${evBase - ha + 4} q0,-4 4,-4 h${bw - 8} q4,0 4,4 V${evBase} Z`}><title>{`${g.name}, after: ${g.after} (${g.text})`}</title></path>
+              <text class="v" x={x0 + bw / 2} y={evBase - hb - 8} text-anchor="middle">100</text>
+              <text class="v v--strong" x={x0 + bw * 1.5 + 2} y={evBase - ha - 8} text-anchor="middle">{g.after}</text>
+              <text class="n" x={x0} y={evBase + 22}>{g.name}</text>
+              <text class="n n--muted" x={x0} y={evBase + 40}>{g.text}</text>
+            </g>
+          );
+        })}
+      </svg>
+    )
+  }
+  {
+    slug === 'i-heart-uni' && (
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="ch-ihu-t ch-ihu-d">
+        <title id="ch-ihu-t">I Heart Uni social audience, start and current</title>
+        <desc id="ch-ihu-d">The audience grew from 400 at the start to 13,200.</desc>
+        <text class="n" x="0" y="54">Start</text>
+        <path class="bar bar--before" d={`M96,40 h${Math.max(6, (360 * 400) / 13200)} v20 h-${Math.max(6, (360 * 400) / 13200)} Z`}><title>Start: 400</title></path>
+        <text class="v" x={96 + Math.max(6, (360 * 400) / 13200) + 10} y="54">400</text>
+        <text class="n" x="0" y="124">Current</text>
+        <path class="bar bar--after" d="M96,110 h356 q4,0 4,4 v12 q0,4 -4,4 h-356 Z"><title>Current: 13,200</title></path>
+        <text class="v v--strong" x="456" y="152" text-anchor="end">13,200</text>
+        <line x1="96" x2="96" y1="28" y2="140" class="axis" />
+      </svg>
+    )
+  }
+  {
+    slug === 'the-lil-project' && (
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="ch-lil-t ch-lil-d">
+        <title id="ch-lil-t">768 children reached to date, organisation total</title>
+        <desc id="ch-lil-d">A grid of 768 dots, one for each child reached by The Lil Project to date. This is an organisation total.</desc>
+        <g class="dots">{dots.map((d) => <circle cx={d.x} cy={d.y} r="2.4" />)}</g>
+        <text class="n" x="8" y="214">One dot per child reached. Organisation total.</text>
+      </svg>
+    )
+  }
+</figure>
+
+<style>
+  .chart { margin: 0; }
+  .chart svg { width: 100%; height: auto; overflow: visible; }
+  .axis { stroke: var(--line-strong); stroke-width: 1; }
+  .bar--before { fill: rgb(243 238 228 / .16); }
+  .bar--after { fill: var(--text); }
+  .v { font: 500 12px var(--mono); fill: var(--text-2); }
+  .v--strong { fill: var(--text); }
+  .n { font: 400 13px var(--ui); fill: var(--text-2); }
+  .n--muted { fill: var(--text-3); }
+  .dots circle { fill: var(--text); opacity: .82; }
+  @media (forced-colors: active) { .bar--after, .dots circle { fill: CanvasText; } .bar--before { fill: GrayText; } }
+</style>

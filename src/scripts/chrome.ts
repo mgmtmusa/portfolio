@@ -1,10 +1,19 @@
 // Persistent chrome: the Melbourne clock, the ⌘K menu, toasts, copy email, the reduce-motion switch and
 // analytics events. Runs once per visit; the elements it wires persist across view transitions.
-import { track } from '@vercel/analytics';
+import { track as vercelTrack } from '@vercel/analytics';
 import { commandItems, searchCommands } from '../lib/command';
 import { site } from '../data/site';
 
 const ITEMS = commandItems();
+
+/** Analytics events carry only these properties, never anything a visitor typed. */
+type EventProps = { slug?: string; from?: string; key?: string };
+function track(name: string, props: EventProps = {}) {
+  if (document.documentElement.dataset.analytics !== 'on') return;
+  const safe: EventProps = {};
+  for (const k of ['slug', 'from', 'key'] as const) if (props[k]) safe[k] = String(props[k]).slice(0, 64);
+  vercelTrack(name, safe);
+}
 
 function startClock() {
   const fmt = new Intl.DateTimeFormat('en-AU', { timeZone: 'Australia/Melbourne', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });

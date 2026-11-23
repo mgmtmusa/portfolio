@@ -4,3 +4,9 @@ dist
 .astro
 .env*
 docs/v3/research/
+.impeccable/
+docs/evidence/
+prototypes/
+scripts/portrait/
+test-results/
+playwright-report/
