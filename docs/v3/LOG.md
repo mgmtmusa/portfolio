@@ -60,3 +60,4 @@ Next steps, in order:
 
 - Reasons, rulings, accepted and modified changes, and guardrails G1 to G8: `docs/v3/reviews/phase2-directions.md` (end). Alternatives kept for the hand-back: A "Cover" (most editorial; the name behind his shoulder) and B "Stage" (the glass bar is the navigation), both in `prototypes/v3-hero/`.
 - The H1 is the name; the CMO's line keeps its weight by position and size and is read first.
+- Usage limit hit around 06:20 while the creative director (contract approval) and the head of engineering (Task 5 approval) were reviewing; both resumed after the 10:20 reset.
