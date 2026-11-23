@@ -33,7 +33,7 @@ for y in Int(Double(H)*0.62)..<H {
 // erode 2px then soften 1px: the outer two pixels carry the grey backdrop
 do {
   var er = alpha
-  let R = 2
+  let R = Int(ProcessInfo.processInfo.environment["ERODE"] ?? "2") ?? 2
   for y in 0..<H { for x in 0..<W { var m: Float = 1
     for dy in -R...R { let yy = min(max(y+dy,0),H-1); for dx in -R...R { let xx = min(max(x+dx,0),W-1); m = min(m, alpha[yy*W+xx]) } }
     er[y*W+x] = m } }
@@ -63,8 +63,12 @@ for y in 0..<H { for x in 0..<W {
   c *= 0.90                                         // exposure
   c = SIMD3(pow(c.x,1.06), pow(c.y,1.06), pow(c.z,1.06)) // deepen mids
   // highlight roll-off so the white shirt sits below the page text
-  for k in 0..<3 { let v = c[k]; if v > 0.62 { c[k] = 0.62 + (v-0.62)*0.55 } }
-    c *= SIMD3(1.05, 1.0, 0.90)                      // warmth (red above blue)
+  let hiT = ef("HI_T", 0.62), hiS = ef("HI_S", 0.55)
+  for k in 0..<3 { let v = c[k]; if v > hiT { c[k] = hiT + (v-hiT)*hiS } }
+    // warmth (red above blue), eased off in the highlights so the shirt reads white, not cream
+  let lum0 = c.x*0.2126 + c.y*0.7152 + c.z*0.0722
+  let hw = smooth(0.55, 0.85, lum0)
+  c *= SIMD3<Float>(1.05, 1.0, 0.90) + (SIMD3<Float>(1.02, 1.0, 0.965) - SIMD3<Float>(1.05, 1.0, 0.90)) * hw
   // navy reads as ink, never blue: pull blue-dominant pixels 35% toward their luminance
   let lum = c.x*0.2126 + c.y*0.7152 + c.z*0.0722
   let blueness = min(max((c.z - c.x) * 4, 0), 1)
@@ -83,7 +87,15 @@ for y in 0..<H { for x in 0..<W {
   let bottom = 1 - smooth(0.74, 1.0, fy)
   // lower-corner dissolve so the frame edge never shows
   let side = 1 - smooth(0.80, 1.0, max(abs(fx-0.5)*2 - 0.0, 0)) * smooth(0.55, 0.9, fy)
-  if mode == "cut" {
+  if mode == "photo" {
+    c = al*c + (1-al)*pool
+    // radial-gradient(62% 60% at 47% 40%, #000 60%, transparent 100%) plus a bottom fade 80 to 100%
+    let ex = (fx-0.47)/0.62, ey = (fy-0.40)/0.60
+    let rr = (ex*ex + ey*ey).squareRoot()
+    let radial = 1 - smooth(0.60, 1.0, rr)
+    let foot = 1 - smooth(0.80, 1.0, fy)
+    oa = max(0, min(1, radial * foot))
+  } else if mode == "cut" {
     oa = al * bottom * side
   } else {
     // framed: backdrop kept as part of the photo, falling to transparent at the frame edge
