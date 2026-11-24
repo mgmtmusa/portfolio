@@ -191,20 +191,31 @@ const fragments = (page: Page) =>
 
 test.describe('slab edges over every masthead row (HoE finding 6)', () => {
   test.describe.configure({ timeout: 60_000 });
-  test('the rest snap reads every row under the slab and keeps the widest worst fragment in reach', async ({ page, isMobile }) => {
+  test('the rest snap reads every row under the slab', async ({ page, isMobile }) => {
     test.skip(!isMobile, 'phone layout: the masthead wraps to three rows under the slab');
     await openHome(page);
     const f = await fragments(page);
     expect(f.rows).toBeGreaterThan(0);
-    expect(f.worst, `cuts: ${f.cuts.join(', ')}`).toBeGreaterThanOrEqual(Math.min(18 * f.u, f.best) - 0.5);
   });
 
-  test('no glyph fragment narrower than 18u at either vertical edge at rest', async ({ page, isMobile }) => {
-    // Phones wider than 400px (Pixel 7, 412): no x within ±48u clears 18u over the three rows; the best (at -48u)
-    // leaves about 17.7px of the 18.7px needed. Escalated to the creative director; drop this once the layout allows it.
-    test.fail(isMobile && page.viewportSize()!.width > 400, 'no fully clear slab x at this phone width (escalated to the creative director)');
+  // Creative director ruling (round 1, item 4): no fragment under 18u from 640px up; below 640px the floor is 16 CSS px.
+  test('no glyph fragment under the floor at either vertical edge at rest (16px phone, 18u from 640px)', async ({ page }) => {
     await openHome(page);
     const f = await fragments(page);
-    expect(f.worst, `cuts: ${f.cuts.join(', ')}`).toBeGreaterThanOrEqual(18 * f.u - 0.5);
+    const min = page.viewportSize()!.width < 640 ? 16 : 18 * f.u;
+    expect(f.worst, `cuts: ${f.cuts.join(', ')}`).toBeGreaterThanOrEqual(min - 0.5);
   });
+
+  // Motion review 9: the edges stay clear while the name slides up through the slab, not only at rest.
+  for (const y of [30, 60, 88]) {
+    test(`no glyph fragment under 18u at the edges during the slide (scrolled ${y}px)`, async ({ page, isMobile }) => {
+      test.skip(isMobile, 'desktop slide');
+      await openHome(page);
+      await page.evaluate((v) => window.__scene!.setProgress(v), y);
+      await page.waitForTimeout(400);
+      expect(await page.evaluate(() => window.__scene!.state())).toBe('rest');
+      const f = await fragments(page);
+      expect(f.worst, `cuts: ${f.cuts.join(', ')}`).toBeGreaterThanOrEqual(18 * f.u - 0.5);
+    });
+  }
 });

@@ -35,7 +35,7 @@ const analytics = Boolean(import.meta.env.VERCEL);
 ---
 
 <!doctype html>
-<html lang="en-AU" data-page={path === '/' ? 'home' : 'inner'} data-analytics={analytics ? 'on' : undefined}>
+<html lang="en-AU" data-page={path === '/' ? 'home' : 'inner'} data-route={path === '/contact/' ? 'contact' : undefined} data-analytics={analytics ? 'on' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -86,6 +86,18 @@ const analytics = Boolean(import.meta.env.VERCEL);
         document.addEventListener('astro:before-swap', function (e) {
           var next = e.newDocument.documentElement;
           root.classList.forEach(function (c) { next.classList.add(c); });
+          // A view-transition arrival: the hero skips its entrance (no glide or rise replay on the way back home).
+          next.classList.add('soft-nav');
+          // Arriving at the top of home: the persisted dock leaves at once, before the first frame, so it never
+          // sits over the masthead while the hero script starts (it comes back when the slab hands over).
+          var y = e.navigationType === 'traverse' ? (history.state && history.state.scrollY) || 0 : 0;
+          var dock = document.querySelector('[data-dock]');
+          if (dock && next.dataset.page === 'home' && y <= 90) {
+            dock.style.transition = 'none';
+            dock.removeAttribute('data-shown');
+            dock.inert = true;
+            requestAnimationFrame(function () { requestAnimationFrame(function () { dock.style.transition = ''; }); });
+          }
           if (root.dataset.motion) next.dataset.motion = root.dataset.motion;
         });
       })();

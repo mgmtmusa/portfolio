@@ -12,6 +12,8 @@ html {
   text-size-adjust: 100%;
   scrollbar-color: rgb(243 238 228 / .18) transparent;
   scrollbar-width: thin;
+  /* The dock floats over the bottom 104px: a focused field or anchor never lands under it. */
+  scroll-padding-bottom: 112px;
 }
 body {
   margin: 0;
@@ -97,6 +99,12 @@ body::before {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: 0s !important; transition-delay: 0s !important; scroll-behavior: auto !important; }
 }
 html[data-motion='reduce'] *, html[data-motion='reduce'] *::before, html[data-motion='reduce'] *::after { animation-duration: .01ms !important; transition-duration: 0s !important; transition-delay: 0s !important; }
+/* The one exception: the slab and the dock cross-fade over 160ms (DESIGN.md, reduced motion), not a hard cut. */
+@media (prefers-reduced-motion: reduce) { html .xfade { transition-duration: 160ms !important; } }
+html[data-motion='reduce'] .xfade { transition-duration: 160ms !important; }
+
+/* Without JavaScript nothing hands the strip's availability over, so it shows (the strip starts hidden on home). */
+html:not(.js) .strip[data-avail-hidden] p { opacity: 1 !important; }
 
 /* Lenis (smooth scroll) */
 html.lenis, html.lenis body { height: auto; }

@@ -3,7 +3,7 @@
 // On phones it holds Menu and Get in touch; without JavaScript the page links show instead of Menu.
 ---
 
-<div class="dock glass" transition:persist="dock" data-dock>
+<div class="dock glass xfade" transition:persist="dock" data-dock>
   <nav class="dock-nav" aria-label="Main">
     <a class="dock-link" href="/work/">Work</a>
     <a class="dock-link" href="/about/">About</a>
@@ -12,7 +12,7 @@
       Menu<span class="sr"> (Command K)</span><kbd class="dock-k" aria-hidden="true">⌘K</kbd>
     </button>
   </nav>
-  <a class="cta dock-cta" href="/contact/" data-track="contact_click" data-from="dock">Get in touch</a>
+  <div class="dock-cta-wrap"><div class="dock-cta-clip"><a class="cta dock-cta" href="/contact/" data-track="contact_click" data-from="dock">Get in touch</a></div></div>
 </div>
 
 <style>
@@ -35,8 +35,24 @@
   .dock-link[aria-current='page'] { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 6px; }
   @media (hover: hover) and (pointer: fine) { .dock-link:hover, .dock-menu:hover { background: rgb(255 250 240 / .06); } }
   .dock-k { font: 500 11px / 1 var(--mono); padding: 4px 6px; border-radius: 6px; border: 1px solid var(--line-strong); color: var(--text-2); }
-  .dock-cta { height: 40px; padding: 0 18px; border-radius: 20px; margin-left: 4px; }
-  .dock[data-cta-hidden] .dock-cta { display: none; }
+  .dock-cta { height: 40px; padding: 0 18px; border-radius: 20px; }
+  /* The CTA folds away (and back) instead of popping, so the dock's width never jumps while it is on screen.
+     The clip's padding leaves room for the focus ring. */
+  .dock-cta-wrap {
+    display: flex;
+    transition: opacity var(--dur-fast) ease-out, margin var(--dur-ui) var(--ease-out), visibility 0s;
+  }
+  .dock-cta-clip {
+    max-width: 150px; overflow: hidden; padding: 6px 5px 6px 9px; margin: -6px -5px -6px -5px;
+    transition: max-width var(--dur-ui) var(--ease-out), padding var(--dur-ui) var(--ease-out);
+  }
+  .dock[data-cta-hidden] .dock-cta-wrap,
+  :global(html[data-route='contact']) .dock-cta-wrap {
+    opacity: 0; visibility: hidden; margin-left: -4px;
+    transition: opacity var(--dur-fast) ease-out, margin var(--dur-ui) var(--ease-out), visibility 0s var(--dur-ui);
+  }
+  .dock[data-cta-hidden] .dock-cta-clip,
+  :global(html[data-route='contact']) .dock-cta-clip { max-width: 0; padding-left: 0; padding-right: 0; }
   :global(html:not(.js)) .js-only { display: none !important; }
   @media (max-width: 639px) {
     .dock { left: 20px; right: 20px; transform: none; justify-content: space-between; bottom: calc(12px + env(safe-area-inset-bottom)); }

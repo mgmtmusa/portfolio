@@ -32,7 +32,7 @@ const alt =
       </div>
     </div>
 
-    <div class="photo" aria-hidden="false">
+    <div class="photo" data-dissolve>
       <picture>
         <source type="image/avif" srcset={pic.avif} sizes={pic.sizes} />
         <source type="image/webp" srcset={pic.webp} sizes={pic.sizes} />
@@ -50,7 +50,7 @@ const alt =
       </picture>
     </div>
 
-    <div class="slab glass--slab" data-slab aria-hidden="true"></div>
+    <div class="slab glass--slab xfade" data-slab aria-hidden="true"></div>
     <div class="slab-shadow" data-slab-shadow aria-hidden="true"></div>
   </div>
 
@@ -58,7 +58,7 @@ const alt =
     <ul class="proof" aria-label="Results">
       <li class="proof-pair">
         <div class="figs">
-          <p class="fig" data-fact={cpa.v}>{cpa.v}</p>
+          <p class="fig" data-fact={cpa.v}>{cpa.v}<Footnote n={1} id="fn-h-1a" note={notes.evitechPair} /></p>
           <p class="fig" data-fact={leads.v}>{leads.v}<Footnote n={1} id="fn-h-1" note={notes.evitechPair} /></p>
         </div>
         <div class="labs">
@@ -138,10 +138,14 @@ const alt =
       radial-gradient(70% 110% at 10% 0%, rgb(255 226 190 / .10), transparent 58%),
       linear-gradient(180deg, rgb(255 248 236 / .05), rgb(255 248 236 / .015) 60%);
     box-shadow: inset 0 1px 0 rgb(255 244 224 / .24), inset 1px 0 0 rgb(255 244 224 / .10), inset 0 -12px 24px rgb(6 5 4 / .26), 0 0 0 1px rgb(6 5 4 / .45);
-    transition: --rim var(--dur-fast) ease-out, scale var(--dur-fast) var(--ease-out);
+    transition: --rim var(--dur-fast) ease-out, -webkit-backdrop-filter 120ms ease-out, backdrop-filter 120ms ease-out;
   }
   .slab::before { padding: 1.5px; }
-  .slab:active { cursor: grabbing; scale: .985; }
+  /* Press: the glass is pushed toward the page, so its contact shadow tightens. No scale: a scaled slab would pull
+     its bent copy off the cut-out under it. */
+  .slab:active { cursor: grabbing; }
+  .slab:active ~ .slab-shadow { transform: translate(calc(5 * var(--u)), calc(8 * var(--u))); }
+  /* In flight the bend eases out and a light blur eases in (120ms), and back on landing. */
   .slab[data-moving] { -webkit-backdrop-filter: blur(4px) saturate(160%) brightness(1.08); backdrop-filter: blur(4px) saturate(160%) brightness(1.08); }
   .slab[data-moving]::after { opacity: 0; }
   .slab :global(svg.bend) { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: inherit; overflow: hidden; pointer-events: none; z-index: 1; }
@@ -154,29 +158,32 @@ const alt =
   }
   @media (hover: hover) and (pointer: fine) {
     .slab:hover { --rim: .95; }
-    .slab:hover ~ .slab-shadow { transform: translate(calc(14 * var(--u)), calc(22 * var(--u))); }
+    .slab:hover:not(:active) ~ .slab-shadow { transform: translate(calc(14 * var(--u)), calc(22 * var(--u))); }
   }
   @property --rim { syntax: '<number>'; inherits: true; initial-value: .35; }
 
-  /* Before first paint the slab waits off to the left (the glide brings it in). */
-  :global(html.js:not([data-motion='reduce'])) .slab,
-  :global(html.js:not([data-motion='reduce'])) .slab-shadow { opacity: 0; translate: calc(-240 * var(--u)) 0; }
+  /* Before first paint the slab waits off to the left (the glide brings it in). Arriving by a view transition
+     (html.soft-nav, Base.astro) there is no entrance: the slab is simply at rest. */
+  :global(html.js:not([data-motion='reduce']):not(.soft-nav)) .slab,
+  :global(html.js:not([data-motion='reduce']):not(.soft-nav)) .slab-shadow { opacity: 0; translate: calc(-240 * var(--u)) 0; }
   @media (prefers-reduced-motion: reduce) {
-    :global(html.js:not([data-motion='reduce'])) .slab, :global(html.js:not([data-motion='reduce'])) .slab-shadow { opacity: 1; translate: none; }
+    :global(html.js:not([data-motion='reduce']):not(.soft-nav)) .slab, :global(html.js:not([data-motion='reduce']):not(.soft-nav)) .slab-shadow { opacity: 1; translate: none; }
   }
   /* Accessibility fallbacks: nothing covers the name. */
   @media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
     .slab, .slab-shadow { display: none !important; }
   }
 
-  /* Entrances: content is visible by default; motion only adds the rise. Never on the masthead or portrait. */
+  /* Entrances: content is visible by default; motion only adds the rise. Never on the masthead or portrait.
+     The rise runs from first paint (no hold, so text never sits 8px low and then jumps), before the slab's glide
+     at 400ms; only on a full load, never on a view-transition return. */
   @media (prefers-reduced-motion: no-preference) {
-    :global(html:not([data-motion='reduce'])) .lead { animation: rise 500ms var(--ease-out) 800ms both; }
-    :global(html:not([data-motion='reduce'])) .proof > li { animation: rise 500ms var(--ease-out) both; }
-    :global(html:not([data-motion='reduce'])) .proof > li:nth-child(1) { animation-delay: 950ms; }
-    :global(html:not([data-motion='reduce'])) .proof > li:nth-child(2) { animation-delay: 1020ms; }
-    :global(html:not([data-motion='reduce'])) .proof > li:nth-child(3) { animation-delay: 1090ms; }
-    :global(html:not([data-motion='reduce'])) .avail { animation: rise 400ms var(--ease-out) 1100ms both; }
+    :global(html:not([data-motion='reduce']):not(.soft-nav)) .lead { animation: rise 500ms var(--ease-out) both; }
+    :global(html:not([data-motion='reduce']):not(.soft-nav)) .proof > li { animation: rise 500ms var(--ease-out) both; }
+    :global(html:not([data-motion='reduce']):not(.soft-nav)) .proof > li:nth-child(1) { animation-delay: 150ms; }
+    :global(html:not([data-motion='reduce']):not(.soft-nav)) .proof > li:nth-child(2) { animation-delay: 220ms; }
+    :global(html:not([data-motion='reduce']):not(.soft-nav)) .proof > li:nth-child(3) { animation-delay: 290ms; }
+    :global(html:not([data-motion='reduce']):not(.soft-nav)) .avail { animation: rise 400ms var(--ease-out) 300ms both; }
   }
   @keyframes rise { from { transform: translateY(8px); } }
 
@@ -209,12 +216,26 @@ const alt =
     .role { font-size: 13px; margin-bottom: 6px; min-height: 0; }
     .line { font-size: 26px; line-height: 1.08; letter-spacing: -.018em; max-width: none; }
     .acts { position: absolute; top: calc(566 * var(--p)); left: 0; margin: 0; gap: 20px; }
-    .photo { left: calc(55 * var(--p)); top: calc(148 * var(--p)); width: calc(280 * var(--p)); height: calc(280 * var(--p)); overflow: hidden; }
+    /* The photo's own dissolve finishes inside its box: an elliptical mask, so every edge meets the page within a
+       level and the suit never ends on a straight line. bend.ts gives the slab's copy the same mask (--dsv-*). */
+    .photo {
+      left: calc(55 * var(--p)); top: calc(148 * var(--p)); width: calc(280 * var(--p)); height: calc(280 * var(--p));
+      --dsv-rx: 50; --dsv-ry: 50; --dsv-cx: 50; --dsv-cy: 46; --dsv-solid: 62;
+      /* Same numbers as --dsv-* (WebKit drops a gradient built from calc(var()) sizes). */
+      -webkit-mask-image: radial-gradient(50% 50% at 50% 46%, #000 62%, transparent 100%);
+      mask-image: radial-gradient(50% 50% at 50% 46%, #000 62%, transparent 100%);
+    }
     .photo :global(img) { position: absolute; left: calc(-21 * var(--p)); top: calc(-14 * var(--p)); width: calc(351 * var(--p)); height: calc(351 * var(--p)); max-width: none; }
     .slab, .slab-shadow { left: calc(100 * var(--p)); top: calc(428 * var(--p)); width: calc(210 * var(--p)); height: calc(130 * var(--p)); border-radius: 32px; --slab-r: 32px; }
     .proof { position: static; width: auto; grid-template-columns: 1fr 1fr; gap: 28px 20px; }
     .proof-pair { grid-column: 1 / -1; }
     .fig { font-size: 30px; }
     .avail { position: static; width: auto; order: -1; }
+  }
+  /* 320 to 359px (Display Zoom, small Androids): the line keeps three rows at Host's 24px floor, and the portrait
+     moves down 12px so the last descender clears the hair by 16px (creative director, round 1). */
+  @media (max-width: 359px) {
+    .line { font-size: 24px; }
+    .photo { top: calc(148 * var(--p) + 12px); }
   }
 </style>

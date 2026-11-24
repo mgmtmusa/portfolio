@@ -302,3 +302,102 @@ test.describe('M5: touch drag on the phone', () => {
     expect(Math.abs(rest.y - b0.y)).toBeLessThan(2);
   });
 });
+
+// Round-1 motion and creative director fixes, as frame-level checks.
+test.describe('round 1 motion', () => {
+  test('CD 3: the name never dims under the gliding slab (no knock-out before the slab is opaque)', async ({ page }) => {
+    await page.addInitScript(() => { (window as unknown as { __v3test: boolean }).__v3test = true; });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => (window.__heroLog?.length ?? 0) > 5 && getComputedStyle(document.querySelector('[data-slab]')!).opacity === '1', null, { timeout: 15000 });
+    await page.waitForTimeout(1500);
+    const log = await page.evaluate(() => window.__heroLog ?? []);
+    expect(log.length).toBeGreaterThan(5);
+    expect(log.filter((f) => f.o < 1 && f.knock), 'frames with the originals cut out while the slab is translucent').toEqual([]);
+  });
+
+  test('M1: scrolling past the slide mid-glide stops the glide; nothing writes the slab during the flight', async ({ page }) => {
+    await page.addInitScript(() => { (window as unknown as { __v3test: boolean }).__v3test = true; });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => (window.__heroLog?.length ?? 0) > 3, null, { timeout: 15000 });
+    await page.evaluate(() => window.__scene!.setProgress(300));
+    const n0 = await page.evaluate(() => window.__heroLog!.length);
+    await page.waitForFunction(() => window.__scene?.state() === 'docked', null, { timeout: 8000 });
+    await page.waitForTimeout(300);
+    expect(await page.evaluate(() => window.__heroLog!.length), 'glide frames after the flight began').toBeLessThanOrEqual(n0 + 1);
+    // The bend never shows during or after the flight to the dock: no holes in the name.
+    expect(await page.evaluate(() => [...document.querySelectorAll<HTMLElement>('.mast [data-line]')].some((l) => !!(l.style.maskImage || (l.style as CSSStyleDeclaration & { webkitMaskImage?: string }).webkitMaskImage)))).toBe(false);
+  });
+
+  test('M2/M3: the slab and the dock cross-fade; the bend eases out before take-off and back in after landing', async ({ page }) => {
+    await openHome(page);
+    const s0 = await page.evaluate(() => window.__bend?.strength ?? null);
+    expect(s0).toBeGreaterThan(1);
+    await page.evaluate(() => {
+      const w = window as unknown as { __mt: { t: number; s: number | null; slab: number; dock: number; vis: string }[]; __set: number[] };
+      w.__mt = [];
+      // Every strength the bend is given (frame sampling alone can miss a 120ms ease on a slow headless engine).
+      w.__set = [];
+      const bend = window.__bend!, set = bend.setStrength.bind(bend);
+      bend.setStrength = (v: number) => { w.__set.push(v); set(v); };
+      const t0 = performance.now();
+      const tick = () => {
+        const slab = document.querySelector<HTMLElement>('[data-slab]')!;
+        w.__mt.push({ t: performance.now() - t0, s: window.__bend ? window.__bend.strength : null, slab: +getComputedStyle(slab).opacity, dock: +getComputedStyle(document.querySelector('[data-dock]')!).opacity, vis: getComputedStyle(slab).visibility });
+        if (performance.now() - t0 < 2600) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      window.__scene!.setProgress(300);
+    });
+    await page.waitForFunction(() => window.__scene?.state() === 'docked', null, { timeout: 8000 });
+    await page.waitForTimeout(900);
+    const out = await page.evaluate(() => (window as unknown as { __mt: { t: number; s: number | null; slab: number; dock: number; vis: string }[] }).__mt);
+    // The bend falls through intermediate strengths (never full to nothing in one frame).
+    const set = await page.evaluate(() => (window as unknown as { __set: number[] }).__set);
+    expect(set.some((v) => v > 0.01 && v < s0! - 0.01), `bend eased out (${set.map((v) => v.toFixed(1)).join(' ')})`).toBe(true);
+    // A dock fading in while the slab is still visible (overlap), and never a frame with neither.
+    expect(out.some((f) => f.dock > 0.1 && f.dock < 0.9 && f.vis === 'visible' && f.slab > 0.1), 'cross-fade overlap').toBe(true);
+    for (const f of out) if (f.t > 100) expect(f.dock > 0.05 || (f.vis === 'visible' && f.slab > 0.05), `gap at ${f.t.toFixed(0)}ms`).toBe(true);
+    // Back to the top: the bend comes back from low strength.
+    await page.evaluate(() => {
+      const w = window as unknown as { __back: number[] };
+      w.__back = [];
+      const t0 = performance.now();
+      const tick = () => { if (window.__bend) w.__back.push(window.__bend.strength); if (performance.now() - t0 < 2500) requestAnimationFrame(tick); };
+      requestAnimationFrame(tick);
+      window.__scene!.setProgress(0);
+    });
+    await page.waitForFunction(() => window.__scene?.state() === 'rest', null, { timeout: 8000 });
+    await page.waitForTimeout(1500);
+    const back = await page.evaluate(() => (window as unknown as { __back: number[] }).__back);
+    expect(back.length).toBeGreaterThan(2);
+    expect(back[0], 'the bend returns from nothing').toBeLessThan(1);
+    expect(back.some((s) => s > 1 && s < s0! - 1), 'and ramps up').toBe(true);
+    expect(back[back.length - 1]).toBeCloseTo(s0!, 1);
+  });
+
+  test('M5: a pause before release does not fling', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'mouse');
+    await openHome(page);
+    const slab = page.locator('[data-slab]');
+    const b0 = (await slab.boundingBox())!;
+    await page.mouse.move(b0.x + 60, b0.y + 60);
+    await page.mouse.down();
+    await page.mouse.move(b0.x + 160, b0.y + 60, { steps: 4 });
+    const held = (await slab.boundingBox())!.x;
+    await page.waitForTimeout(300);
+    await page.mouse.up();
+    await page.waitForTimeout(1500);
+    const rest = (await slab.boundingBox())!.x;
+    // Only the clear-edge snap may move it (at most about 48u), never a fling.
+    expect(Math.abs(rest - held), `moved ${rest - held}px after a held release`).toBeLessThan(60);
+  });
+
+  test('M11: under reduced motion the slab and the dock cross-fade over 160ms', async ({ browser }, info) => {
+    const ctx = await browser.newContext({ ...info.project.use, reducedMotion: 'reduce' });
+    const page = await ctx.newPage();
+    await page.goto('/');
+    const d = await page.evaluate(() => [document.querySelector('[data-slab]')!, document.querySelector('[data-dock]')!].map((e) => getComputedStyle(e).transitionDuration));
+    for (const v of d) expect(v.split(',').map((x) => x.trim())).toContain('0.16s');
+    await ctx.close();
+  });
+});

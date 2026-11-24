@@ -120,7 +120,7 @@ test.describe('layout guardrails', () => {
   });
 
   // Ruling 2: the phone role line stays three rows, measured at y 61 to 145 at 390x664.
-  for (const [w, h] of [[375, 667], [390, 664], [412, 915]]) {
+  for (const [w, h] of [[320, 640], [375, 667], [390, 664], [412, 915]]) {
     test(`phone: the line stays three rows at ${w}x${h}`, async ({ page }) => {
       await page.setViewportSize({ width: w, height: h });
       await openHome(page);
@@ -130,10 +130,96 @@ test.describe('layout guardrails', () => {
         const rg = document.createRange(); rg.selectNodeContents(el);
         const tops = new Set([...rg.getClientRects()].map((x) => Math.round(x.top)));
         const b = el.getBoundingClientRect();
-        return { rows: tops.size, top: b.top + scrollY, bottom: b.bottom + scrollY };
+        return { rows: tops.size, top: b.top + scrollY, bottom: b.bottom + scrollY, photo: document.querySelector('.hero .photo')!.getBoundingClientRect().top + scrollY };
       });
       expect(r.rows).toBe(3);
+      // Creative director, ruling 5: at 320 the line (24px) ends above the portrait, which moves down 12px.
+      if (w === 320) expect(r.bottom, 'line clears the portrait').toBeLessThanOrEqual(r.photo + 0.5);
       if (w === 390) { expect(Math.abs(r.top - 61)).toBeLessThanOrEqual(2); expect(Math.abs(r.bottom - 145)).toBeLessThanOrEqual(2); }
     });
   }
+
+  // Creative director fix 6: a paired teaser figure ends at least 48px left of its label column.
+  for (const [w, h] of [[1024, 768], [1280, 800], [1440, 900]]) {
+    test(`home Work row: figures clear the label column by 48px at ${w}`, async ({ page, isMobile }) => {
+      test.skip(isMobile, 'desktop');
+      await page.setViewportSize({ width: w, height: h });
+      await page.goto('/');
+      await page.evaluate(() => document.fonts.ready);
+      const gaps = await page.evaluate(() => [...document.querySelectorAll('.case')].map((c) => {
+        const fig = c.querySelector('.case-fig')!, body = c.querySelector('.case-body')!;
+        const r = document.createRange(); r.selectNodeContents(fig);
+        const right = Math.max(...[...r.getClientRects()].map((x) => x.right));
+        return body.getBoundingClientRect().left - right;
+      }));
+      expect(gaps.length).toBeGreaterThan(0);
+      for (const g of gaps) expect(g).toBeGreaterThanOrEqual(48);
+    });
+  }
+
+  // Creative director fix 1: the phone portrait dissolves into the page; no edge of its box steps against the field.
+  for (const [w, h] of [[375, 667], [390, 844], [412, 915]]) {
+    test(`phone portrait: every edge within a level of the page at ${w}`, async ({ page, isMobile }) => {
+      test.skip(!isMobile, 'phone layout');
+      await page.setViewportSize({ width: w, height: h });
+      await openHome(page);
+      await page.addStyleTag({ content: '.hero .mast,.hero .lead,[data-slab],[data-slab-shadow],.strip,svg.bend{visibility:hidden!important}' });
+      await page.waitForTimeout(200);
+      const b = (await page.locator('.hero .photo').boundingBox())!;
+      const pad = 12;
+      const clip = { x: Math.max(0, b.x - pad), y: b.y - pad, width: Math.min(w - Math.max(0, b.x - pad), b.width + pad * 2), height: b.height + pad * 2 };
+      const shot = await page.screenshot({ clip });
+      const steps = await page.evaluate(async ([png, box, c]) => {
+        const img: ImageData = await new Promise((res) => { const i = new Image(); i.onload = () => { const cv = document.createElement('canvas'); cv.width = i.width; cv.height = i.height; const x = cv.getContext('2d')!; x.drawImage(i, 0, 0); res(x.getImageData(0, 0, i.width, i.height)); }; i.src = 'data:image/png;base64,' + png; });
+        const k = img.width / c.width;
+        const L = (x: number, y: number) => { const i = (Math.round(y * k) * img.width + Math.round(x * k)) * 4; return (img.data[i] + img.data[i + 1] + img.data[i + 2]) / 3; };
+        const bx = box.x - c.x, by = box.y - c.y;
+        // Mean along each edge, 1px inside vs 6px outside, over the middle 80% of the edge.
+        const edge = (inside: (t: number) => [number, number], outside: (t: number) => [number, number]) => {
+          let a = 0, o = 0, n = 0;
+          for (let t = 0.1; t <= 0.9; t += 0.01) { a += L(...inside(t)); o += L(...outside(t)); n++; }
+          return Math.abs(a / n - o / n);
+        };
+        return {
+          top: edge((t) => [bx + t * box.w, by + 1], (t) => [bx + t * box.w, by - 6]),
+          bottom: edge((t) => [bx + t * box.w, by + box.h - 1], (t) => [bx + t * box.w, by + box.h + 6]),
+          left: edge((t) => [bx + 1, by + t * box.h], (t) => [Math.max(0, bx - 6), by + t * box.h]),
+          right: edge((t) => [bx + box.w - 1, by + t * box.h], (t) => [Math.min(c.width - 1, bx + box.w + 6), by + t * box.h]),
+        };
+      }, [shot.toString('base64'), { x: b.x, y: b.y, w: b.width, h: b.height }, clip] as const);
+      for (const [k, v] of Object.entries(steps)) expect(v, `${k} edge step (levels)`).toBeLessThanOrEqual(1);
+    });
+  }
+
+  // Creative director fix 12: on /contact/ the dock's Get in touch (pointing at the page you are on) is gone.
+  test('contact: the dock has no Get in touch', async ({ page }) => {
+    await page.goto('/contact/');
+    await expect(page.locator('[data-dock]')).toBeVisible();
+    await expect(page.locator('[data-dock] .dock-cta')).toBeHidden();
+    expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollPaddingBottom)).toBe('112px');
+  });
+
+  // Motion review 8: the dock's Get in touch folds in and out; the dock never jumps width.
+  test('the dock CTA folds over time instead of popping', async ({ page }) => {
+    await page.goto('/work/');
+    const dock = page.locator('[data-dock]');
+    const wrap = dock.locator('.dock-cta-wrap');
+    await expect(dock.locator('.dock-cta')).toBeVisible();
+    const full = (await wrap.boundingBox())!.width;
+    const widths = await dock.evaluate(async (d) => {
+      const w = d.querySelector('.dock-cta-wrap')!;
+      d.dataset.ctaHidden = '';
+      const out: number[] = [];
+      const t0 = performance.now();
+      await new Promise<void>((done) => { const tick = () => { out.push(w.getBoundingClientRect().width); if (performance.now() - t0 < 300) requestAnimationFrame(tick); else done(); }; requestAnimationFrame(tick); });
+      return out;
+    });
+    const mid = widths.slice(1).reduce((m, v) => (Math.abs(v - full / 2) < Math.abs(m - full / 2) ? v : m), widths[0]);
+    await page.waitForTimeout(500);
+    const folded = (await wrap.boundingBox())?.width ?? 0;
+    expect(folded).toBeLessThan(full - 60);
+    expect(mid, `mid-fold width ${mid} between ${folded} and ${full}`).toBeGreaterThan(folded + 4);
+    expect(mid).toBeLessThan(full - 1);
+    await expect(dock.locator('.dock-cta')).toBeHidden();
+  });
 });

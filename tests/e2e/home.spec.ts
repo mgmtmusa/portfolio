@@ -13,7 +13,7 @@ test.describe('home hero (direction C)', () => {
     errs.assertClean();
   });
 
-  test('proof: three footnoted figures, the pair carries its qualifier and spend', async ({ page }) => {
+  test('proof: every figure footnoted (28% and 65% share note 1), the pair carries its qualifier and spend', async ({ page }) => {
     await openHome(page);
     const proof = page.locator('.hero .proof');
     await expect(proof).toContainText('28%');
@@ -21,12 +21,16 @@ test.describe('home hero (direction C)', () => {
     await expect(proof).toContainText('Two results from the same initiative at Evitech, on paid media of roughly $15K to $30K a month.');
     await expect(proof).toContainText('$2M+');
     await expect(proof).toContainText('13,200');
-    await expect(proof.locator('.fn')).toHaveCount(3);
+    await expect(proof.locator('.fn')).toHaveCount(4);
+    // Finish review 4: 28% carries its own marker, inside its data-fact element with the scope note.
+    const cpa = proof.locator('.fig[data-fact="28%"]');
+    await expect(cpa.locator('.fn')).toHaveText('1');
+    await expect(cpa.locator('.fn-pop')).toContainText('Two results from the same initiative');
   });
 
   test('a footnote opens its scope note on click and with the keyboard', async ({ page, isMobile }) => {
     await openHome(page);
-    const fn = page.locator('.hero .proof .fn').nth(1);
+    const fn = page.locator('.hero .proof .fn[popovertarget="fn-h-2"]');
     await fn.scrollIntoViewIfNeeded();
     await page.waitForTimeout(400);
     await fn.click();
@@ -190,23 +194,86 @@ test.describe('slab drag', () => {
     expect(clear).toEqual([]);
   });
 
-  test('press scales the slab and it returns', async ({ page, isMobile }) => {
+  test('press tightens the contact shadow without scaling the slab, and it returns', async ({ page, isMobile }) => {
     test.skip(isMobile, 'pointer press');
     await openHome(page);
     const slab = page.locator('[data-slab]');
+    const shadowY = () => page.locator('[data-slab-shadow]').evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m42);
     const b = (await slab.boundingBox())!;
     await page.mouse.move(b.x + 40, b.y + 40);
+    await page.waitForTimeout(250);
+    const hover = await shadowY();
     await page.mouse.down();
     await page.waitForTimeout(250);
-    expect(await slab.evaluate((el) => getComputedStyle(el).scale)).toBe('0.985');
+    // Motion review 4: a scale would pivot and pull the bent copy off its cut-out.
+    expect(['none', '1']).toContain(await slab.evaluate((el) => getComputedStyle(el).scale));
+    expect(await shadowY(), 'pressed shadow sits closer').toBeLessThan(hover - 4);
     await page.mouse.up();
     await page.waitForTimeout(250);
-    expect(['none', '1']).toContain(await slab.evaluate((el) => getComputedStyle(el).scale));
+    expect(Math.abs((await shadowY()) - hover)).toBeLessThan(1);
   });
 
   test('a vertical swipe that starts on the slab scrolls the page', async ({ page, isMobile }) => {
     test.skip(!isMobile, 'touch');
     await openHome(page);
     expect(await page.locator('[data-slab]').evaluate((el) => getComputedStyle(el).touchAction)).toBe('pan-y');
+  });
+});
+
+// Creative director round 1, fix 4: without the slab (prefers-contrast: more) the dock never sits on the masthead.
+test.describe('no-slab fallback (prefers-contrast: more)', () => {
+  test('the dock stays hidden at rest, arrives once the hero CTA leaves, and the strip yields availability', async ({ browser, isMobile }, info) => {
+    const ctx = await browser.newContext({ ...info.project.use, contrast: 'more' });
+    const page = await ctx.newPage();
+    await page.goto('/');
+    await expect(page.locator('[data-slab]')).toBeHidden();
+    await page.waitForTimeout(1500);
+    const dock = page.locator('[data-dock]');
+    await expect(dock).not.toHaveAttribute('data-shown', '');
+    expect(await dock.evaluate((d) => (d as HTMLElement).inert)).toBe(true);
+    if (!isMobile) await expect(page.locator('.strip')).toHaveAttribute('data-avail-hidden', '');
+    await page.evaluate(() => scrollTo(0, 1400));
+    await expect(dock).toHaveAttribute('data-shown', '');
+    expect(await dock.evaluate((d) => (d as HTMLElement).inert)).toBe(false);
+    await page.evaluate(() => scrollTo(0, 0));
+    await expect(dock).not.toHaveAttribute('data-shown', '');
+    await ctx.close();
+  });
+});
+
+// Motion review 6: coming back to home by a view transition replays nothing, and the dock never covers the name.
+test.describe('soft return to home', () => {
+  test('no glide, no text rise; the slab is at rest and the dock hidden from the first frame', async ({ page }) => {
+    await page.addInitScript(() => { (window as unknown as { __v3test: boolean }).__v3test = true; });
+    await page.goto('/work/');
+    await page.waitForTimeout(1500);
+    await page.evaluate(() => { const a = document.createElement('a'); a.href = '/'; a.id = 'go-home'; a.textContent = 'home'; document.body.appendChild(a); });
+    await page.evaluate(() => {
+      // Sample the first frames after the swap.
+      (window as unknown as { __soft: unknown[] }).__soft = [];
+      document.addEventListener('astro:after-swap', () => {
+        const log = (window as unknown as { __soft: unknown[] }).__soft;
+        let n = 0;
+        const tick = () => {
+          const slab = document.querySelector<HTMLElement>('[data-slab]');
+          const dock = document.querySelector<HTMLElement>('[data-dock]')!;
+          if (slab) log.push({ o: getComputedStyle(slab).opacity, tr: getComputedStyle(slab).translate, dock: getComputedStyle(dock).opacity, rise: document.querySelector('.hero .lead')!.getAnimations().length });
+          if (++n < 20) requestAnimationFrame(tick);
+        };
+        tick();
+      }, { once: true });
+    });
+    await page.locator('#go-home').click();
+    await page.waitForURL(/\/$/);
+    await page.waitForTimeout(800);
+    const log = await page.evaluate(() => (window as unknown as { __soft: { o: string; tr: string; dock: string; rise: number }[] }).__soft);
+    expect(log.length).toBeGreaterThan(3);
+    for (const f of log) {
+      expect(f.o, 'slab opacity').toBe('1');
+      expect(Math.abs(parseFloat(f.tr) || 0), `slab not off to the left (${f.tr})`).toBeLessThan(0.5);
+      expect(f.rise, 'no text rise').toBe(0);
+      expect(Number(f.dock), 'dock not over the masthead').toBeLessThan(0.5);
+    }
+    await expect(page.locator('[data-slab]')).toHaveAttribute('data-bend', 'on', { timeout: 8000 });
   });
 });

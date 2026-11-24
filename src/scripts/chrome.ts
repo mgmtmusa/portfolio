@@ -67,7 +67,9 @@ function wireCommandMenu() {
     const found = searchCommands(ITEMS, input.value);
     const ids = new Set(found.map((f) => f.id));
     const list = dialog.querySelector('#cmdk-list')!;
-    dialog.querySelectorAll<HTMLElement>('.cmdk-item').forEach((o) => (o.hidden = !ids.has(o.dataset.id!)));
+    // The row for the page you are on is dropped (creative director, round 1, fix 9).
+    const here = location.pathname;
+    dialog.querySelectorAll<HTMLElement>('.cmdk-item').forEach((o) => (o.hidden = !ids.has(o.dataset.id!) || (o.closest<HTMLElement>('.cmdk-group')?.dataset.group === 'Pages' && o.getAttribute('href') === here)));
     // Ranked order inside each group; groups keep their order.
     dialog.querySelectorAll<HTMLElement>('.cmdk-group').forEach((g) => {
       const kids = [...g.querySelectorAll<HTMLElement>('.cmdk-item')];
@@ -79,9 +81,10 @@ function wireCommandMenu() {
       const first = found[0] && dialog.querySelector(`[data-id="${found[0].id}"]`)?.closest('.cmdk-group');
       if (first) list.prepend(first);
     } else {
-      ['Pages', 'Cases', 'Actions'].forEach((g) => list.append(dialog.querySelector(`[data-group="${g}"]`)!));
+      // DESIGN.md: the actions are the first visible rows, then cases, then pages.
+      ['Actions', 'Cases', 'Pages'].forEach((g) => list.append(dialog.querySelector(`[data-group="${g}"]`)!));
     }
-    dialog.querySelector<HTMLElement>('.cmdk-empty')!.hidden = found.length > 0;
+    dialog.querySelector<HTMLElement>('.cmdk-empty')!.hidden = options().length > 0;
     highlight(0);
   };
   const open = (from: HTMLElement | null) => {
