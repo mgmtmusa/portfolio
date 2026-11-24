@@ -1,0 +1,299 @@
+import { test, expect, type Page } from '@playwright/test';
+import { openHome } from './helpers';
+
+/** Task 5 moments: load order (DESIGN.md, Motion), M7, M9, H2 and the drag on touch. */
+
+const decode = `(s) => new Promise((res) => { const i = new Image(); i.onload = () => { const c = document.createElement('canvas'); c.width = i.width; c.height = i.height; const x = c.getContext('2d'); x.drawImage(i, 0, 0); res(x.getImageData(0, 0, i.width, i.height)); }; i.src = 'data:image/png;base64,' + s; })`;
+
+test.describe('load order (DESIGN.md, Motion)', () => {
+  test('content is visible at first paint and the rise is transform-only', async ({ page }) => {
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const r = await page.evaluate(() => {
+      const sel = ['.mast', '[data-portrait]', '.hero .lead', '.hero .proof > li:nth-child(1)', '.hero .proof > li:nth-child(2)', '.hero .proof > li:nth-child(3)', '[data-hero-avail]'];
+      const out: { sel: string; opacity: string; visibility: string; props: string[] }[] = [];
+      for (const s of sel) {
+        const el = document.querySelector(s)!;
+        const cs = getComputedStyle(el);
+        const props = new Set<string>();
+        for (const a of el.getAnimations()) {
+          for (const kf of (a.effect as KeyframeEffect).getKeyframes()) {
+            for (const k of Object.keys(kf)) if (!['offset', 'easing', 'composite', 'computedOffset'].includes(k)) props.add(k);
+          }
+        }
+        out.push({ sel: s, opacity: cs.opacity, visibility: cs.visibility, props: [...props] });
+      }
+      return out;
+    });
+    for (const e of r) {
+      expect(e.opacity, `${e.sel} opacity at first paint`).toBe('1');
+      expect(e.visibility, e.sel).toBe('visible');
+      for (const p of e.props) expect(p, `${e.sel} animates ${p}`).toBe('transform');
+    }
+    // The masthead and the portrait never animate at all.
+    expect(r.find((e) => e.sel === '.mast')!.props).toEqual([]);
+    expect(r.find((e) => e.sel === '[data-portrait]')!.props).toEqual([]);
+  });
+
+  test('reduced motion: everything is at rest, nothing animates', async ({ browser }) => {
+    const ctx = await browser.newContext({ reducedMotion: 'reduce' });
+    const page = await ctx.newPage();
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const r = await page.evaluate(() => {
+      const slab = getComputedStyle(document.querySelector('[data-slab]')!);
+      return {
+        slabOpacity: slab.opacity,
+        slabTranslate: slab.translate,
+        animated: ['.lead', '.proof > li', '[data-hero-avail]'].flatMap((s) => [...document.querySelectorAll(s)].map((e) => e.getAnimations().length)),
+      };
+    });
+    expect(r.slabOpacity).toBe('1');
+    expect(r.slabTranslate).toBe('none');
+    expect(r.animated.every((n) => n === 0)).toBe(true);
+    await ctx.close();
+  });
+});
+
+test.describe('M7: first paint of the slab', () => {
+  test('waits off to the left at opacity 0 and leaves nothing on screen', async ({ page }) => {
+    await page.clock.install(); // freeze timers so a slow machine cannot start the glide first
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const s = await page.evaluate(() => {
+      const cs = getComputedStyle(document.querySelector('[data-slab]')!);
+      const sh = getComputedStyle(document.querySelector('[data-slab-shadow]')!);
+      return { o: cs.opacity, t: cs.translate, so: sh.opacity, jsClass: document.documentElement.classList.contains('js') };
+    });
+    expect(s.jsClass).toBe(true);
+    expect(s.o).toBe('0');
+    expect(s.so).toBe('0');
+    expect(s.t).not.toBe('none');
+    expect(parseFloat(s.t)).toBeLessThan(0);
+  });
+
+  test('a screenshot at DOMContentLoaded matches the page with the slab removed', async ({ page, browserName }) => {
+    test.skip(browserName !== 'chromium', 'Chromium screenshot per the plan');
+    await page.clock.install(); // freeze timers so the glide (400ms) cannot start before the shot
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    const b = (await page.locator('[data-slab]').boundingBox())!;
+    const clip = { x: Math.max(0, b.x - 12), y: b.y, width: b.width + 24, height: b.height };
+    const early = await page.screenshot({ clip, animations: 'allow' });
+    await page.addStyleTag({ content: '[data-slab],[data-slab-shadow]{display:none!important}' });
+    const without = await page.screenshot({ clip, animations: 'allow' });
+    const share = await page.evaluate(async ([a, c]) => {
+      const load = (s: string) => new Promise<ImageData>((res) => { const i = new Image(); i.onload = () => { const cv = document.createElement('canvas'); cv.width = i.width; cv.height = i.height; const x = cv.getContext('2d')!; x.drawImage(i, 0, 0); res(x.getImageData(0, 0, i.width, i.height)); }; i.src = 'data:image/png;base64,' + s; });
+      const [A, B] = await Promise.all([load(a), load(c)]);
+      let bad = 0;
+      for (let i = 0; i < A.data.length; i += 4) if (Math.max(Math.abs(A.data[i] - B.data[i]), Math.abs(A.data[i + 1] - B.data[i + 1]), Math.abs(A.data[i + 2] - B.data[i + 2])) > 10) bad++;
+      return bad / (A.data.length / 4);
+    }, [early.toString('base64'), without.toString('base64')]);
+    // Late rises on neighbouring content may move a few pixels; the slab itself must not show.
+    expect(share).toBeLessThan(0.02);
+  });
+
+  test('without JavaScript the slab sits at rest with no bend', async ({ browser }) => {
+    const ctx = await browser.newContext({ javaScriptEnabled: false });
+    const page = await ctx.newPage();
+    await page.goto('/');
+    const slab = page.locator('[data-slab]');
+    await expect(slab).toBeVisible();
+    const s = await slab.evaluate((el) => ({ o: getComputedStyle(el).opacity, t: getComputedStyle(el).translate, bend: el.querySelectorAll('svg.bend').length, js: document.documentElement.classList.contains('js') }));
+    expect(s).toEqual({ o: '1', t: 'none', bend: 0, js: false });
+    await ctx.close();
+  });
+});
+
+test.describe('M9: pixel contrast of text over the slab and the hero', () => {
+  const lum = (r: number, g: number, b: number) => {
+    const f = (v: number) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+  };
+
+  async function check(page: Page, label: string, only: 'dock' | 'page' = 'page') {
+    const state = label;
+    const targets = await page.evaluate(() => {
+      const sel = ['.strip p', '.hero .role', '.hero .line', '.hero .lab', '.hero .cap', '[data-hero-avail] p', '.hero .fig', '[data-dock] button', '[data-dock] a'];
+      const out: { sel: string; i: number; color: [number, number, number]; box: { x: number; y: number; width: number; height: number } }[] = [];
+      const vw = innerWidth, vh = innerHeight;
+      for (const s of sel) {
+        [...document.querySelectorAll<HTMLElement>(s)].forEach((el, i) => {
+          const cs = getComputedStyle(el);
+          const r = el.getBoundingClientRect();
+          if (cs.visibility === 'hidden' || cs.display === 'none' || (el.closest('[inert]') && !el.closest('[data-dock][data-shown]'))) return;
+          const x0 = Math.max(0, r.left), y0 = Math.max(0, r.top), x1 = Math.min(vw, r.right), y1 = Math.min(vh, r.bottom);
+          // Skip labels that are mostly off screen: a clipped sliver would sample the dock's resting edge instead.
+          if (x1 - x0 < 4 || y1 - y0 < 4 || (x1 - x0) * (y1 - y0) < 0.6 * r.width * r.height) return;
+          const m = cs.color.match(/[\d.]+/g)!.map(Number);
+          out.push({ sel: s, i, color: [m[0], m[1], m[2]], box: { x: x0, y: y0, width: x1 - x0, height: y1 - y0 } });
+        });
+      }
+      return out;
+    });
+    const picked = targets.filter((t) => (only === 'dock') === (t.sel.startsWith('[data-dock]') || (only === 'dock' || state === 'docked') && t.sel.startsWith('.strip')));
+    expect(picked.length, `${label}: found labels`).toBeGreaterThan(0);
+    await page.addStyleTag({ content: '.strip p,.hero .role,.hero .line,.hero .lab,.hero .cap,[data-hero-avail] p,.hero .fig,[data-dock] *{color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:none!important}' });
+    await page.waitForTimeout(150);
+    for (const t of picked) {
+      const buf = await page.screenshot({ clip: t.box, animations: 'disabled' });
+      const brightest = await page.evaluate(async ([b]) => {
+        // eslint-disable-next-line no-new-func
+        const img: ImageData = await new Promise((res) => { const i = new Image(); i.onload = () => { const c = document.createElement('canvas'); c.width = i.width; c.height = i.height; const x = c.getContext('2d')!; x.drawImage(i, 0, 0); res(x.getImageData(0, 0, i.width, i.height)); }; i.src = 'data:image/png;base64,' + b; });
+        let best = 0, pr = 0, pg = 0, pb = 0;
+        const f = (v: number) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+        for (let k = 0; k < img.data.length; k += 4) {
+          const L = 0.2126 * f(img.data[k]) + 0.7152 * f(img.data[k + 1]) + 0.0722 * f(img.data[k + 2]);
+          if (L > best) { best = L; pr = img.data[k]; pg = img.data[k + 1]; pb = img.data[k + 2]; }
+        }
+        return { L: best, rgb: [pr, pg, pb] };
+      }, [buf.toString('base64')]);
+      const lt = lum(...t.color);
+      const ratio = (Math.max(lt, brightest.L) + 0.05) / (Math.min(lt, brightest.L) + 0.05);
+      expect(ratio, `${label} ${t.sel}[${t.i}] text ${t.color} over brightest ${brightest.rgb}`).toBeGreaterThanOrEqual(4.5);
+    }
+  }
+
+  test('rest', async ({ page }) => {
+    await openHome(page);
+    await check(page, 'rest');
+  });
+
+  test('scrolled 45px, the name sliding through the slab', async ({ page }) => {
+    await openHome(page);
+    await page.evaluate(() => window.__scene?.setProgress(45));
+    await page.waitForTimeout(400);
+    await check(page, 'y45');
+  });
+
+  test('docked, over the next section', async ({ page }) => {
+    await openHome(page);
+    await page.evaluate(() => window.__scene?.setProgress(200));
+    await page.waitForFunction(() => window.__scene?.state() === 'docked', null, { timeout: 5000 });
+    await page.waitForTimeout(900);
+    await check(page, 'docked');
+  });
+
+  test('docked, the dock and strip labels over the page behind them', async ({ page }) => {
+    test.fixme(true, 'Known failing (HoE finding 7): the dock label measures 3.4 to 3.8:1 over blurred content and the strip reply time 1.6:1 over the key light once docked. The fix is in the dock fill and strip mask, not the hero.');
+    await openHome(page);
+    await page.evaluate(() => window.__scene?.setProgress(200));
+    await page.waitForFunction(() => window.__scene?.state() === 'docked', null, { timeout: 5000 });
+    await page.waitForTimeout(900);
+    await check(page, 'dock', 'dock');
+  });
+});
+
+test.describe('H2: the bend stays registered', () => {
+  test.beforeEach(({ browserName, isMobile }) => {
+    test.skip(browserName === 'firefox' || isMobile, 'Chromium and WebKit desktop at 2x');
+  });
+
+  async function offset(page: Page) {
+    await page.evaluate(() => window.__bend?.setStrength(0));
+    await page.waitForTimeout(120);
+    const b = (await page.locator('[data-slab]').boundingBox())!;
+    const clip = { x: b.x + 30, y: b.y + 30, width: b.width - 60, height: b.height - 60 };
+    await page.addStyleTag({ content: '[data-slab]{background:none!important;box-shadow:none!important}[data-slab]::before,[data-slab]::after{display:none!important}' });
+    const withCopy = await page.screenshot({ clip });
+    await page.evaluate(() => window.__bend?.destroy());
+    const originals = await page.screenshot({ clip });
+    return page.evaluate(async ([a, c]) => {
+      const load = (s: string) => new Promise<ImageData>((res) => { const i = new Image(); i.onload = () => { const cv = document.createElement('canvas'); cv.width = i.width; cv.height = i.height; const x = cv.getContext('2d')!; x.drawImage(i, 0, 0); res(x.getImageData(0, 0, i.width, i.height)); }; i.src = 'data:image/png;base64,' + s; });
+      const [A, B] = await Promise.all([load(a), load(c)]);
+      const w = A.width, h = A.height;
+      let bestD = Infinity, bx = 0, by = 0;
+      for (let dy = -4; dy <= 4; dy++) for (let dx = -4; dx <= 4; dx++) {
+        let sum = 0;
+        for (let y = 8; y < h - 8; y += 2) for (let x = 8; x < w - 8; x += 2) {
+          const i = (y * w + x) * 4, j = ((y + dy) * w + (x + dx)) * 4;
+          sum += Math.abs(A.data[i] - B.data[j]) + Math.abs(A.data[i + 1] - B.data[j + 1]);
+        }
+        if (sum < bestD) { bestD = sum; bx = dx; by = dy; }
+      }
+      return { bx, by };
+    }, [withCopy.toString('base64'), originals.toString('base64')]);
+  }
+
+  async function fresh(browser: import('@playwright/test').Browser, width = 1440) {
+    const ctx = await browser.newContext({ viewport: { width, height: 900 }, deviceScaleFactor: 2 });
+    const page = await ctx.newPage();
+    await openHome(page);
+    return { ctx, page };
+  }
+  const within = (o: { bx: number; by: number }) => { expect(Math.abs(o.bx), 'x (device px)').toBeLessThanOrEqual(2); expect(Math.abs(o.by), 'y (device px)').toBeLessThanOrEqual(2); };
+
+  test('after the fonts have loaded', async ({ browser }) => {
+    const { ctx, page } = await fresh(browser);
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(400);
+    within(await offset(page));
+    await ctx.close();
+  });
+
+  test('after a width resize', async ({ browser }) => {
+    const { ctx, page } = await fresh(browser);
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.waitForTimeout(900);
+    await page.waitForFunction(() => window.__scene?.state() === 'rest');
+    within(await offset(page));
+    await ctx.close();
+  });
+
+  test('after home, work, home', async ({ browser }) => {
+    const { ctx, page } = await fresh(browser);
+    await page.locator('a[href="/work/evitech/"]').first().click();
+    await page.waitForURL(/\/work\/evitech\/$/);
+    await page.goBack();
+    await page.waitForURL(/\/$/);
+    await page.waitForFunction(() => window.__scene?.state() === 'docked', null, { timeout: 6000 });
+    await page.evaluate(() => scrollTo(0, 0));
+    await page.waitForFunction(() => window.__scene?.state() === 'rest', null, { timeout: 6000 });
+    await page.waitForTimeout(1800);
+    within(await offset(page));
+    await ctx.close();
+  });
+});
+
+test.describe('scroll down and up, repeated', () => {
+  test('the scene state and the dock follow the scroll every time', async ({ page }) => {
+    await openHome(page);
+    const rest0 = await page.locator('[data-slab]').boundingBox();
+    for (let n = 0; n < 4; n++) {
+      await page.evaluate(() => scrollTo(0, 260));
+      await page.waitForFunction(() => window.__scene?.state() === 'docked', null, { timeout: 5000 });
+      await expect(page.locator('[data-dock]')).toHaveAttribute('data-shown', '');
+      expect(await page.locator('[data-dock]').evaluate((d) => (d as HTMLElement).inert), `down ${n}`).toBe(false);
+      expect(await page.locator('[data-slab]').evaluate((el) => getComputedStyle(el).visibility)).toBe('hidden');
+      await page.evaluate(() => scrollTo(0, 0));
+      await page.waitForFunction(() => window.__scene?.state() === 'rest', null, { timeout: 5000 });
+      await page.waitForTimeout(500);
+      await expect.poll(() => page.locator('[data-dock]').evaluate((d) => (d as HTMLElement).inert), { message: `dock inert after scrolling up ${n}`, timeout: 3000 }).toBe(true);
+      const s = await page.locator('[data-slab]').evaluate((el) => { const cs = getComputedStyle(el); return { v: cs.visibility, o: cs.opacity, bend: (el as HTMLElement).dataset.bend, r: el.getBoundingClientRect() }; });
+      expect(s.v).toBe('visible');
+      expect(s.o).toBe('1');
+      expect(Math.abs(s.r.width - rest0!.width), `slab width ${n}`).toBeLessThan(2);
+      expect(Math.abs(s.r.left - rest0!.x), `slab left ${n}`).toBeLessThan(2);
+      expect(Math.abs(s.r.top - rest0!.y), `slab top ${n}`).toBeLessThan(2);
+    }
+  });
+});
+
+test.describe('M5: touch drag on the phone', () => {
+  test('a horizontal drag on the slab moves it and does not scroll the page', async ({ page, browserName, isMobile }) => {
+    test.skip(!isMobile, 'phone projects');
+    test.skip(browserName !== 'chromium', 'Playwright has no touch drag outside Chromium (CDP Input.dispatchTouchEvent only); WebKit is covered by the touch-action check in home.spec');
+    await openHome(page);
+    const b0 = (await page.locator('[data-slab]').boundingBox())!;
+    const cdp = await page.context().newCDPSession(page);
+    const x0 = b0.x + b0.width / 2, y0 = b0.y + b0.height / 2;
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: x0, y: y0 }] });
+    for (let i = 1; i <= 10; i++) {
+      await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x0 - i * 6, y: y0 }] });
+      await page.waitForTimeout(16);
+    }
+    const mid = (await page.locator('[data-slab]').boundingBox())!;
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+    expect(mid.x, 'slab follows the finger left').toBeLessThan(b0.x - 20);
+    expect(await page.evaluate(() => scrollY), 'the page did not scroll').toBeLessThan(5);
+    await page.waitForTimeout(900);
+    const rest = (await page.locator('[data-slab]').boundingBox())!;
+    expect(Math.abs(rest.y - b0.y)).toBeLessThan(2);
+  });
+});

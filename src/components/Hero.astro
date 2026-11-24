@@ -157,7 +157,7 @@ const alt =
   :global(html.js:not([data-motion='reduce'])) .slab,
   :global(html.js:not([data-motion='reduce'])) .slab-shadow { opacity: 0; translate: calc(-240 * var(--u)) 0; }
   @media (prefers-reduced-motion: reduce) {
-    :global(html.js) .slab, :global(html.js) .slab-shadow { opacity: 1; translate: none; }
+    :global(html.js:not([data-motion='reduce'])) .slab, :global(html.js:not([data-motion='reduce'])) .slab-shadow { opacity: 1; translate: none; }
   }
   /* Accessibility fallbacks: nothing covers the name. */
   @media (prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active) {
@@ -175,6 +175,11 @@ const alt =
   }
   @keyframes rise { from { transform: translateY(8px); } }
 
+  /* Below 1440px wide the cover lines start higher, so the column clears the cap line of "Abdullah" by 24u. */
+  @media (max-width: 1439px) and (min-width: 640px) {
+    .proof { top: calc(88 * var(--u)); }
+  }
+
   /* Below 1180px: figure pairs stack, labels keep a readable measure. */
   @media (max-width: 1179px) and (min-width: 640px) {
     .figs, .labs { grid-template-columns: 1fr; }
@@ -184,6 +189,8 @@ const alt =
     .proof-pair .labs .lab { min-height: calc(36 * var(--u)); display: flex; align-items: center; margin: 0; }
     .proof-pair .cap { grid-column: 1 / -1; }
     .lab { min-width: 14ch; }
+    /* Availability: x 996 to 1382u, clear of the slab, so it stays short and sits below line 1's baseline. */
+    .avail { left: calc(996 * var(--u)); width: calc(386 * var(--u)); }
   }
 
   /* Phone: 390 grid, first viewport 664px. */

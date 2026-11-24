@@ -50,6 +50,10 @@ Host weights by role, one variable file (axis 480 to 540): 480 the line, 500 fig
 
 12 columns, 24px gutters. The hero unit is `u = min(100vw / 1440, 100svh / 900, 1px)` (never above 1px, so the 1254px portrait never renders over 620 CSS px); the hero is `100svh` tall (min 600px), `min(100%, 1440u)` wide, centred. One edge for the whole page: `--edge: max(clamp(20px, 4vw, 58px), calc((100vw - 1440 * var(--u)) / 2 + 58 * var(--u)))`, used by the strip, the hero, every section and the footer.
 
+Phone role line: the line ("I carried a sales target / first, so I judge / marketing by what closes.") stays three rows at 360, 375, 390, 402 and 412 and sits at y 61 to 145 at 390×664 (role label at y 38 to 55 above it). This replaces the earlier 44 to 128; the portrait follows at y 148 to 428.
+
+Below 1440px wide the cover lines start at 88u instead of 128u, and below 1180px the availability block widens to x 996 to 1382u, so the proof column clears the cap line of "Abdullah" by 24u and the availability block clears its baseline by 24u at every width.
+
 ### Glass (one recipe)
 
 - Clear first: fill `rgb(255 250 240 / .03 → .01)`, blur 8px (dock 16px), `saturate(160%) brightness(1.08)`, a 1px rim lit top left (`rim-catch` at .35 → .10 → .07 → .16), a 1px outer line `rgb(6 5 4 / .6)`.
@@ -71,7 +75,7 @@ Host weights by role, one variable file (axis 480 to 540): 480 the line, 500 fig
 - Signature moments are slow and weighty; everything repeated is instant or near-instant.
 - Lenis smooth scroll, off under reduced motion; GSAP ScrollTrigger only where scroll drives a scene; Astro view transitions with the strip, dock and ⌘K persisting.
 - Reduced motion is a complete version: everything present at first paint, no slide, no spring, cross-fades of 160ms at most.
-- The portrait and the masthead are painted at first paint and never hidden (they are the LCP). Home load order: 0–240ms the masthead fades in; 400–1500ms the slab glides in from opacity 0 at −240u; 800–1300ms the top-left block (opacity plus an 8px rise); 950–1450ms the cover lines, 70ms apart; 1100–1500ms the availability block.
+- The portrait and the masthead are painted at first paint and never hidden (they are the LCP). Home load order: the masthead and the portrait are simply there; 400–1500ms the slab glides in from opacity 0 at −240u; 800–1300ms the top-left block (opacity plus an 8px rise); 950–1450ms the cover lines, 70ms apart; 1100–1500ms the availability block.
 
 ### The portrait
 

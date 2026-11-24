@@ -51,4 +51,67 @@ test.describe('layout guardrails', () => {
     });
     expect(d).toBeLessThanOrEqual(2);
   });
+
+  // Finding 5: the proof column and the availability block clear line 1 of the masthead.
+  for (const [w, h] of [[1024, 768], [1100, 900], [1180, 820], [1280, 720], [1440, 789]]) {
+    test(`proof and availability clear "Abdullah" at ${w}x${h}`, async ({ page, isMobile }) => {
+      test.skip(isMobile, 'desktop');
+      await page.setViewportSize({ width: w, height: h });
+      await openHome(page);
+      await page.evaluate(() => document.fonts.ready);
+      const m = await page.evaluate(() => {
+        const hero = document.querySelector('.hero')!.getBoundingClientRect(); const u = hero.width / 1440;
+        const l1 = document.querySelector('.mast [data-line="1"]') as HTMLElement;
+        const probe = document.createElement('span'); probe.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
+        l1.appendChild(probe); const baseline = probe.getBoundingClientRect().bottom; probe.remove();
+        const cs = getComputedStyle(l1); const c = document.createElement('canvas').getContext('2d')!;
+        c.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        const cap = c.measureText('H').actualBoundingBoxAscent;
+        return {
+          u, capTop: baseline - cap, baseline,
+          proofBottom: document.querySelector('.hero .proof')!.getBoundingClientRect().bottom,
+          availTop: document.querySelector('[data-hero-avail]')!.getBoundingClientRect().top,
+        };
+      });
+      expect(m.proofBottom, 'proof bottom <= cap top - 24u').toBeLessThanOrEqual(m.capTop - 24 * m.u + 1);
+      expect(m.availTop, 'availability top >= baseline + 24u').toBeGreaterThanOrEqual(m.baseline + 24 * m.u - 1);
+    });
+  }
+
+  test('G7: below 1180px the figure pairs stack and labels are at least 14ch', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'desktop');
+    await page.setViewportSize({ width: 1024, height: 768 });
+    await openHome(page);
+    const r = await page.evaluate(() => {
+      const pair = document.querySelector('.proof-pair')!;
+      const figs = [...pair.querySelectorAll('.fig')].map((e) => e.getBoundingClientRect());
+      const labs = [...pair.querySelectorAll('.lab')];
+      const probe = document.createElement('span'); probe.style.cssText = 'position:absolute;visibility:hidden;width:14ch;font:' + getComputedStyle(labs[0]).font;
+      document.body.appendChild(probe); const ch14 = probe.getBoundingClientRect().width; probe.remove();
+      return {
+        sameColumn: Math.abs(figs[0].left - figs[1].left) < 1, stacked: figs[1].top >= figs[0].bottom - 1,
+        labWidths: labs.map((e) => e.getBoundingClientRect().width), ch14,
+      };
+    });
+    expect(r.sameColumn && r.stacked, 'figures stack').toBe(true);
+    for (const w of r.labWidths) expect(w).toBeGreaterThanOrEqual(r.ch14 - 0.5);
+  });
+
+  // Ruling 2: the phone role line stays three rows, measured at y 61 to 145 at 390x664.
+  for (const [w, h] of [[375, 667], [390, 664], [412, 915]]) {
+    test(`phone: the line stays three rows at ${w}x${h}`, async ({ page }) => {
+      await page.setViewportSize({ width: w, height: h });
+      await openHome(page);
+      await page.evaluate(() => document.fonts.ready);
+      const r = await page.evaluate(() => {
+        const el = document.querySelector('.hero .line')!;
+        const rg = document.createRange(); rg.selectNodeContents(el);
+        const tops = new Set([...rg.getClientRects()].map((x) => Math.round(x.top)));
+        const b = el.getBoundingClientRect();
+        return { rows: tops.size, top: b.top + scrollY, bottom: b.bottom + scrollY };
+      });
+      expect(r.rows).toBe(3);
+      if (w === 390) { expect(Math.abs(r.top - 61)).toBeLessThanOrEqual(2); expect(Math.abs(r.bottom - 145)).toBeLessThanOrEqual(2); }
+    });
+  }
 });
