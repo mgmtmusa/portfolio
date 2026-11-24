@@ -41,6 +41,20 @@ test.describe('home hero (direction C)', () => {
     }
   });
 
+  test('a teaser footnote marker is clickable and opens its popover', async ({ page }) => {
+    await openHome(page);
+    for (const id of ['fn-t-evitech', 'fn-t-ihu', 'fn-t-lil']) {
+      const fn = page.locator(`.teasers .fn[popovertarget="${id}"]`);
+      await fn.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(400);
+      await fn.click();
+      await expect(page.locator(`#${id}`)).toBeVisible();
+      await expect(page).toHaveURL(/\/$/);
+      await page.keyboard.press('Escape');
+      await expect(page.locator(`#${id}`)).toBeHidden();
+    }
+  });
+
   test('availability and reply time appear verbatim', async ({ page }) => {
     await openHome(page);
     await expect(page.locator('[data-hero-avail]')).toContainText(AVAILABILITY);

@@ -32,10 +32,10 @@ export const pages: Record<string, PageMeta> = {
   },
   '/work/i-heart-uni/': {
     title: 'I Heart Uni: a student brand grown city by city',
-    description: `${n} set I Heart Uni’s brand, content and event calendar across five cities, and hosted 18 sold-out events for the student brand as lead MC.`,
+    description: `${n} set I Heart Uni’s brand, content and event calendar across five cities, and hosted its sold-out events for the student brand as lead MC.`,
     og: '/og/i-heart-uni.png',
-    ogTitle: 'I Heart Uni: 18 sold-out events hosted as lead MC, across five cities',
-    ogAlt: 'I Heart Uni: 18 sold-out events hosted as lead MC across five cities',
+    ogTitle: 'I Heart Uni: sold-out events hosted as lead MC, across five cities',
+    ogAlt: 'I Heart Uni: sold-out events hosted as lead MC across five cities',
   },
   '/work/the-lil-project/': {
     title: 'The Lil Project: gigs that fund school buildings',

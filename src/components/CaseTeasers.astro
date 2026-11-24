@@ -22,7 +22,7 @@ const teasers = [
         const c = cases.find((x) => x.slug === t.slug)!;
         return (
           <li class="case">
-            <p class="case-fig" transition:name={`fig-${t.slug}`}>
+            <p class="case-fig" data-fact={t.figs.join('|')} transition:name={`fig-${t.slug}`}>
               {t.figs.map((f, i) => (
                 <span class="case-n">{f}{i === t.figs.length - 1 && <Footnote {...t.note} />}</span>
               ))}
@@ -70,7 +70,10 @@ const teasers = [
     .case { transition: background-color var(--dur-fast) ease-out; }
     .case:hover .case-t a { text-decoration: underline; text-decoration-color: var(--accent); }
   }
-  .case :global(.fn) { position: relative; z-index: 2; }
+  /* transition:name makes .case-fig a stacking context, so the marker's own z-index cannot beat the stretched link's ::after.
+     Lift the figure instead; clicks on the digits fall through to the link, only the marker takes them. */
+  .case-fig { position: relative; z-index: 2; pointer-events: none; }
+  .case :global(.fn) { position: relative; z-index: 2; pointer-events: auto; }
   .teasers-all { display: inline-flex; margin-top: 24px; }
   @media (max-width: 899px) {
     .teasers-head .h1, .teasers-head .body, .case-fig, .case-body { grid-column: 1 / -1; }
