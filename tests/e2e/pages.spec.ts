@@ -120,8 +120,8 @@ test.describe('CV', () => {
     expect(res.status()).toBe(200);
     expect(res.headers()['content-type']).toContain('application/pdf');
     expect((await res.body()).subarray(0, 5).toString()).toBe('%PDF-');
-    // The header link and the footer link, nothing more.
-    await expect(page.locator(`a[href="${CV}"]`)).toHaveCount(2);
+    // One download link in the page content (the menu and footer have their own).
+    await expect(page.locator(`main a[href="${CV}"]`)).toHaveCount(1);
   });
 
   test('contact routes: email and LinkedIn, no phone number', async ({ page }) => {
