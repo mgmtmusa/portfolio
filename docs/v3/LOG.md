@@ -136,3 +136,10 @@ Next steps, in order:
 **Running (uncommitted work may exist):** (A) Opus hero/motion batch, port 4371, owns src/scripts/*, Hero.astro, Dock, Base.astro, global.css, glass.css, bend/moments/hero-states/layout/home specs, ios.mjs. (B) Sonnet pages/copy batch, port 4372, all other src + meta/work/pages/nav specs + docs/plans F14. (C) Sonnet: scripts/qa/motion.mjs filmstrips into docs/evidence/round-4/motion.
 **Next:** verify each batch on the preview build (astro check, unit, build, facts, the specs), commit; round-4 captures incl. motion.mjs; round 2 reviews: HoE r3, CD, CMO, finish, motion (with filmstrips), then principal; repeat to 8 rounds max; gates (lighthouse.mjs, perf.mjs, facts, full matrix); documenter, SUMMARY-v3.md, hand-back.
 **For Musa:** CV PDF still says "CV coming soon" (go-live blocker, needs his real CV).
+
+## RESUME HERE (saved 25 November, 03:38, at 93% of the five-hour limit; resets 06:50)
+
+**Done since 02:58:** motion.mjs (ae86550). Pages/copy round 1 fixes committed (see latest commit): astro check, unit 88, build, facts PASS; e2e not yet run combined. Items it left: dock CTA on /contact/, footnote popover, "1 of 3" counter, light pools, layout.spec rule; chrome.ts:82 menu order and the StatusStrip reveal routed to the hero batch.
+**Uncommitted:** the Opus hero/motion batch's files (src/scripts/*, Hero.astro, Dock.astro, Base.astro, global.css, glass.css, hero-states/home specs, ios.mjs). If its helper is gone, verify these on a build (astro check, build, facts, `npx playwright test tests/e2e/{bend,moments,hero-states,layout,home,nav,nojs,a11y,work}.spec.ts --workers=2`) before committing; inspect `git diff --stat` first. work.spec.ts:173 (scroll restore after sheet) failed once under load: recheck.
+**Next:** combined e2e run, commit; finish the pages leftovers above (one Sonnet batch); `node scripts/qa/motion.mjs http://127.0.0.1:4322 docs/evidence/round-4/motion` + capture/hero-states/ios into round-4; round 2 reviews (HoE r3, CD, CMO, finish, motion with filmstrips; then principal).
+**For Musa:** CV PDF says "CV coming soon" (go-live blocker).
