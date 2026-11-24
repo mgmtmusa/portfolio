@@ -173,7 +173,7 @@ const alt =
     :global(html:not([data-motion='reduce'])) .proof > li:nth-child(3) { animation-delay: 1090ms; }
     :global(html:not([data-motion='reduce'])) .avail { animation: rise 400ms var(--ease-out) 1100ms both; }
   }
-  @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+  @keyframes rise { from { transform: translateY(8px); } }
 
   /* Below 1180px: figure pairs stack, labels keep a readable measure. */
   @media (max-width: 1179px) and (min-width: 640px) {
