@@ -31,7 +31,16 @@ const pageNotes = [
   <section class="wrap" style="padding-top: 120px" aria-label="Notes"><Notes notes={pageNotes} /></section>
 </Base>
 <script>
+  // The dock is hidden (opacity 0) on home until the hero hands it over; keep it out of the tab order until then.
+  const dock = document.querySelector<HTMLElement>('[data-dock]');
+  if (dock && !dock.hasAttribute('data-shown')) dock.inert = true;
   ((window as unknown as { __afterPaint: (() => void)[] }).__afterPaint ??= []).push(() => {
-    import('../scripts/hero').then((m) => m.start());
+    import('../scripts/hero')
+      .then((m) => m.start())
+      .catch(() => {
+        // The hero chunk failed to load: show the dock so navigation still works.
+        const d = document.querySelector<HTMLElement>('[data-dock]');
+        if (d) { d.dataset.shown = ''; d.inert = false; }
+      });
   });
 </script>

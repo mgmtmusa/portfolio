@@ -16,20 +16,34 @@ export function bendSupported(): boolean {
   return !!c.getContext?.('2d') && typeof SVGFEDisplacementMapElement !== 'undefined';
 }
 
+// The map is generated at half resolution and feImage scales it up (preserveAspectRatio none). The field is a
+// smooth ramp, so bilinear upscaling loses nothing visible, and the cold build costs a quarter of the pixels.
+const MAP_SCALE = 0.5;
 function mapUrl(w: number, h: number, r: number, band: number): string {
   const key = `${Math.round(w)}x${Math.round(h)}r${r}b${band}`;
   const hit = maps.get(key);
   if (hit) return hit;
-  const W = Math.round(w), H = Math.round(h);
+  const W = Math.max(1, Math.round(w * MAP_SCALE)), H = Math.max(1, Math.round(h * MAP_SCALE));
   const c = document.createElement('canvas');
   c.width = W; c.height = H;
   const ctx = c.getContext('2d')!;
   const img = ctx.createImageData(W, H);
-  img.data.set(displacementField(W, H, r, band));
+  img.data.set(displacementField(W, H, r * (W / w), band * (W / w)));
   ctx.putImageData(img, 0, 0);
   const url = c.toDataURL('image/png');
   maps.set(key, url);
   return url;
+}
+
+/** Fill the map cache for a slab of this size ahead of time (call from an idle callback), so the next build is warm. */
+export function warmBendMap(pane: HTMLElement, band: number): void {
+  if (!bendSupported()) return;
+  const prev = { tr: pane.style.translate, tf: pane.style.transform };
+  pane.style.translate = 'none'; pane.style.transform = 'none';
+  const P = pane.getBoundingClientRect();
+  pane.style.translate = prev.tr; pane.style.transform = prev.tf;
+  if (!P.width || !P.height) return;
+  mapUrl(P.width, P.height, parseFloat(getComputedStyle(pane).borderTopLeftRadius) || 24, band);
 }
 
 /** Baseline of a line, measured with an inline-block probe (font metrics vary by engine). */
@@ -134,37 +148,37 @@ export function buildBend(
   }
   pane.prepend(svg);
 
-  // The knock-out: everything outside a rounded hole, built from layers that only ever add (bands
-  // around the hole plus four corner pieces). No mask-composite: iOS Safari mis-composites the
-  // two-layer exclude/xor form and hides the whole element. Moving the slab updates positions only.
+  // The knock-out: one mask layer per target, an SVG of a solid rect with the rounded hole cut out
+  // (evenodd). One layer means no internal edges, so nothing can seam at a fractional device-pixel
+  // ratio (Pixel 7), and no mask-composite (iOS Safari mis-composites exclude/xor and hides the whole
+  // element). The image is the target's size plus the slab's on each axis, so the hole can sit anywhere
+  // over the target with solid mask around it; moving the slab only changes mask-position.
+  const rr = Math.min(radius, pw / 2, ph / 2);
   const targets = [...o.lines, ...o.images].map((el) => {
     const r = el.getBoundingClientRect();
-    return { el, w: r.width, h: r.height, base: { x: P.left - r.left, y: P.top - r.top } };
+    const w = r.width, h = r.height, mw = 2 * w + pw, mh = 2 * h + ph;
+    const n = (v: number) => +v.toFixed(3);
+    const hole = `M${n(w + rr)} ${n(h)}H${n(w + pw - rr)}A${n(rr)} ${n(rr)} 0 0 1 ${n(w + pw)} ${n(h + rr)}V${n(h + ph - rr)}A${n(rr)} ${n(rr)} 0 0 1 ${n(w + pw - rr)} ${n(h + ph)}H${n(w + rr)}A${n(rr)} ${n(rr)} 0 0 1 ${n(w)} ${n(h + ph - rr)}V${n(h + rr)}A${n(rr)} ${n(rr)} 0 0 1 ${n(w + rr)} ${n(h)}Z`;
+    const svgSrc = `<svg xmlns="${SVG}" width="${n(mw)}" height="${n(mh)}" viewBox="0 0 ${n(mw)} ${n(mh)}" preserveAspectRatio="none"><path fill-rule="evenodd" d="M0 0H${n(mw)}V${n(mh)}H0Z${hole}"/></svg>`;
+    return { el, w, h, base: { x: P.left - r.left, y: P.top - r.top }, image: `url("data:image/svg+xml,${encodeURIComponent(svgSrc)}")`, size: `${n(mw)}px ${n(mh)}px`, on: false };
   });
-  const rr = Math.min(radius, pw / 2, ph / 2);
-  const solid = 'linear-gradient(#000 0 0)';
-  const corner = (at: string) => `radial-gradient(circle at ${at}, transparent ${rr - 0.5}px, #000 ${rr + 0.5}px)`;
-  const layers = [solid, solid, solid, solid, corner('100% 100%'), corner('0% 100%'), corner('100% 0%'), corner('0% 0%')].join(', ');
-  const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
   let dx = 0, dy = 0, visible = false;
   const paintMasks = () => {
     for (const t of targets) {
       const st = t.el.style;
       const hx = t.base.x + dx, hy = t.base.y + dy;
       const hit = visible && hx < t.w && hx + pw > 0 && hy < t.h && hy + ph > 0;
-      if (!hit) { st.webkitMaskImage = st.maskImage = ''; continue; }
-      const L = clamp(hx, t.w), R = clamp(hx + pw, t.w), T = clamp(hy, t.h), B = clamp(hy + ph, t.h);
-      // Snap to device pixels so band edges never meet mid-pixel (a hairline seam on Android).
-      const dpr = window.devicePixelRatio || 1;
-      const px = (n: number) => `${(Math.round(n * dpr) / dpr).toFixed(3)}px`;
-      // left band, right band, top and bottom bands (1px wider each side so no seam shows), four corners
-      const size = [`${px(L)} 100%`, `${px(t.w - R)} 100%`, `${px(pw + 2)} ${px(T)}`, `${px(pw + 2)} ${px(t.h - B)}`, ...Array(4).fill(`${px(rr)} ${px(rr)}`)];
-      const pos = [`0 0`, `${px(R)} 0`, `${px(hx - 1)} 0`, `${px(hx - 1)} ${px(B)}`,
-        `${px(hx)} ${px(hy)}`, `${px(hx + pw - rr)} ${px(hy)}`, `${px(hx)} ${px(hy + ph - rr)}`, `${px(hx + pw - rr)} ${px(hy + ph - rr)}`];
-      st.webkitMaskImage = st.maskImage = layers;
-      st.webkitMaskRepeat = st.maskRepeat = 'no-repeat';
-      st.webkitMaskSize = st.maskSize = size.join(', ');
-      st.webkitMaskPosition = st.maskPosition = pos.join(', ');
+      if (!hit) {
+        if (t.on) { t.on = false; st.webkitMaskImage = st.maskImage = st.webkitMaskRepeat = st.maskRepeat = st.webkitMaskSize = st.maskSize = st.webkitMaskPosition = st.maskPosition = ''; }
+        continue;
+      }
+      if (!t.on) {
+        t.on = true;
+        st.webkitMaskImage = st.maskImage = t.image;
+        st.webkitMaskRepeat = st.maskRepeat = 'no-repeat';
+        st.webkitMaskSize = st.maskSize = t.size;
+      }
+      st.webkitMaskPosition = st.maskPosition = `${(hx - t.w).toFixed(3)}px ${(hy - t.h).toFixed(3)}px`;
     }
   };
   pane.dataset.bend = 'on';
@@ -189,15 +203,16 @@ export function buildBend(
   };
 }
 
-// Test-only hook (perf gate, head of engineering finding 9): a cold build with the map cache cleared. Absent in production.
-if (typeof window !== 'undefined' && (window as unknown as { __v3test?: boolean }).__v3test) {
-  (window as unknown as { __bendBuild?: () => number | null }).__bendBuild = () => {
+// Test-only hook (perf gate, head of engineering finding 9): times one build, cold (map cache cleared) by
+// default or warm. Stripped from production builds; in dev it still needs the __v3test flag.
+if (!import.meta.env.PROD && typeof window !== 'undefined' && (window as unknown as { __v3test?: boolean }).__v3test) {
+  (window as unknown as { __bendBuild?: (warm?: boolean) => number | null }).__bendBuild = (warm = false) => {
     const hero = document.querySelector<HTMLElement>('[data-hero]');
     const slab = hero?.querySelector<HTMLElement>('[data-slab]');
     const img = hero?.querySelector<HTMLImageElement>('[data-portrait]');
     if (!hero || !slab || !img) return null;
     const phone = innerWidth < 700;
-    maps.clear();
+    if (!warm) maps.clear();
     const t0 = performance.now();
     buildBend(slab, hero, { lines: [...hero.querySelectorAll<HTMLElement>('.mast [data-line]')], images: [img], band: phone ? 20 : 40, strength: phone ? 9 : 18 });
     return performance.now() - t0;

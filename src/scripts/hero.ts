@@ -1,10 +1,10 @@
 // The hero slab (direction C): glide in, drag along the name, let the name slide up through it for 90px,
 // then settle into the dock. Built per page load; torn down before every swap.
-import { buildBend, glyphBoxes, type Bend } from './bend';
+import { buildBend, glyphBoxes, warmBendMap, type Bend } from './bend';
 import { springAt, project, rubberband, snapClearX, edgesClear, glyphsUnder, flip, type Rect } from '../lib/hero-math';
 
 declare global {
-  interface Window { __v3test?: boolean; __bend?: Bend | null; __scene?: { state: () => string; setProgress: (y: number) => void } }
+  interface Window { __v3test?: boolean; __bend?: Bend | null; __scene?: { state: () => string; setProgress: (y: number) => void }; __landBuildMs?: number }
 }
 
 const SLIDE = 90; // px of scroll the name slides through the fixed slab
@@ -201,7 +201,12 @@ function init() {
       slab.style.visibility = '';
       showDock(false);
       // A bend dropped while away (dock arrival, resize, fonts, motion change) is rebuilt from the rest rect.
-      if (bend) bend.setVisible(true); else buildNow();
+      if (bend) bend.setVisible(true);
+      else {
+        const t0 = performance.now();
+        buildNow();
+        if (window.__v3test) window.__landBuildMs = performance.now() - t0; // perf gate: this build sits inside the landing
+      }
       place();
     }
   }
@@ -296,6 +301,7 @@ function init() {
     if (reduced) { slab.style.opacity = '1'; shadow.style.opacity = '1'; slab.style.translate = 'none'; shadow.style.translate = 'none'; buildNow(); return; }
     // Glide in from −240u: opacity over the first 200ms, a critically damped spring (response 1.1).
     const startX = -240 * (R0.w / 360);
+    dragX = startX; // so place() inside buildNow() writes the glide's first position, not 0
     buildNow();
     bend?.setStrength(0);
     bendMoving(true);
@@ -328,8 +334,15 @@ function init() {
     stopDrag?.(); drag = null;
     dragX = settledX = 0;
     restGeometry();
-    // At rest, rebuild now; anywhere else, drop the bend (and its mask hole) so land(0) rebuilds it.
-    if (mode === 'rest') buildNow(); else { dropBend(); if (t > 0 && !reduced) render(); }
+    // At rest, rebuild now; anywhere else, drop the bend (and its mask hole) so land(0) rebuilds it,
+    // and warm the displacement map for the new size while idle so that rebuild is never cold.
+    if (mode === 'rest') buildNow();
+    else {
+      dropBend();
+      if (t > 0 && !reduced) render();
+      const band = BAND;
+      idle(() => { if (!bend) warmBendMap(slab, band); });
+    }
     place();
   });
   on(document.fonts as unknown as HTMLElement, 'loadingdone', () => { if (mode === 'rest') buildNow(); else dropBend(); });

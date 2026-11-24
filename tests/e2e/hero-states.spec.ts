@@ -21,7 +21,8 @@ const snap = (page: Page): Promise<Snap> =>
     const s = slab.getBoundingClientRect();
     const cs = getComputedStyle(slab);
     const nums = (v: string) => (v.match(/-?\d+(\.\d+)?/g) ?? []).map(Number);
-    // Each knock-out target: how far the slab overlaps it now, and where its mask hole is (the 5th mask layer's position).
+    // Each knock-out target: how far the slab overlaps it now, and where its mask hole is. The mask is one SVG layer
+    // the target's size plus the slab's, with the hole at (target width, target height) inside it.
     const holes = [...document.querySelectorAll<HTMLElement>('.mast [data-line], [data-portrait]')].map((el, i) => {
       const st = el.style as CSSStyleDeclaration & { webkitMaskPosition?: string; webkitMaskImage?: string };
       const on = !!(st.maskImage || st.webkitMaskImage); // clearing a mask empties the image only
@@ -30,7 +31,7 @@ const snap = (page: Page): Promise<Snap> =>
       return {
         name: `target ${i}`,
         overlap: [Math.min(s.right, r.right) - Math.max(s.left, r.left), Math.min(s.bottom, r.bottom) - Math.max(s.top, r.top)] as [number, number],
-        hole: on && p.length >= 10 ? ([p[8], p[9]] as [number, number]) : null,
+        hole: on && p.length >= 2 ? ([p[0] + r.width, p[1] + r.height] as [number, number]) : null,
         want: [s.left - r.left, s.top - r.top] as [number, number],
       };
     });

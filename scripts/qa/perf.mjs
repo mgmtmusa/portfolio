@@ -1,11 +1,15 @@
-// INP and frame-rate gates (brief section 9). Usage: node scripts/qa/perf.mjs <baseUrl> <outdir>
+// INP and frame-rate gates (brief section 9). Usage: node scripts/qa/perf.mjs <baseUrl> <outdir> [bendBaseUrl]
 // INP: Chromium at 4× CPU throttling, Event Timing grouped by interactionId, worst interaction ≤ 200ms.
 // Frames: headed Chromium, 5s of real wheel scrolling over the hero scene; ≥ 95% of frames within 1.5x the measured refresh interval, no task over 50ms.
-// Also times the bend build at desktop and phone sizes (cold build via window.__bendBuild, budget 16ms at 4× CPU).
+// Bend build (plan F10), desktop and phone at 4× CPU, through the window.__bendBuild test hook:
+//   cold (map cache cleared) ≤ 25ms, and only ever inside an idle callback; warm (cache hit) ≤ 16ms.
+//   Plus one land(0) after a resize while docked (the rebuild inside the spring back) ≤ 16ms.
+// __bendBuild is stripped from production builds, so the bend timings need an `astro dev` server: pass it as
+// bendBaseUrl (defaults to baseUrl). INP and frames should run against `astro preview`.
 import { chromium, devices } from '@playwright/test';
 import { mkdirSync, writeFileSync } from 'node:fs';
 
-const [, , base = 'http://127.0.0.1:4322', out = 'docs/evidence/perf'] = process.argv;
+const [, , base = 'http://127.0.0.1:4322', out = 'docs/evidence/perf', bendBase = base] = process.argv;
 mkdirSync(out, { recursive: true });
 const result = {};
 
@@ -44,29 +48,48 @@ const result = {};
   await b.close();
 }
 
-// ---------- Bend build time (4× CPU), desktop and phone ----------
+// ---------- Bend build time (4× CPU), desktop and phone: cold, warm, and land(0) after a resize while docked ----------
+const COLD_MS = 25, WARM_MS = 16;
 for (const [label, opts] of [['desktop', { viewport: { width: 1440, height: 900 } }], ['phone', { ...devices['Pixel 7'] }]]) {
   const b = await chromium.launch();
   const ctx = await b.newContext(opts);
   const p = await ctx.newPage();
   await p.addInitScript(() => { window.__v3test = true; });
-  await p.goto(base + '/', { waitUntil: 'load' });
+  await p.goto(bendBase + '/', { waitUntil: 'load' });
   await p.waitForTimeout(3500);
   const cdp = await ctx.newCDPSession(p);
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
-  // Cold build: the test hook clears the displacement-map cache and times buildBend synchronously (median of 5, after one warm-up).
+  // Median of 5 after one warm-up, each timed synchronously by the hook.
   const ms = await p.evaluate(() => {
     const hook = window.__bendBuild;
     if (!hook) return null;
-    hook();
-    const runs = [];
-    for (let i = 0; i < 5; i++) runs.push(hook());
-    runs.sort((a, b) => a - b);
-    return runs[2];
+    const median = (warm) => { hook(warm); const runs = []; for (let i = 0; i < 5; i++) runs.push(hook(warm)); runs.sort((a, c) => a - c); return runs[2]; };
+    return { cold: median(false), warm: median(true) };
   });
-  if (ms == null) { result[`bendBuild_${label}_ms`] = null; result[`bendBuild_${label}_pass`] = false; result[`bendBuild_${label}_note`] = 'window.__bendBuild missing: rebuild dist so the bend.ts test hook is included'; await b.close(); continue; }
-  result[`bendBuild_${label}_ms`] = Math.round(ms * 10) / 10;
-  result[`bendBuild_${label}_pass`] = ms <= 16;
+  const r = (result[`bendBuild_${label}`] = {});
+  if (ms == null) {
+    Object.assign(r, { cold: null, warm: null, pass: false, note: 'window.__bendBuild missing: it is stripped from production builds, so pass an astro dev URL as bendBaseUrl' });
+    await b.close();
+    continue;
+  }
+  Object.assign(r, { coldMs: Math.round(ms.cold * 10) / 10, coldPass: ms.cold <= COLD_MS, warmMs: Math.round(ms.warm * 10) / 10, warmPass: ms.warm <= WARM_MS });
+  // land(0) after a resize while docked: reload unthrottled, dock, change the width (the resize handler drops the
+  // bend and warms the map while idle), then throttle and scroll back to the top. The rebuild in land(0) must be warm.
+  await cdp.send('Emulation.setCPUThrottlingRate', { rate: 1 });
+  await p.reload({ waitUntil: 'load' });
+  await p.waitForTimeout(3500);
+  await p.evaluate(() => window.__scene?.setProgress(600));
+  await p.waitForFunction(() => window.__scene?.state() === 'docked', null, { timeout: 5000 }).catch(() => {});
+  const vp = p.viewportSize();
+  await p.setViewportSize({ width: vp.width - (label === 'phone' ? 20 : 160), height: vp.height });
+  await p.waitForTimeout(1500);
+  await p.evaluate(() => { window.__landBuildMs = undefined; });
+  await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
+  await p.evaluate(() => window.__scene?.setProgress(0));
+  await p.waitForFunction(() => window.__scene?.state() === 'rest' && window.__landBuildMs !== undefined, null, { timeout: 8000 }).catch(() => {});
+  const land = await p.evaluate(() => window.__landBuildMs ?? null);
+  Object.assign(r, { landAfterResizeMs: land == null ? null : Math.round(land * 10) / 10, landPass: land != null && land <= WARM_MS });
+  r.pass = r.coldPass && r.warmPass && r.landPass;
   await b.close();
 }
 
