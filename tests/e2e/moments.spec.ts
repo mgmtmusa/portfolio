@@ -171,7 +171,6 @@ test.describe('M9: pixel contrast of text over the slab and the hero', () => {
   });
 
   test('docked, the dock and strip labels over the page behind them', async ({ page }) => {
-    test.fixme(true, 'Known failing (HoE finding 7): the dock label measures 3.4 to 3.8:1 over blurred content and the strip reply time 1.6:1 over the key light once docked. The fix is in the dock fill and strip mask, not the hero.');
     await openHome(page);
     await page.evaluate(() => window.__scene?.setProgress(200));
     await page.waitForFunction(() => window.__scene?.state() === 'docked', null, { timeout: 5000 });

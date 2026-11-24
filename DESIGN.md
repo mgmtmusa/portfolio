@@ -56,7 +56,7 @@ Below 1440px wide the cover lines start at 88u instead of 128u, and below 1180px
 
 ### Glass (one recipe)
 
-- Clear first: fill `rgb(255 250 240 / .03 → .01)`, blur 8px (dock 16px), `saturate(160%) brightness(1.08)`, a 1px rim lit top left (`rim-catch` at .35 → .10 → .07 → .16), a 1px outer line `rgb(6 5 4 / .6)`.
+- Clear first: fill `rgb(255 250 240 / .03 → .01)`, blur 8px (dock 16px; the dock fill is `rgb(26 24 22 / .62)`, the top of the .55 to .62 range, so every dock label clears 4.5:1), `saturate(160%) brightness(1.08)`, a 1px rim lit top left (`rim-catch` at .35 → .10 → .07 → .16), a 1px outer line `rgb(6 5 4 / .6)`.
 - The slab (hero): no backdrop blur at rest; `radial-gradient(70% 110% at 10% 0%, rgb(255 226 190 / .10), transparent 58%), linear-gradient(180deg, rgb(255 248 236 / .05), rgb(255 248 236 / .015) 60%)`; `box-shadow: inset 0 1px 0 rgb(255 244 224 / .24), inset 1px 0 0 rgb(255 244 224 / .10), inset 0 -12px 24px rgb(6 5 4 / .26), 0 0 0 1px rgb(6 5 4 / .45)`; rim 1.5px with a top-left catch of .80; an inner rim inset 7px; contact shadow `rgb(6 5 4 / .25)`, offset (10u, 16u), blur 28u. The bend is an inline SVG copy of what lies under the slab (glyphs placed one by one from the page's own layout), sampled inward, band 40 / scale 18 desktop, band 20 / scale 9 phone, never folding (scale < 1.2 × band).
   - Registration: at strength 0 the bent copy matches the page within 1px at 2× in Chromium and WebKit.
   - Knock-out: the originals are cut out under the slab only while its opacity is above 0.
