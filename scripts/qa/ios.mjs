@@ -1,13 +1,15 @@
 // Scripted iOS Simulator gate (head of engineering finding 2). Usage: node scripts/qa/ios.mjs <port> <outdir>
 // Drives xcrun simctl on the iPhone 17 simulator; loads http://127.0.0.1:<port>/ (IPv4 only), waits for paint by
-// sampling screenshot brightness, captures rest, y 45 and docked, and fails on blank masthead/portrait, missing
-// glyphs under the slab, or a full-screen white page. Mid-drag is not captured (cannot be driven from simctl).
+// sampling screenshot brightness, captures rest, docked and back (same-document #top). Fails on a white page, a scrolled
+// rest capture, a missing masthead, no dock pill when docked, or captures that did not change between states.
+// Mid-drag is not captured (cannot be driven from simctl).
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import sharp from 'sharp';
 
 const [, , port = '4341', out = 'docs/evidence/round-2/ios'] = process.argv;
-const UDID = '527DB004-2FE9-46EE-AD74-6C32C3D5A387';
+const DEVICE_NAME = 'iPhone 17';
+let UDID = '';
 const base = `http://127.0.0.1:${port}/`;
 mkdirSync(out, { recursive: true });
 const sh = (...a) => execFileSync('xcrun', ['simctl', ...a], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
@@ -15,8 +17,10 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 function boot() {
   const list = JSON.parse(sh('list', 'devices', '-j')).devices;
-  const dev = Object.values(list).flat().find((d) => d.udid === UDID);
-  if (!dev) throw new Error('simulator ' + UDID + ' not found');
+  const all = Object.values(list).flat().filter((d) => d.name === DEVICE_NAME && d.isAvailable !== false);
+  const dev = all.find((d) => d.state === 'Booted') ?? all[0];
+  if (!dev) throw new Error('simulator named ' + DEVICE_NAME + ' not found');
+  UDID = dev.udid;
   if (dev.state !== 'Booted') { try { sh('boot', UDID); } catch { /* already booting */ } }
   sh('bootstatus', UDID, '-b');
 }
@@ -69,54 +73,80 @@ async function waitPaint(file, settleMs = 0) {
   throw new Error('page never painted (centre mean outside 8..120)');
 }
 
+
 const results = { checks: [] };
 const check = (name, ok, detail) => { results.checks.push({ name, ok, detail }); console.log(`${ok ? 'PASS' : 'FAIL'} ${name} ${JSON.stringify(detail)}`); };
+
+// Fraction of "bright" pixels (luminance above `min`) in a region.
+async function brightShare(file, rect, min = 150) {
+  const { width, height } = await sharp(file).metadata();
+  const r = { left: Math.round(rect[0] * width), top: Math.round(rect[1] * height), width: Math.round(rect[2] * width), height: Math.round(rect[3] * height) };
+  const { data } = await sharp(file).extract(r).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+  let k = 0;
+  for (let i = 0; i < data.length; i += 3) if (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2] > min) k++;
+  return k / (data.length / 3);
+}
+const fileHash = async (f) => (await sharp(f).raw().toBuffer()).toString('base64').length + ':' + (await sharp(f).stats()).channels.map((c) => c.mean.toFixed(2)).join(',');
+
+// Rest-state assertions, shared by "rest" and "back": the page is at the top, dark, with the masthead, portrait and slab where they belong.
+async function assertRest(name, file) {
+  const full = await stats(file, [0, 0, 1, 1]);
+  check(`${name}: dark page, not a white or blank load`, full.mean < 120 && full.std > 12, { mean: +full.mean.toFixed(1), std: +full.std.toFixed(1) });
+  // At the top: the role line is a bright text band above the portrait.
+  const role = await brightShare(file, [0.06, 0.12, 0.88, 0.12], 150);
+  check(`${name}: role line band at the top (page not scrolled)`, role > 0.01, { brightShare: +role.toFixed(3) });
+  const face = await stats(file, [0.2, 0.26, 0.6, 0.18]);
+  check(`${name}: portrait has detail`, face.std > 20, { std: +face.std.toFixed(1) });
+  // Masthead rows (phone: three rows, about y 0.54 to 0.77) outside the slab (x 0.07 to 0.60, y 0.575 to 0.73):
+  // glyphs above it ("Musa"), below it ("Walid") and to its right ("lah" of "Abdullah"). Any one missing is the original iOS bug.
+  for (const [where, rect] of [['above', [0.04, 0.545, 0.5, 0.03]], ['below', [0.04, 0.737, 0.5, 0.03]], ['right of', [0.62, 0.61, 0.16, 0.07]]]) {
+    const g = await brightShare(file, rect, 150);
+    check(`${name}: masthead glyphs ${where} the slab`, g > 0.02, { brightShare: +g.toFixed(3) });
+  }
+  const bg = await pixel(file, Math.round(W * 0.03), Math.round(H * 0.3));
+  const under = await diffShare(file, [0.14, 0.50, 0.72, 0.13], bg, 14);
+  check(`${name}: glyph pixels under the slab`, under > 0.03, { diffShare: +under.toFixed(3) });
+}
 
 boot();
 try { sh('launch', UDID, 'com.apple.mobilesafari'); } catch { /* ok */ }
 await openUrl('about:blank').catch(() => {});
 await sleep(1500);
-await openUrl(base);
+const url = (extra = '') => `${base}?v=${Date.now()}${extra}#top`;
+const topUrl = url();
+await openUrl(topUrl);
 const rest = `${out}/iphone17-rest.png`;
 results.paintMean = await waitPaint(rest, 2500);
-
 const meta = await sharp(rest).metadata();
-results.size = [meta.width, meta.height];
-
-// Regions as fractions of the screenshot. Background reference: top-left corner pixel below the status bar.
-// Layout (phone): masthead above the portrait, portrait ~y 148-428, slab ~y 428-558 of a 874pt screen.
 const W = meta.width, H = meta.height;
-const regions = {
-  masthead: [0.06, 0.09, 0.88, 0.07],   // role/name rows, outside the slab
-  portrait: [0.10, 0.20, 0.80, 0.25],   // portrait above the slab
-};
-async function assertState(name, file, opts = {}) {
-  const full = await stats(file, [0, 0, 1, 1]);
-  check(`${name}: not a full-screen white page`, full.mean < 200 || full.std > 12, { mean: +full.mean.toFixed(1), std: +full.std.toFixed(1) });
-  if (opts.skipRegions) return;
-  const bg = await pixel(file, Math.round(W * 0.03), Math.round(H * 0.3));
-  for (const [rn, rect] of Object.entries(regions)) {
-    const share = await diffShare(file, rect, bg, 14);
-    check(`${name}: ${rn} not blank`, share > 0.04, { diffShare: +share.toFixed(3), bg });
-  }
-  if (opts.slab) {
-    const under = await diffShare(file, opts.slab, bg, 14);
-    check(`${name}: glyph pixels under the slab`, under > 0.03, { diffShare: +under.toFixed(3) });
-  }
-}
-// Slab region at rest: roughly the band between portrait and CTA.
-const slabRect = [0.14, 0.50, 0.72, 0.13];
-await assertState('rest', rest, { slab: slabRect });
+results.size = [W, H];
+await assertRest('rest', rest);
 
-// y 45 is not captured: simctl cannot drive a scroll, and javascript: URLs through openurl do not scroll Safari (the capture was identical to rest).
-// Only anchor navigation (#path-h) is reliable, which gives the docked state.
-
-// Docked: anchor to #path-h (below the hero), reload so the anchor applies.
-await openUrl(base + '?d=' + Date.now() + '#path-h');
-await sleep(4500);
+// Docked: a fresh cache-busted load that anchors to #path-h (below the hero).
+const dq = `${base}?d=${Date.now()}`;
+await openUrl(dq + '#path-h');
+await sleep(1500);
 const docked = `${out}/iphone17-docked.png`;
-sh('io', UDID, 'screenshot', '--type=png', docked);
-await assertState('docked', docked, { skipRegions: true });
+await waitPaint(docked, 2500);
+{
+  const full = await stats(docked, [0, 0, 1, 1]);
+  check('docked: dark page, not a white or blank load', full.mean < 120 && full.std > 12, { mean: +full.mean.toFixed(1), std: +full.std.toFixed(1) });
+  const pill = await brightShare(docked, [0.1, 0.83, 0.8, 0.03], 120);
+  check('docked: dock pill present in the bottom band', pill > 0.03, { brightShare: +pill.toFixed(3) });
+}
+
+// Back: same-document navigation to #top (no reload), then the rest checks again (finding 1 on iOS).
+await openUrl(dq + '#top'); // same document, only the fragment changes
+await sleep(1500);
+const back = `${out}/iphone17-back.png`;
+await waitPaint(back, 3000);
+await assertRest('back', back);
+
+// The three captures must differ from each other (a frozen or repeated screenshot cannot pass).
+const sig = { rest: await fileHash(rest), docked: await fileHash(docked), back: await fileHash(back) };
+const mean = { rest: (await stats(rest, [0, 0, 1, 1])).mean, docked: (await stats(docked, [0, 0, 1, 1])).mean };
+check('rest and docked captures differ', sig.rest !== sig.docked && Math.abs(mean.rest - mean.docked) > 1, { restMean: +mean.rest.toFixed(1), dockedMean: +mean.docked.toFixed(1) });
+check('docked and back captures differ', sig.docked !== sig.back, {});
 
 results.pass = results.checks.every((c) => c.ok);
 writeFileSync(`${out}/ios-summary.json`, JSON.stringify(results, null, 2));

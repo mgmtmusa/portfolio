@@ -55,7 +55,8 @@ test.describe('load order (DESIGN.md, Motion)', () => {
 
 test.describe('M7: first paint of the slab', () => {
   test('waits off to the left at opacity 0 and leaves nothing on screen', async ({ page }) => {
-    await page.clock.install(); // freeze timers so a slow machine cannot start the glide first
+    // Block the hero module: first paint shows exactly what CSS alone gives, with no glide to race.
+    await page.route(/\/(_astro\/hero\.[^/]+\.js|src\/scripts\/hero(\.ts)?)(\?.*)?$/, (r) => r.abort());
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     const s = await page.evaluate(() => {
       const cs = getComputedStyle(document.querySelector('[data-slab]')!);
@@ -71,8 +72,10 @@ test.describe('M7: first paint of the slab', () => {
 
   test('a screenshot at DOMContentLoaded matches the page with the slab removed', async ({ page, browserName }) => {
     test.skip(browserName !== 'chromium', 'Chromium screenshot per the plan');
-    await page.clock.install(); // freeze timers so the glide (400ms) cannot start before the shot
+    // Block the hero module: first paint shows exactly what CSS alone gives, with no glide to race.
+    await page.route(/\/(_astro\/hero\.[^/]+\.js|src\/scripts\/hero(\.ts)?)(\?.*)?$/, (r) => r.abort());
     await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => document.fonts.ready);
     const b = (await page.locator('[data-slab]').boundingBox())!;
     const clip = { x: Math.max(0, b.x - 12), y: b.y, width: b.width + 24, height: b.height };
     const early = await page.screenshot({ clip, animations: 'allow' });
@@ -131,6 +134,7 @@ test.describe('M9: pixel contrast of text over the slab and the hero', () => {
     expect(picked.length, `${label}: found labels`).toBeGreaterThan(0);
     await page.addStyleTag({ content: '.strip p,.hero .role,.hero .line,.hero .lab,.hero .cap,[data-hero-avail] p,.hero .fig,[data-dock] *{color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:none!important}' });
     await page.waitForTimeout(150);
+    let minRatio = Infinity;
     for (const t of picked) {
       const buf = await page.screenshot({ clip: t.box, animations: 'disabled' });
       const brightest = await page.evaluate(async ([b]) => {
@@ -146,8 +150,10 @@ test.describe('M9: pixel contrast of text over the slab and the hero', () => {
       }, [buf.toString('base64')]);
       const lt = lum(...t.color);
       const ratio = (Math.max(lt, brightest.L) + 0.05) / (Math.min(lt, brightest.L) + 0.05);
+      minRatio = Math.min(minRatio, ratio);
       expect(ratio, `${label} ${t.sel}[${t.i}] text ${t.color} over brightest ${brightest.rgb}`).toBeGreaterThanOrEqual(4.5);
     }
+    console.log(`M9 ${label}: min contrast ${minRatio.toFixed(2)}:1`);
   }
 
   test('rest', async ({ page }) => {

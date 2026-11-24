@@ -16,7 +16,29 @@ test.describe('layout guardrails', () => {
     });
     expect(r.lines).toBe(2);
     expect(r.left).toBeGreaterThanOrEqual(58 * r.u - 8);
-    expect(r.right).toBeGreaterThanOrEqual(0);
+    expect(r.right).toBeGreaterThanOrEqual(58 * r.u - 8);
+  });
+
+  test('drag, dock, back: the slab returns to where it was dragged', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'mouse drag on desktop');
+    await openHome(page);
+    const slab = page.locator('[data-slab]');
+    const b0 = (await slab.boundingBox())!;
+    await page.mouse.move(b0.x + 60, b0.y + 60);
+    await page.mouse.down();
+    await page.mouse.move(b0.x + 260, b0.y + 60, { steps: 8 });
+    await page.mouse.up();
+    await page.waitForTimeout(1500);
+    const dragged = (await slab.boundingBox())!;
+    expect(dragged.x - b0.x, 'the drag moved the slab').toBeGreaterThan(100);
+    await page.evaluate(() => window.__scene?.setProgress(200));
+    await page.waitForFunction(() => window.__scene?.state() === 'docked', null, { timeout: 5000 });
+    await page.evaluate(() => { window.__scene?.setProgress(0); scrollTo(0, 0); });
+    await page.waitForFunction(() => window.__scene?.state() === 'rest', null, { timeout: 6000 });
+    await page.waitForTimeout(1500);
+    const back = (await slab.boundingBox())!;
+    expect(Math.abs(back.x - dragged.x), 'slab x after docking and coming back').toBeLessThan(2);
+    expect(Math.abs(back.y - dragged.y)).toBeLessThan(2);
   });
 
   test('G6: no line of the pitch or the availability block ends on a single word', async ({ page }) => {

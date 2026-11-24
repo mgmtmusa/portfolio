@@ -1,6 +1,6 @@
 /* One glass recipe (brief Appendix B, tuned in phase 2). Mostly clear: the rim and the edges do the work.
    Uses: dock, the ⌘K menu, the case sheet header, toasts. The hero pane is the same material without a
-   backdrop blur; its bend comes from the SVG lens in src/scripts/lens.ts.
+   backdrop blur; its bend comes from the SVG displacement filter in src/scripts/bend.ts.
    Budget: at most 4 blurred surfaces visible at once; never a large scrolling blurred surface on phones. */
 
 .glass {

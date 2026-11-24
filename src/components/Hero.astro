@@ -2,8 +2,13 @@
 // Direction C, "Cover line": an inverted magazine cover. Contract: .impeccable/surfaces/src-pages-index-astro.md
 import { portraitSources } from '../lib/portrait';
 import Footnote from './Footnote.astro';
-import { site } from '../data/site';
+import { site, cases, growthWork } from '../data/site';
 import { notes } from '../data/notes';
+
+// Proof figures come from site.ts (F5: each carries data-fact so the facts gate can trace it).
+const [cpa, leads] = cases.find((c) => c.slug === 'evitech')!.results;
+const closed = growthWork.flatMap((g) => g.results).find((r) => r.v === '$2M+')!;
+const audience = growthWork.flatMap((g) => g.results).find((r) => r.v === '400 → 13,200')!.v.split(' → ')[1];
 
 // One picture, built by hand so each format gets its own quality.
 const pic = await portraitSources();
@@ -53,21 +58,21 @@ const alt =
     <ul class="proof" aria-label="Results">
       <li class="proof-pair">
         <div class="figs">
-          <p class="fig">28%</p>
-          <p class="fig">65%<Footnote n={1} id="fn-h-1" note={notes.evitechPair} /></p>
+          <p class="fig" data-fact={cpa.v}>{cpa.v}</p>
+          <p class="fig" data-fact={leads.v}>{leads.v}<Footnote n={1} id="fn-h-1" note={notes.evitechPair} /></p>
         </div>
         <div class="labs">
-          <p class="lab">lower cost per acquisition</p>
-          <p class="lab">more qualified leads</p>
+          <p class="lab">{cpa.l}</p>
+          <p class="lab">{leads.l}</p>
         </div>
         <p class="cap">Two results from the same initiative at Evitech, on paid media of roughly $15K to $30K a month.</p>
       </li>
       <li>
-        <p class="fig">$2M+<Footnote n={2} id="fn-h-2" note={notes.closed} /></p>
-        <p class="lab">in B2B contracts personally closed</p>
+        <p class="fig" data-fact={closed.v}>{closed.v}<Footnote n={2} id="fn-h-2" note={notes.closed} /></p>
+        <p class="lab">{closed.l}</p>
       </li>
       <li>
-        <p class="fig">13,200<Footnote n={3} id="fn-h-3" note={notes.audience} /></p>
+        <p class="fig" data-fact={audience}>{audience}<Footnote n={3} id="fn-h-3" note={notes.audience} /></p>
         <p class="lab">social audience for I Heart Uni, grown from 400</p>
       </li>
     </ul>
