@@ -28,18 +28,18 @@ export const pages: Record<string, PageMeta> = {
     description: `${n} rebuilt Evitech’s paid media around lead quality: 28% lower CPA and 65% more qualified leads, two results from the same initiative.`,
     og: '/og/evitech.png',
     ogTitle: 'Evitech: 28% lower CPA and 65% more qualified leads, two results from the same initiative',
-    ogAlt: 'Evitech: 28% lower cost per acquisition, two results from the same initiative',
+    ogAlt: `Evitech: 28% lower cost per acquisition and 65% more qualified leads, two results from the same initiative. Portrait of ${n}.`,
   },
   '/work/i-heart-uni/': {
     title: 'I Heart Uni: a student brand grown city by city',
-    description: `${n} set I Heart Uni’s brand, content and event calendar across five cities, and hosted its sold-out events for the student brand as lead MC.`,
+    description: `${n} hosted 18 sold-out events as I Heart Uni’s lead MC across five cities. These outcomes overlap with the organic audience growth work.`,
     og: '/og/i-heart-uni.png',
     ogTitle: 'I Heart Uni: sold-out events hosted as lead MC, across five cities',
-    ogAlt: 'I Heart Uni: sold-out events hosted as lead MC across five cities',
+    ogAlt: `I Heart Uni: 18 sold-out events hosted as lead MC. These outcomes overlap with the organic audience growth work. Portrait of ${n}.`,
   },
   '/work/the-lil-project/': {
     title: 'The Lil Project: gigs that fund school buildings',
-    description: `${n} led event production and marketing for The Lil Project, whose gigs build schools in Zambia. 768 children reached (organisation total).`,
+    description: `${n} led event production and marketing for The Lil Project, whose gigs fund school buildings in Zambia. 768 children reached (organisation total).`,
     og: '/og/the-lil-project.png',
     ogTitle: 'The Lil Project: 768 children reached in Zambia (organisation total)',
     ogAlt: 'The Lil Project: 768 children reached in Zambia (organisation total)',
@@ -105,13 +105,18 @@ export function profilePage(origin: string): Record<string, unknown> {
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
+    url: origin,
+    name: `${site.name}, ${site.role}`,
     mainEntity: {
       '@type': 'Person',
       name: site.name,
+      url: origin,
+      description: site.description,
+      email: `mailto:${site.email}`,
       jobTitle: site.role,
       address: { '@type': 'PostalAddress', addressLocality: site.city },
       sameAs: [site.linkedin],
-      knowsAbout: capabilities.map((c) => c.t),
+      knowsAbout: ['Performance marketing', 'Paid media', 'Google Ads', 'Meta Ads Manager', 'GA4', 'Looker Studio', 'HubSpot', 'CRM and automation', 'Event marketing'],
       worksFor: { '@type': 'Organization', name: 'Evitech' },
       image: new URL(PORTRAIT_JPG, origin).href,
     },
@@ -158,6 +163,14 @@ const scoped = (r: Scoped) => `${r.v} ${r.l}${r.scope ? ` (${r.scope})` : ''}`;
 /** The scope notes site.ts attaches to a case's growth work, so each case line carries them beside its figures. */
 const caseNotes = (slug: string) => growthWork.filter((g) => g.case === slug && g.note).map((g) => g.note!);
 
+/** Evitech: the pair and its note travel together, so an assistant cannot attach the note to the company figures. */
+const caseResults = (c: (typeof cases)[number]) => {
+  if (c.slug !== 'evitech') return c.results.map(scoped).join('; ');
+  const [a, b, ...rest] = c.results;
+  const pair = `${a.v} ${a.l} and ${b.v} ${b.l} (two results from the same initiative)`;
+  return [pair, ...rest.map(scoped)].join('; ');
+};
+
 export function llmsText(origin: string): string {
   const url = (p: string) => new URL(p, origin).href;
   return [
@@ -171,12 +184,13 @@ export function llmsText(origin: string): string {
     `- Work rights: ${site.workRights}`,
     `- Reply time: ${site.replyTime.text} Business days are Monday to Friday, Melbourne time.`,
     `- Contact: ${site.email} or ${site.linkedin}`,
+    `- Brief form: ${url('/contact/')}`,
     `- CV: ${url(site.cv)}`,
     '',
     '## Case studies',
     ...cases.map(
       (c) =>
-        `- [${c.org}: ${c.title}](${url(`/work/${c.slug}/`)}): ${c.summary} Results: ${c.results.map(scoped).join('; ')}.${caseNotes(c.slug).map((x) => ` ${x}`).join('')}`,
+        `- [${c.org}: ${c.title}](${url(`/work/${c.slug}/`)}): ${c.summary} Results: ${caseResults(c)}.${c.slug === 'evitech' ? '' : caseNotes(c.slug).map((x) => ` ${x}`).join('')}`,
     ),
     '',
     '## Selected growth work',

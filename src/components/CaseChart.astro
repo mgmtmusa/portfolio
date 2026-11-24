@@ -57,12 +57,12 @@ const startPct = ((start / current) * 100).toFixed(2);
     )
   }
   {slug === 'the-lil-project' && <div class="lil" aria-hidden="true" data-cols="48" data-rows="16" />}
-  {Astro.slots.has('default') && <figcaption class="chart-cap"><slot /></figcaption>}
+  {Astro.slots.has('default') && <figcaption class="chart-cap"><slot />{slug === 'evitech' && ' Bars are drawn to scale from the two percentages.'}</figcaption>}
 </figure>
 
 <style>
   .chart { margin: 0; display: grid; gap: 16px; }
-  .chart-cap { font: 400 13px / 18px var(--ui); color: var(--text-2); max-width: 46ch; }
+  .chart-cap { font: 400 13px / 18px var(--ui); color: var(--text-2); max-width: min(46ch, 330px); }
 
   /* Evitech: paired bars on one baseline. Before is a quiet fill, after is the text colour. */
   .ev { display: grid; gap: 14px; }

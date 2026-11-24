@@ -22,7 +22,7 @@ const teasers = [
         const c = cases.find((x) => x.slug === t.slug)!;
         return (
           <li class="case">
-            <p class="case-fig" data-fact={t.figs.join('|')} transition:name={`fig-${t.slug}`}>
+            <p class={`case-fig${t.figs.length > 1 ? ' case-fig--pair' : ''}`} data-fact={t.figs.join('|')} transition:name={`fig-${t.slug}`}>
               {t.figs.map((f, i) => (
                 <span class="case-n">{f}{i === t.figs.length - 1 && <Footnote {...t.note} />}</span>
               ))}
@@ -56,6 +56,7 @@ const teasers = [
   .cases { margin-top: 56px; }
   .case { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); padding: 40px 0 48px; border-top: 1px solid var(--line); align-items: start; position: relative; }
   .case-fig { grid-column: 1 / 7; display: flex; gap: .28em; font: 500 var(--fs-fig) / .86 var(--display); letter-spacing: -.045em; color: var(--text); white-space: nowrap; }
+  .case-fig--pair { font-size: clamp(72px, 9.4vw, 136px); }
   .case-n { display: inline-flex; align-items: flex-start; }
   .case-n :global(.fn) { vertical-align: top; margin-top: .08em; margin-left: .04em; }
   .case-body { grid-column: 7 / 13; display: grid; gap: 12px; padding-top: 8px; }
@@ -78,7 +79,8 @@ const teasers = [
   @media (max-width: 899px) {
     .teasers-head .h1, .teasers-head .body, .case-fig, .case-body { grid-column: 1 / -1; }
     .teasers-head .body { margin-top: 16px; }
-    .case-fig { font-size: clamp(52px, 16vw, 96px); flex-wrap: wrap; }
+    .case-fig, .case-fig--pair { font-size: clamp(52px, 16vw, 96px); flex-wrap: wrap; }
+    .case-t { text-wrap: balance; }
     .case-body { margin-top: 20px; }
   }
 </style>

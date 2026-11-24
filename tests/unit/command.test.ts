@@ -13,7 +13,7 @@ describe('command menu', () => {
   });
   it('returns everything in group order for an empty query', () => {
     const groups = searchCommands(items, '  ').map((i) => i.group);
-    expect(groups).toEqual([...groups].sort((a, b) => ['Pages', 'Cases', 'Actions'].indexOf(a) - ['Pages', 'Cases', 'Actions'].indexOf(b)));
+    expect(groups).toEqual([...groups].sort((a, b) => ['Actions', 'Cases', 'Pages'].indexOf(a) - ['Actions', 'Cases', 'Pages'].indexOf(b)));
     expect(groups).toHaveLength(items.length);
   });
   it('"cv" puts Download CV first', () => expect(searchCommands(items, 'cv')[0].label).toBe('Download CV'));

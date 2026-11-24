@@ -4,7 +4,7 @@
 // by click or keyboard, with no JavaScript.
 import Footnote from './Footnote.astro';
 import type { Result } from '../data/site';
-interface Row { t: string; org: string; did: string; results: Result[]; note?: { n: number; id: string; note: string } }
+interface Row { t: string; org: string; did: string; results: Result[]; line?: string; note?: { n: number; id: string; note: string } }
 interface Props { rows: Row[] }
 const { rows } = Astro.props;
 ---
@@ -13,6 +13,7 @@ const { rows } = Astro.props;
   {
     rows.map((r) => (
       <li class="row" data-fact={r.results.map((x) => x.v).join('|')}>
+        <div class="row-main">
         <div class="row-figs">
           {r.results.map((x, i) => (
             <p class="row-r">
@@ -26,6 +27,8 @@ const { rows } = Astro.props;
               </span>
             </p>
           ))}
+        </div>
+        {r.line && <p class="row-note">{r.line}</p>}
         </div>
         <details class="row-d">
           <summary class="row-s">
@@ -46,7 +49,9 @@ const { rows } = Astro.props;
     display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter);
     padding: 28px 0 30px; border-top: 1px solid var(--line); align-items: start;
   }
-  .row-figs { grid-column: 1 / 7; display: flex; flex-wrap: wrap; gap: 18px 40px; }
+  .row-main { grid-column: 1 / 7; display: grid; gap: 14px; min-width: 0; }
+  .row-note { font: 400 13px / 18px var(--ui); color: var(--text-3); }
+  .row-figs { display: flex; flex-wrap: wrap; gap: 18px 40px; }
   .row-r { display: grid; gap: 8px; min-width: 0; }
   .row-v { font: 500 clamp(36px, 3.6vw, 52px) / .95 var(--display); letter-spacing: -.035em; color: var(--text); white-space: nowrap; font-variant-numeric: lining-nums proportional-nums; }
   .row-v :global(.fn) { vertical-align: top; margin-top: .1em; }
@@ -75,7 +80,7 @@ const { rows } = Astro.props;
 
   @media (max-width: 899px) {
     .row { padding: 24px 0 26px; row-gap: 18px; }
-    .row-figs, .row-d { grid-column: 1 / -1; }
+    .row-main, .row-d { grid-column: 1 / -1; }
     .row-figs { gap: 16px 28px; }
   }
 </style>

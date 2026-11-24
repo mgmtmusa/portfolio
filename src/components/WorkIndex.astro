@@ -42,7 +42,7 @@ const ONLY_IN_CASE = new Set(['2.6×']);
 const rows = growthWork.map((g) => {
   const results: Result[] = g.results.filter((r) => !ONLY_IN_CASE.has(r.v));
   const note = rowNote[g.t];
-  return { t: g.t, org: g.org, did: g.did, results, note: note ? reg.mark(note) : undefined };
+  return { t: g.t, org: g.org, did: g.did, results, line: g.note, note: note ? reg.mark(note) : undefined };
 });
 
 // One :has() rule per tag hides the covers that don't carry it.
@@ -155,7 +155,7 @@ const filterCss = tags
   .cover-scope { display: inline-block; margin-left: 10px; vertical-align: middle; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--text-2); }
   .cover-cap { color: var(--text-2); font-size: 15px; margin-top: -8px; }
   .cover-b { grid-column: 9 / 13; display: grid; gap: 14px; padding-top: 10px; align-content: start; }
-  .cover-t { font: 500 17px / 1.35 var(--ui); margin-top: 26px; }
+  .cover-t { font: 500 17px / 1.35 var(--ui); margin-top: 26px; text-wrap: balance; }
   .cover-t a { text-decoration: underline; text-decoration-color: transparent; transition: text-decoration-color var(--dur-fast) ease-out; }
   .cover-t a::after { content: ''; position: absolute; inset: 0; border-radius: 4px; }
   .cover-sum { font-size: 15px; }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { pages, resolveHead, profilePage, sitemapXml, llmsText, SITEMAP_PATHS } from '../../src/lib/meta';
-import { site, cases, capabilities } from '../../src/data/site';
+import { site, cases } from '../../src/data/site';
 
 const origin = site.url;
 const all = JSON.stringify([pages, profilePage(origin), llmsText(origin), sitemapXml(origin)]);
@@ -49,15 +49,25 @@ describe('resolveHead', () => {
 describe('JSON-LD', () => {
   const p = (profilePage(origin) as { mainEntity: Record<string, unknown> }).mainEntity;
   it('carries exactly the planned Person fields', () => {
-    expect(Object.keys(p).sort()).toEqual(['@type', 'address', 'image', 'jobTitle', 'knowsAbout', 'name', 'sameAs', 'worksFor']);
+    expect(Object.keys(p).sort()).toEqual(['@type', 'address', 'description', 'email', 'image', 'jobTitle', 'knowsAbout', 'name', 'sameAs', 'url', 'worksFor']);
     expect(p.jobTitle).toBe(site.role);
     expect(p.address).toEqual({ '@type': 'PostalAddress', addressLocality: 'Melbourne' });
     expect(p.sameAs).toEqual([site.linkedin]);
-    expect(p.knowsAbout).toEqual(capabilities.map((c) => c.t));
+    expect(p.knowsAbout).toEqual(['Performance marketing', 'Paid media', 'Google Ads', 'Meta Ads Manager', 'GA4', 'Looker Studio', 'HubSpot', 'CRM and automation', 'Event marketing']);
     expect(p.worksFor).toEqual({ '@type': 'Organization', name: 'Evitech' });
     expect(p.image).toBe(`${origin}/og/musa-portrait.jpg`);
   });
   it('has no phone number or street address', () => expect(JSON.stringify(p)).not.toMatch(/telephone|streetAddress|\+?\d{8,}/));
+});
+
+describe('I Heart Uni share metadata', () => {
+  const m = pages['/work/i-heart-uni/'];
+  const note = 'These outcomes overlap with the organic audience growth work.';
+  it('restores 18 with the overlap note in description and alt, and keeps the title without it', () => {
+    expect(m.description).toContain(`18 sold-out events as I Heart Uni’s lead MC across five cities. ${note}`);
+    expect(m.ogAlt).toContain(`18 sold-out events hosted as lead MC. ${note}`);
+    expect(m.ogTitle).not.toMatch(/18/);
+  });
 });
 
 describe('sitemap', () => {
@@ -81,7 +91,7 @@ describe('llms.txt', () => {
         if (r.scope) expect(line).toContain(`(${r.scope})`);
       }
     }
-    expect(text).toMatch(/28% lower cost per acquisition.*Two results from the same initiative\./);
+    expect(text).toMatch(/28% lower cost per acquisition and 65% more qualified leads \(two results from the same initiative\); 80%/);
     expect(text).toMatch(/18 sold-out events.*overlap with the organic audience growth work\./);
   });
   it('has no phone number or street address', () => expect(text).not.toMatch(/\+?\d[\d ]{8,}\d|\bStreet\b/));

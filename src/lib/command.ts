@@ -10,7 +10,7 @@ export type CommandItem = {
   action?: 'copy-email' | 'reduce-motion';
   keywords: string[];
 };
-const ORDER: CommandGroup[] = ['Pages', 'Cases', 'Actions'];
+const ORDER: CommandGroup[] = ['Actions', 'Cases', 'Pages'];
 
 export function commandItems(): CommandItem[] {
   return [

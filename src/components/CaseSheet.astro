@@ -3,9 +3,11 @@
 // the headline figure (it shares transition:name with the cover and the home teaser), the outcome, the facts,
 // the results with their scope notes, then the story. Every string is from site.ts, notes.ts or story.md;
 // rows site.ts has no copy for (Channels, Measured by, and Tools outside Evitech) are left out.
-import { cases, growthWork } from '../data/site';
+import { cases, growthWork, site } from '../data/site';
+import { notes } from '../data/notes';
 import { caseNav, closeHref, covers, noteRegistry, resultGroups, scopeNotes, yearChip, type CoverSlug } from '../lib/work';
 import CaseFigure from './CaseFigure.astro';
+import CaseChart from './CaseChart.astro';
 import Footnote from './Footnote.astro';
 import Notes from './Notes.astro';
 
@@ -25,6 +27,7 @@ const groups = resultGroups(slug, c.results, growthWork).map((g) => {
   const scoped = !g.note && last.scope ? reg.mark(scopeNotes[last.scope] ?? last.scope) : undefined;
   return { ...g, mark: scoped };
 });
+const chartMark = slug === 'i-heart-uni' ? reg.mark(notes.audience) : undefined;
 const ext = (href: string) => /^https?:/.test(href);
 ---
 
@@ -88,6 +91,16 @@ const ext = (href: string) => /^https?:/.test(href);
         ))
       }
     </ul>
+    {
+      chartMark && (
+        <div class="sec-c res-chart">
+          <CaseChart slug="i-heart-uni">
+            Social audience
+            <Footnote {...chartMark} />
+          </CaseChart>
+        </div>
+      )
+    }
   </section>
 
   <section class="sec" aria-labelledby="sec-brief">
@@ -96,12 +109,12 @@ const ext = (href: string) => /^https?:/.test(href);
   </section>
 
   <section class="sec" aria-labelledby="sec-q">
-    <h2 class="sec-k" id="sec-q">Question</h2>
+    <h2 class="sec-k" id="sec-q">What it had to do</h2>
     <p class="sec-c sec-p sec-p--q">{c.question}</p>
   </section>
 
   <section class="sec" aria-labelledby="sec-resp">
-    <h2 class="sec-k" id="sec-resp">Responsibilities</h2>
+    <h2 class="sec-k" id="sec-resp">What I owned</h2>
     <ul class="sec-c ticks">{c.responsibilities.map((r) => <li>{r}</li>)}</ul>
   </section>
 
@@ -122,14 +135,14 @@ const ext = (href: string) => /^https?:/.test(href);
   {
     c.execution && (
       <section class="sec" aria-labelledby="sec-ex">
-        <h2 class="sec-k" id="sec-ex">Execution</h2>
+        <h2 class="sec-k" id="sec-ex">Day to day</h2>
         <ul class="sec-c ticks">{c.execution.map((x) => <li>{x}</li>)}</ul>
       </section>
     )
   }
 
   <section class="sec" aria-labelledby="sec-ev">
-    <h2 class="sec-k" id="sec-ev">Evidence</h2>
+    <h2 class="sec-k" id="sec-ev">What I can show</h2>
     <div class="sec-c">
       <p class="sec-p">{c.evidence.text}</p>
       {
@@ -140,6 +153,8 @@ const ext = (href: string) => /^https?:/.test(href);
           </a>
         )
       }
+      <p class="sec-p ev-ask"><a class="textlink" href="/contact/" data-track="contact_click" data-from="case" data-slug={c.slug}>Get in touch</a></p>
+      <p class="sec-p ev-reply">{site.replyTime.text}</p>
     </div>
   </section>
 
@@ -232,6 +247,10 @@ const ext = (href: string) => /^https?:/.test(href);
   .dec-d { font: 400 var(--fs-body) / 1.6 var(--ui); color: var(--text-2); text-wrap: pretty; }
 
   .ev-link { display: inline-flex; margin-top: 16px; }
+  .ev-ask { margin-top: 24px; }
+  .ev-ask .textlink { display: inline-flex; min-height: 44px; align-items: center; }
+  .ev-reply { color: var(--text-2); font-size: 15px; }
+  .res-chart { margin-top: 32px; }
   .sec--notes { padding-top: 72px; }
 
   .sheet-foot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 88px 0 0; padding: 0 0 12px; }

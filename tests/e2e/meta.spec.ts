@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { pages } from '../../src/lib/meta';
-import { site, capabilities } from '../../src/data/site';
+import { site } from '../../src/data/site';
 
 // Pages that are still being rebuilt may 404; those cases skip rather than fail.
 const PATHS = Object.keys(pages).filter((p) => p !== '/404/');
@@ -46,12 +46,12 @@ test.describe('metadata', () => {
     expect(ld['@type']).toBe('ProfilePage');
     const p = ld.mainEntity;
     expect(p['@type']).toBe('Person');
-    expect(Object.keys(p).sort()).toEqual(['@type', 'address', 'image', 'jobTitle', 'knowsAbout', 'name', 'sameAs', 'worksFor']);
+    expect(Object.keys(p).sort()).toEqual(['@type', 'address', 'description', 'email', 'image', 'jobTitle', 'knowsAbout', 'name', 'sameAs', 'url', 'worksFor']);
     expect(p.name).toBe(site.name);
     expect(p.jobTitle).toBe(site.role);
     expect(p.address.addressLocality).toBe('Melbourne');
     expect(p.sameAs).toEqual([site.linkedin]);
-    expect(p.knowsAbout).toEqual(capabilities.map((c) => c.t));
+    expect(p.knowsAbout).toEqual(['Performance marketing', 'Paid media', 'Google Ads', 'Meta Ads Manager', 'GA4', 'Looker Studio', 'HubSpot', 'CRM and automation', 'Event marketing']);
     expect(p.worksFor.name).toBe('Evitech');
     const r = await request.get(new URL(new URL(p.image).pathname, baseURL).href);
     expect(r.status()).toBe(200);

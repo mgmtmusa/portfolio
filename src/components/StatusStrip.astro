@@ -2,9 +2,11 @@
 import { site } from '../data/site';
 // Settled sentences appear verbatim or not at all (principal, G4).
 const availability = site.availability;
+// Home paints with the hero's own availability on screen, so the strip starts hidden there; the hero script reveals it on scroll.
+const onHome = Astro.url.pathname === '/';
 ---
 
-<div class="strip" transition:persist="strip">
+<div class="strip" transition:persist="strip" data-avail-hidden={onHome ? '' : undefined}>
   <p class="strip-t">Melbourne <time class="strip-clock" data-clock></time></p>
   <p class="strip-c">{availability}</p>
   <p class="strip-r">{site.replyTime.text}</p>
