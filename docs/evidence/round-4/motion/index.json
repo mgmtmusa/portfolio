@@ -1,0 +1,1189 @@
+{
+  "base": "http://127.0.0.1:4322",
+  "generated": "2026-11-24T22:13:37.234Z",
+  "ffmpeg": true,
+  "sequences": [
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "load",
+      "frameCount": 9,
+      "frames": [
+        {
+          "ms": 145,
+          "file": "chromium-normal-load-00145.png"
+        },
+        {
+          "ms": 524,
+          "file": "chromium-normal-load-00524.png"
+        },
+        {
+          "ms": 848,
+          "file": "chromium-normal-load-00848.png"
+        },
+        {
+          "ms": 1193,
+          "file": "chromium-normal-load-01193.png"
+        },
+        {
+          "ms": 1525,
+          "file": "chromium-normal-load-01525.png"
+        },
+        {
+          "ms": 1855,
+          "file": "chromium-normal-load-01855.png"
+        },
+        {
+          "ms": 2190,
+          "file": "chromium-normal-load-02190.png"
+        },
+        {
+          "ms": 2491,
+          "file": "chromium-normal-load-02491.png"
+        },
+        {
+          "ms": 2790,
+          "file": "chromium-normal-load-02790.png"
+        }
+      ],
+      "sheet": "sheet-chromium-normal-load.png",
+      "notes": [
+        "shot error (before first paint, frames skipped): page.screenshot: Protocol error (Page.captureScreenshot): Unable to capture screenshot"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "scroll",
+      "frameCount": 11,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-normal-scroll-00000.png"
+        },
+        {
+          "ms": 317,
+          "file": "chromium-normal-scroll-00317.png"
+        },
+        {
+          "ms": 642,
+          "file": "chromium-normal-scroll-00642.png"
+        },
+        {
+          "ms": 944,
+          "file": "chromium-normal-scroll-00944.png"
+        },
+        {
+          "ms": 1238,
+          "file": "chromium-normal-scroll-01238.png"
+        },
+        {
+          "ms": 1560,
+          "file": "chromium-normal-scroll-01560.png"
+        },
+        {
+          "ms": 1902,
+          "file": "chromium-normal-scroll-01902.png"
+        },
+        {
+          "ms": 2233,
+          "file": "chromium-normal-scroll-02233.png"
+        },
+        {
+          "ms": 2541,
+          "file": "chromium-normal-scroll-02541.png"
+        },
+        {
+          "ms": 2885,
+          "file": "chromium-normal-scroll-02885.png"
+        },
+        {
+          "ms": 3218,
+          "file": "chromium-normal-scroll-03218.png"
+        }
+      ],
+      "sheet": "sheet-chromium-normal-scroll.png",
+      "notes": [
+        "scrollY at dock 295"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "drag",
+      "frameCount": 7,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-normal-drag-00000.png"
+        },
+        {
+          "ms": 336,
+          "file": "chromium-normal-drag-00336.png"
+        },
+        {
+          "ms": 688,
+          "file": "chromium-normal-drag-00688.png"
+        },
+        {
+          "ms": 1007,
+          "file": "chromium-normal-drag-01007.png"
+        },
+        {
+          "ms": 1313,
+          "file": "chromium-normal-drag-01313.png"
+        },
+        {
+          "ms": 1627,
+          "file": "chromium-normal-drag-01627.png"
+        },
+        {
+          "ms": 1927,
+          "file": "chromium-normal-drag-01927.png"
+        }
+      ],
+      "sheet": "sheet-chromium-normal-drag.png",
+      "notes": []
+    },
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "vt",
+      "frameCount": 14,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-normal-vt-00000.png"
+        },
+        {
+          "ms": 346,
+          "file": "chromium-normal-vt-00346.png"
+        },
+        {
+          "ms": 635,
+          "file": "chromium-normal-vt-00635.png"
+        },
+        {
+          "ms": 942,
+          "file": "chromium-normal-vt-00942.png"
+        },
+        {
+          "ms": 1210,
+          "file": "chromium-normal-vt-01210.png"
+        },
+        {
+          "ms": 1510,
+          "file": "chromium-normal-vt-01510.png"
+        },
+        {
+          "ms": 1791,
+          "file": "chromium-normal-vt-01791.png"
+        },
+        {
+          "ms": 2123,
+          "file": "chromium-normal-vt-02123.png"
+        },
+        {
+          "ms": 2432,
+          "file": "chromium-normal-vt-02432.png"
+        },
+        {
+          "ms": 2731,
+          "file": "chromium-normal-vt-02731.png"
+        },
+        {
+          "ms": 3030,
+          "file": "chromium-normal-vt-03030.png"
+        },
+        {
+          "ms": 3333,
+          "file": "chromium-normal-vt-03333.png"
+        },
+        {
+          "ms": 3628,
+          "file": "chromium-normal-vt-03628.png"
+        },
+        {
+          "ms": 3930,
+          "file": "chromium-normal-vt-03930.png"
+        }
+      ],
+      "sheet": "sheet-chromium-normal-vt.png",
+      "notes": []
+    },
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "cmdk",
+      "frameCount": 7,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-normal-cmdk-00000.png"
+        },
+        {
+          "ms": 322,
+          "file": "chromium-normal-cmdk-00322.png"
+        },
+        {
+          "ms": 665,
+          "file": "chromium-normal-cmdk-00665.png"
+        },
+        {
+          "ms": 985,
+          "file": "chromium-normal-cmdk-00985.png"
+        },
+        {
+          "ms": 1321,
+          "file": "chromium-normal-cmdk-01321.png"
+        },
+        {
+          "ms": 1645,
+          "file": "chromium-normal-cmdk-01645.png"
+        },
+        {
+          "ms": 1947,
+          "file": "chromium-normal-cmdk-01947.png"
+        }
+      ],
+      "sheet": "sheet-chromium-normal-cmdk.png",
+      "notes": [
+        "dialog open=true closedAfterEscape=true"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "load",
+      "frameCount": 9,
+      "frames": [
+        {
+          "ms": 100,
+          "file": "chromium-reduced-load-00100.png"
+        },
+        {
+          "ms": 450,
+          "file": "chromium-reduced-load-00450.png"
+        },
+        {
+          "ms": 753,
+          "file": "chromium-reduced-load-00753.png"
+        },
+        {
+          "ms": 1050,
+          "file": "chromium-reduced-load-01050.png"
+        },
+        {
+          "ms": 1351,
+          "file": "chromium-reduced-load-01351.png"
+        },
+        {
+          "ms": 1650,
+          "file": "chromium-reduced-load-01650.png"
+        },
+        {
+          "ms": 1951,
+          "file": "chromium-reduced-load-01951.png"
+        },
+        {
+          "ms": 2265,
+          "file": "chromium-reduced-load-02265.png"
+        },
+        {
+          "ms": 2568,
+          "file": "chromium-reduced-load-02568.png"
+        }
+      ],
+      "sheet": "sheet-chromium-reduced-load.png",
+      "notes": [
+        "shot error (before first paint, frames skipped): page.screenshot: Protocol error (Page.captureScreenshot): Unable to capture screenshot"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "scroll",
+      "frameCount": 12,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-reduced-scroll-00000.png"
+        },
+        {
+          "ms": 340,
+          "file": "chromium-reduced-scroll-00340.png"
+        },
+        {
+          "ms": 642,
+          "file": "chromium-reduced-scroll-00642.png"
+        },
+        {
+          "ms": 874,
+          "file": "chromium-reduced-scroll-00874.png"
+        },
+        {
+          "ms": 1198,
+          "file": "chromium-reduced-scroll-01198.png"
+        },
+        {
+          "ms": 1512,
+          "file": "chromium-reduced-scroll-01512.png"
+        },
+        {
+          "ms": 1832,
+          "file": "chromium-reduced-scroll-01832.png"
+        },
+        {
+          "ms": 2145,
+          "file": "chromium-reduced-scroll-02145.png"
+        },
+        {
+          "ms": 2444,
+          "file": "chromium-reduced-scroll-02444.png"
+        },
+        {
+          "ms": 2744,
+          "file": "chromium-reduced-scroll-02744.png"
+        },
+        {
+          "ms": 3043,
+          "file": "chromium-reduced-scroll-03043.png"
+        },
+        {
+          "ms": 3343,
+          "file": "chromium-reduced-scroll-03343.png"
+        }
+      ],
+      "sheet": "sheet-chromium-reduced-scroll.png",
+      "notes": [
+        "scrollY at dock 295"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "drag",
+      "frameCount": 7,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-reduced-drag-00000.png"
+        },
+        {
+          "ms": 338,
+          "file": "chromium-reduced-drag-00338.png"
+        },
+        {
+          "ms": 661,
+          "file": "chromium-reduced-drag-00661.png"
+        },
+        {
+          "ms": 976,
+          "file": "chromium-reduced-drag-00976.png"
+        },
+        {
+          "ms": 1296,
+          "file": "chromium-reduced-drag-01296.png"
+        },
+        {
+          "ms": 1612,
+          "file": "chromium-reduced-drag-01612.png"
+        },
+        {
+          "ms": 1929,
+          "file": "chromium-reduced-drag-01929.png"
+        }
+      ],
+      "sheet": "sheet-chromium-reduced-drag.png",
+      "notes": []
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "vt",
+      "frameCount": 15,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-reduced-vt-00000.png"
+        },
+        {
+          "ms": 308,
+          "file": "chromium-reduced-vt-00308.png"
+        },
+        {
+          "ms": 574,
+          "file": "chromium-reduced-vt-00574.png"
+        },
+        {
+          "ms": 843,
+          "file": "chromium-reduced-vt-00843.png"
+        },
+        {
+          "ms": 1110,
+          "file": "chromium-reduced-vt-01110.png"
+        },
+        {
+          "ms": 1375,
+          "file": "chromium-reduced-vt-01375.png"
+        },
+        {
+          "ms": 1643,
+          "file": "chromium-reduced-vt-01643.png"
+        },
+        {
+          "ms": 1999,
+          "file": "chromium-reduced-vt-01999.png"
+        },
+        {
+          "ms": 2296,
+          "file": "chromium-reduced-vt-02296.png"
+        },
+        {
+          "ms": 2594,
+          "file": "chromium-reduced-vt-02594.png"
+        },
+        {
+          "ms": 2912,
+          "file": "chromium-reduced-vt-02912.png"
+        },
+        {
+          "ms": 3212,
+          "file": "chromium-reduced-vt-03212.png"
+        },
+        {
+          "ms": 3514,
+          "file": "chromium-reduced-vt-03514.png"
+        },
+        {
+          "ms": 3813,
+          "file": "chromium-reduced-vt-03813.png"
+        },
+        {
+          "ms": 4113,
+          "file": "chromium-reduced-vt-04113.png"
+        }
+      ],
+      "sheet": "sheet-chromium-reduced-vt.png",
+      "notes": []
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "cmdk",
+      "frameCount": 7,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-reduced-cmdk-00000.png"
+        },
+        {
+          "ms": 306,
+          "file": "chromium-reduced-cmdk-00306.png"
+        },
+        {
+          "ms": 650,
+          "file": "chromium-reduced-cmdk-00650.png"
+        },
+        {
+          "ms": 970,
+          "file": "chromium-reduced-cmdk-00970.png"
+        },
+        {
+          "ms": 1303,
+          "file": "chromium-reduced-cmdk-01303.png"
+        },
+        {
+          "ms": 1629,
+          "file": "chromium-reduced-cmdk-01629.png"
+        },
+        {
+          "ms": 1932,
+          "file": "chromium-reduced-cmdk-01932.png"
+        }
+      ],
+      "sheet": "sheet-chromium-reduced-cmdk.png",
+      "notes": [
+        "dialog open=true closedAfterEscape=true"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "normal",
+      "sequence": "load",
+      "frameCount": 15,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-normal-load-00000.png"
+        },
+        {
+          "ms": 219,
+          "file": "webkit-normal-load-00219.png"
+        },
+        {
+          "ms": 319,
+          "file": "webkit-normal-load-00319.png"
+        },
+        {
+          "ms": 528,
+          "file": "webkit-normal-load-00528.png"
+        },
+        {
+          "ms": 716,
+          "file": "webkit-normal-load-00716.png"
+        },
+        {
+          "ms": 897,
+          "file": "webkit-normal-load-00897.png"
+        },
+        {
+          "ms": 1084,
+          "file": "webkit-normal-load-01084.png"
+        },
+        {
+          "ms": 1300,
+          "file": "webkit-normal-load-01300.png"
+        },
+        {
+          "ms": 1501,
+          "file": "webkit-normal-load-01501.png"
+        },
+        {
+          "ms": 1698,
+          "file": "webkit-normal-load-01698.png"
+        },
+        {
+          "ms": 1897,
+          "file": "webkit-normal-load-01897.png"
+        },
+        {
+          "ms": 2094,
+          "file": "webkit-normal-load-02094.png"
+        },
+        {
+          "ms": 2294,
+          "file": "webkit-normal-load-02294.png"
+        },
+        {
+          "ms": 2492,
+          "file": "webkit-normal-load-02492.png"
+        },
+        {
+          "ms": 2729,
+          "file": "webkit-normal-load-02729.png"
+        }
+      ],
+      "sheet": "sheet-webkit-normal-load.png",
+      "notes": []
+    },
+    {
+      "context": "webkit",
+      "mode": "normal",
+      "sequence": "scroll",
+      "frameCount": 17,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-normal-scroll-00000.png"
+        },
+        {
+          "ms": 242,
+          "file": "webkit-normal-scroll-00242.png"
+        },
+        {
+          "ms": 436,
+          "file": "webkit-normal-scroll-00436.png"
+        },
+        {
+          "ms": 638,
+          "file": "webkit-normal-scroll-00638.png"
+        },
+        {
+          "ms": 837,
+          "file": "webkit-normal-scroll-00837.png"
+        },
+        {
+          "ms": 1035,
+          "file": "webkit-normal-scroll-01035.png"
+        },
+        {
+          "ms": 1234,
+          "file": "webkit-normal-scroll-01234.png"
+        },
+        {
+          "ms": 1429,
+          "file": "webkit-normal-scroll-01429.png"
+        },
+        {
+          "ms": 1627,
+          "file": "webkit-normal-scroll-01627.png"
+        },
+        {
+          "ms": 1826,
+          "file": "webkit-normal-scroll-01826.png"
+        },
+        {
+          "ms": 2022,
+          "file": "webkit-normal-scroll-02022.png"
+        },
+        {
+          "ms": 2228,
+          "file": "webkit-normal-scroll-02228.png"
+        },
+        {
+          "ms": 2427,
+          "file": "webkit-normal-scroll-02427.png"
+        },
+        {
+          "ms": 2645,
+          "file": "webkit-normal-scroll-02645.png"
+        },
+        {
+          "ms": 2840,
+          "file": "webkit-normal-scroll-02840.png"
+        },
+        {
+          "ms": 3037,
+          "file": "webkit-normal-scroll-03037.png"
+        },
+        {
+          "ms": 3238,
+          "file": "webkit-normal-scroll-03238.png"
+        }
+      ],
+      "sheet": "sheet-webkit-normal-scroll.png",
+      "notes": [
+        "scrollY at dock 276"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "normal",
+      "sequence": "drag",
+      "frameCount": 11,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-normal-drag-00000.png"
+        },
+        {
+          "ms": 237,
+          "file": "webkit-normal-drag-00237.png"
+        },
+        {
+          "ms": 451,
+          "file": "webkit-normal-drag-00451.png"
+        },
+        {
+          "ms": 650,
+          "file": "webkit-normal-drag-00650.png"
+        },
+        {
+          "ms": 845,
+          "file": "webkit-normal-drag-00845.png"
+        },
+        {
+          "ms": 1039,
+          "file": "webkit-normal-drag-01039.png"
+        },
+        {
+          "ms": 1233,
+          "file": "webkit-normal-drag-01233.png"
+        },
+        {
+          "ms": 1429,
+          "file": "webkit-normal-drag-01429.png"
+        },
+        {
+          "ms": 1624,
+          "file": "webkit-normal-drag-01624.png"
+        },
+        {
+          "ms": 1821,
+          "file": "webkit-normal-drag-01821.png"
+        },
+        {
+          "ms": 2014,
+          "file": "webkit-normal-drag-02014.png"
+        }
+      ],
+      "sheet": "sheet-webkit-normal-drag.png",
+      "notes": [
+        "mouse events used on webkit phone (no CDP touch)"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "normal",
+      "sequence": "vt",
+      "frameCount": 20,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-normal-vt-00000.png"
+        },
+        {
+          "ms": 282,
+          "file": "webkit-normal-vt-00282.png"
+        },
+        {
+          "ms": 545,
+          "file": "webkit-normal-vt-00545.png"
+        },
+        {
+          "ms": 722,
+          "file": "webkit-normal-vt-00722.png"
+        },
+        {
+          "ms": 899,
+          "file": "webkit-normal-vt-00899.png"
+        },
+        {
+          "ms": 1073,
+          "file": "webkit-normal-vt-01073.png"
+        },
+        {
+          "ms": 1250,
+          "file": "webkit-normal-vt-01250.png"
+        },
+        {
+          "ms": 1427,
+          "file": "webkit-normal-vt-01427.png"
+        },
+        {
+          "ms": 1602,
+          "file": "webkit-normal-vt-01602.png"
+        },
+        {
+          "ms": 1907,
+          "file": "webkit-normal-vt-01907.png"
+        },
+        {
+          "ms": 2143,
+          "file": "webkit-normal-vt-02143.png"
+        },
+        {
+          "ms": 2356,
+          "file": "webkit-normal-vt-02356.png"
+        },
+        {
+          "ms": 2571,
+          "file": "webkit-normal-vt-02571.png"
+        },
+        {
+          "ms": 2784,
+          "file": "webkit-normal-vt-02784.png"
+        },
+        {
+          "ms": 3004,
+          "file": "webkit-normal-vt-03004.png"
+        },
+        {
+          "ms": 3219,
+          "file": "webkit-normal-vt-03219.png"
+        },
+        {
+          "ms": 3434,
+          "file": "webkit-normal-vt-03434.png"
+        },
+        {
+          "ms": 3649,
+          "file": "webkit-normal-vt-03649.png"
+        },
+        {
+          "ms": 3865,
+          "file": "webkit-normal-vt-03865.png"
+        },
+        {
+          "ms": 4079,
+          "file": "webkit-normal-vt-04079.png"
+        }
+      ],
+      "sheet": "sheet-webkit-normal-vt.png",
+      "notes": []
+    },
+    {
+      "context": "webkit",
+      "mode": "normal",
+      "sequence": "cmdk",
+      "frameCount": 8,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-normal-cmdk-00000.png"
+        },
+        {
+          "ms": 245,
+          "file": "webkit-normal-cmdk-00245.png"
+        },
+        {
+          "ms": 480,
+          "file": "webkit-normal-cmdk-00480.png"
+        },
+        {
+          "ms": 797,
+          "file": "webkit-normal-cmdk-00797.png"
+        },
+        {
+          "ms": 1101,
+          "file": "webkit-normal-cmdk-01101.png"
+        },
+        {
+          "ms": 1403,
+          "file": "webkit-normal-cmdk-01403.png"
+        },
+        {
+          "ms": 1623,
+          "file": "webkit-normal-cmdk-01623.png"
+        },
+        {
+          "ms": 1860,
+          "file": "webkit-normal-cmdk-01860.png"
+        }
+      ],
+      "sheet": "sheet-webkit-normal-cmdk.png",
+      "notes": [
+        "dialog open=true closedAfterEscape=true"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "reduced",
+      "sequence": "load",
+      "frameCount": 14,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-reduced-load-00000.png"
+        },
+        {
+          "ms": 102,
+          "file": "webkit-reduced-load-00102.png"
+        },
+        {
+          "ms": 306,
+          "file": "webkit-reduced-load-00306.png"
+        },
+        {
+          "ms": 526,
+          "file": "webkit-reduced-load-00526.png"
+        },
+        {
+          "ms": 725,
+          "file": "webkit-reduced-load-00725.png"
+        },
+        {
+          "ms": 977,
+          "file": "webkit-reduced-load-00977.png"
+        },
+        {
+          "ms": 1193,
+          "file": "webkit-reduced-load-01193.png"
+        },
+        {
+          "ms": 1410,
+          "file": "webkit-reduced-load-01410.png"
+        },
+        {
+          "ms": 1628,
+          "file": "webkit-reduced-load-01628.png"
+        },
+        {
+          "ms": 1863,
+          "file": "webkit-reduced-load-01863.png"
+        },
+        {
+          "ms": 2099,
+          "file": "webkit-reduced-load-02099.png"
+        },
+        {
+          "ms": 2322,
+          "file": "webkit-reduced-load-02322.png"
+        },
+        {
+          "ms": 2544,
+          "file": "webkit-reduced-load-02544.png"
+        },
+        {
+          "ms": 2778,
+          "file": "webkit-reduced-load-02778.png"
+        }
+      ],
+      "sheet": "sheet-webkit-reduced-load.png",
+      "notes": []
+    },
+    {
+      "context": "webkit",
+      "mode": "reduced",
+      "sequence": "scroll",
+      "frameCount": 17,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-reduced-scroll-00000.png"
+        },
+        {
+          "ms": 247,
+          "file": "webkit-reduced-scroll-00247.png"
+        },
+        {
+          "ms": 455,
+          "file": "webkit-reduced-scroll-00455.png"
+        },
+        {
+          "ms": 658,
+          "file": "webkit-reduced-scroll-00658.png"
+        },
+        {
+          "ms": 855,
+          "file": "webkit-reduced-scroll-00855.png"
+        },
+        {
+          "ms": 1053,
+          "file": "webkit-reduced-scroll-01053.png"
+        },
+        {
+          "ms": 1251,
+          "file": "webkit-reduced-scroll-01251.png"
+        },
+        {
+          "ms": 1450,
+          "file": "webkit-reduced-scroll-01450.png"
+        },
+        {
+          "ms": 1657,
+          "file": "webkit-reduced-scroll-01657.png"
+        },
+        {
+          "ms": 1855,
+          "file": "webkit-reduced-scroll-01855.png"
+        },
+        {
+          "ms": 2052,
+          "file": "webkit-reduced-scroll-02052.png"
+        },
+        {
+          "ms": 2252,
+          "file": "webkit-reduced-scroll-02252.png"
+        },
+        {
+          "ms": 2451,
+          "file": "webkit-reduced-scroll-02451.png"
+        },
+        {
+          "ms": 2676,
+          "file": "webkit-reduced-scroll-02676.png"
+        },
+        {
+          "ms": 2887,
+          "file": "webkit-reduced-scroll-02887.png"
+        },
+        {
+          "ms": 3092,
+          "file": "webkit-reduced-scroll-03092.png"
+        },
+        {
+          "ms": 3292,
+          "file": "webkit-reduced-scroll-03292.png"
+        }
+      ],
+      "sheet": "sheet-webkit-reduced-scroll.png",
+      "notes": [
+        "scrollY at dock 276"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "reduced",
+      "sequence": "drag",
+      "frameCount": 11,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-reduced-drag-00000.png"
+        },
+        {
+          "ms": 256,
+          "file": "webkit-reduced-drag-00256.png"
+        },
+        {
+          "ms": 456,
+          "file": "webkit-reduced-drag-00456.png"
+        },
+        {
+          "ms": 652,
+          "file": "webkit-reduced-drag-00652.png"
+        },
+        {
+          "ms": 849,
+          "file": "webkit-reduced-drag-00849.png"
+        },
+        {
+          "ms": 1046,
+          "file": "webkit-reduced-drag-01046.png"
+        },
+        {
+          "ms": 1242,
+          "file": "webkit-reduced-drag-01242.png"
+        },
+        {
+          "ms": 1439,
+          "file": "webkit-reduced-drag-01439.png"
+        },
+        {
+          "ms": 1636,
+          "file": "webkit-reduced-drag-01636.png"
+        },
+        {
+          "ms": 1832,
+          "file": "webkit-reduced-drag-01832.png"
+        },
+        {
+          "ms": 2027,
+          "file": "webkit-reduced-drag-02027.png"
+        }
+      ],
+      "sheet": "sheet-webkit-reduced-drag.png",
+      "notes": [
+        "mouse events used on webkit phone (no CDP touch)"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "reduced",
+      "sequence": "vt",
+      "frameCount": 20,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-reduced-vt-00000.png"
+        },
+        {
+          "ms": 269,
+          "file": "webkit-reduced-vt-00269.png"
+        },
+        {
+          "ms": 532,
+          "file": "webkit-reduced-vt-00532.png"
+        },
+        {
+          "ms": 708,
+          "file": "webkit-reduced-vt-00708.png"
+        },
+        {
+          "ms": 884,
+          "file": "webkit-reduced-vt-00884.png"
+        },
+        {
+          "ms": 1061,
+          "file": "webkit-reduced-vt-01061.png"
+        },
+        {
+          "ms": 1238,
+          "file": "webkit-reduced-vt-01238.png"
+        },
+        {
+          "ms": 1414,
+          "file": "webkit-reduced-vt-01414.png"
+        },
+        {
+          "ms": 1600,
+          "file": "webkit-reduced-vt-01600.png"
+        },
+        {
+          "ms": 1860,
+          "file": "webkit-reduced-vt-01860.png"
+        },
+        {
+          "ms": 2076,
+          "file": "webkit-reduced-vt-02076.png"
+        },
+        {
+          "ms": 2292,
+          "file": "webkit-reduced-vt-02292.png"
+        },
+        {
+          "ms": 2507,
+          "file": "webkit-reduced-vt-02507.png"
+        },
+        {
+          "ms": 2724,
+          "file": "webkit-reduced-vt-02724.png"
+        },
+        {
+          "ms": 2944,
+          "file": "webkit-reduced-vt-02944.png"
+        },
+        {
+          "ms": 3162,
+          "file": "webkit-reduced-vt-03162.png"
+        },
+        {
+          "ms": 3395,
+          "file": "webkit-reduced-vt-03395.png"
+        },
+        {
+          "ms": 3621,
+          "file": "webkit-reduced-vt-03621.png"
+        },
+        {
+          "ms": 3852,
+          "file": "webkit-reduced-vt-03852.png"
+        },
+        {
+          "ms": 4077,
+          "file": "webkit-reduced-vt-04077.png"
+        }
+      ],
+      "sheet": "sheet-webkit-reduced-vt.png",
+      "notes": []
+    },
+    {
+      "context": "webkit",
+      "mode": "reduced",
+      "sequence": "cmdk",
+      "frameCount": 8,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-reduced-cmdk-00000.png"
+        },
+        {
+          "ms": 243,
+          "file": "webkit-reduced-cmdk-00243.png"
+        },
+        {
+          "ms": 574,
+          "file": "webkit-reduced-cmdk-00574.png"
+        },
+        {
+          "ms": 876,
+          "file": "webkit-reduced-cmdk-00876.png"
+        },
+        {
+          "ms": 1178,
+          "file": "webkit-reduced-cmdk-01178.png"
+        },
+        {
+          "ms": 1398,
+          "file": "webkit-reduced-cmdk-01398.png"
+        },
+        {
+          "ms": 1615,
+          "file": "webkit-reduced-cmdk-01615.png"
+        },
+        {
+          "ms": 1834,
+          "file": "webkit-reduced-cmdk-01834.png"
+        }
+      ],
+      "sheet": "sheet-webkit-reduced-cmdk.png",
+      "notes": [
+        "dialog open=true closedAfterEscape=true"
+      ]
+    }
+  ],
+  "runSeconds": 195.9,
+  "totalFrames": 239
+}

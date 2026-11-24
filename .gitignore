@@ -12,3 +12,7 @@ docs/evidence/**/lh-*-[0-9].json
 # Reference-site screenshots for the v3 research (never published)
 docs/v3/research/
 .impeccable/review/
+
+# Motion frame sequences stay local; contact sheets and index.json are committed
+docs/evidence/**/motion/*.png
+!docs/evidence/**/motion/sheet-*.png

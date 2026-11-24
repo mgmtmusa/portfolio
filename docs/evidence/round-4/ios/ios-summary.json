@@ -1,0 +1,202 @@
+{
+  "checks": [
+    {
+      "name": "rest: dark page, not a white or blank load",
+      "ok": true,
+      "detail": {
+        "mean": 49.2,
+        "std": 63.2
+      }
+    },
+    {
+      "name": "rest: role line band at the top (page not scrolled)",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.134
+      }
+    },
+    {
+      "name": "rest: portrait has detail",
+      "ok": true,
+      "detail": {
+        "std": 49.1
+      }
+    },
+    {
+      "name": "rest: masthead glyphs above the slab",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.268
+      }
+    },
+    {
+      "name": "rest: masthead glyphs below the slab",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.456
+      }
+    },
+    {
+      "name": "rest: masthead glyphs right of the slab",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.353
+      }
+    },
+    {
+      "name": "rest: glyph pixels under the slab",
+      "ok": true,
+      "detail": {
+        "diffShare": 0.217
+      }
+    },
+    {
+      "name": "scrolled 45: differs from rest (needs the dev server)",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "docked: dark page, not a white or blank load",
+      "ok": true,
+      "detail": {
+        "mean": 42.4,
+        "std": 55.3
+      }
+    },
+    {
+      "name": "docked: dock pill present in the bottom band",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.318
+      }
+    },
+    {
+      "name": "back: dark page, not a white or blank load",
+      "ok": true,
+      "detail": {
+        "mean": 49.2,
+        "std": 63.2
+      }
+    },
+    {
+      "name": "back: role line band at the top (page not scrolled)",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.134
+      }
+    },
+    {
+      "name": "back: portrait has detail",
+      "ok": true,
+      "detail": {
+        "std": 49.1
+      }
+    },
+    {
+      "name": "back: masthead glyphs above the slab",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.268
+      }
+    },
+    {
+      "name": "back: masthead glyphs below the slab",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.456
+      }
+    },
+    {
+      "name": "back: masthead glyphs right of the slab",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.353
+      }
+    },
+    {
+      "name": "back: glyph pixels under the slab",
+      "ok": true,
+      "detail": {
+        "diffShare": 0.217
+      }
+    },
+    {
+      "name": "rest: slab present (diff box 651 x 421 vs 649 x 402 device px)",
+      "ok": true,
+      "detail": {
+        "box": {
+          "x0": 311,
+          "x1": 962,
+          "y0": 1506,
+          "y1": 1927
+        }
+      }
+    },
+    {
+      "name": "rest: slab top rim lit",
+      "ok": true,
+      "detail": {
+        "darkColumns": 357,
+        "litShare": 1
+      }
+    },
+    {
+      "name": "back: slab present (diff box 651 x 421 vs 649 x 402 device px)",
+      "ok": true,
+      "detail": {
+        "box": {
+          "x0": 311,
+          "x1": 962,
+          "y0": 1506,
+          "y1": 1927
+        }
+      }
+    },
+    {
+      "name": "back: slab top rim lit",
+      "ok": true,
+      "detail": {
+        "darkColumns": 357,
+        "litShare": 1
+      }
+    },
+    {
+      "name": "rest and docked captures differ",
+      "ok": true,
+      "detail": {
+        "restMean": 49.2,
+        "dockedMean": 42.4
+      }
+    },
+    {
+      "name": "docked and back captures differ",
+      "ok": true,
+      "detail": {}
+    }
+  ],
+  "rest": {
+    "clock": 0.121,
+    "msAfterPaint": 3269
+  },
+  "size": [
+    1206,
+    2622
+  ],
+  "scrolled": {
+    "clock": 0.105,
+    "msAfterPaint": 3610
+  },
+  "docked": {
+    "clock": 0.114,
+    "msAfterPaint": 3093
+  },
+  "back": {
+    "clock": 0.117,
+    "msAfterPaint": 3588
+  },
+  "contrast": {
+    "clock": 0.115,
+    "msAfterPaint": 3089
+  },
+  "pass": true
+}
