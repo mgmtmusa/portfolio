@@ -1,0 +1,38 @@
+{
+  "status": "ok",
+  "deployment": {
+    "id": "dpl_Ef7j1GHLgQ2s4CACUMhqhZeFAtJG",
+    "url": "https://portfolio-h5kr9i9xa-musa-c771.vercel.app",
+    "productionUrl": null,
+    "inspectorUrl": "https://vercel.com/musa-c771/portfolio/Ef7j1GHLgQ2s4CACUMhqhZeFAtJG",
+    "readyState": "READY",
+    "target": null,
+    "environment": "preview",
+    "deploymentApiUrl": "https://api.vercel.com/v13/deployments/dpl_Ef7j1GHLgQ2s4CACUMhqhZeFAtJG",
+    "buildMachine": {
+      "cores": 2,
+      "memory": 8192,
+      "machine": "basic",
+      "selectionType": "fixed",
+      "selectionSource": "plan-default"
+    },
+    "deploymentProtection": [
+      "vercel_authentication"
+    ]
+  },
+  "message": "Deployment portfolio-h5kr9i9xa-musa-c771.vercel.app ready.",
+  "next": [
+    {
+      "command": "vercel curl https://portfolio-h5kr9i9xa-musa-c771.vercel.app",
+      "when": "Verify deployment, including when Deployment Protection is enabled"
+    },
+    {
+      "command": "vercel inspect portfolio-h5kr9i9xa-musa-c771.vercel.app",
+      "when": "Inspect deployment"
+    },
+    {
+      "command": "vercel deploy --prod",
+      "when": "Promote to production"
+    }
+  ]
+}
