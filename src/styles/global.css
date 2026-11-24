@@ -94,9 +94,9 @@ body::before {
 .skip:focus-visible { transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: 0s !important; transition-delay: 0s !important; scroll-behavior: auto !important; }
 }
-html[data-motion='reduce'] *, html[data-motion='reduce'] *::before, html[data-motion='reduce'] *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+html[data-motion='reduce'] *, html[data-motion='reduce'] *::before, html[data-motion='reduce'] *::after { animation-duration: .01ms !important; transition-duration: 0s !important; transition-delay: 0s !important; }
 
 /* Lenis (smooth scroll) */
 html.lenis, html.lenis body { height: auto; }
