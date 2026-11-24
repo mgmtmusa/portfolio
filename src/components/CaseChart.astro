@@ -1,81 +1,110 @@
 ---
-// One chart per case, drawn from site.ts figures only. Static SVG with native tooltips and a text equivalent.
+// One chart per case cover on /work/, drawn from site.ts figures only. HTML and CSS: every label is real text
+// (no SVG text), and nothing repeats a figure the cover already shows, so no number appears more than twice.
+// Evitech: before and after bars for the two results, drawn to scale (0.72 and 1.65 of before), no numbers.
+// I Heart Uni: a zero-based slope from 400 to 13,200. The Lil Project: a 48 × 16 grid, exactly 768 dots.
+// The caption comes from the default slot.
 interface Props { slug: 'evitech' | 'i-heart-uni' | 'the-lil-project' }
 const { slug } = Astro.props;
-const W = 480, H = 220;
 
-// Evitech: two results from one initiative, each indexed to 100 before the restructure.
 const ev = [
-  { name: 'Cost per acquisition', before: 100, after: 72, text: '28% lower' },
-  { name: 'Qualified leads', before: 100, after: 165, text: '65% more' },
+  { name: 'Cost per acquisition', after: 0.72 },
+  { name: 'Qualified leads', after: 1.65 },
 ];
-const evMax = 165, evBase = 172, evTop = 28, scale = (v: number) => ((evBase - evTop) * v) / evMax;
-const bw = 44;
-// Lil Project unit chart: 768 = 48 × 16.
-const dots = Array.from({ length: 768 }, (_, i) => ({ x: 8 + (i % 48) * 9.6, y: 40 + Math.floor(i / 48) * 9.6 }));
+const evMax = Math.max(1, ...ev.map((g) => g.after));
+const pct = (v: number) => `${((v / evMax) * 100).toFixed(2)}%`;
+
+const start = 400, current = 13200;
+const startPct = ((start / current) * 100).toFixed(2);
 ---
 
-<figure class={`chart chart--${slug}`}>
+<figure class={`chart chart--${slug}`} data-chart={slug}>
   {
     slug === 'evitech' && (
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="ch-ev-t ch-ev-d">
-        <title id="ch-ev-t">Evitech: two results from the same initiative</title>
-        <desc id="ch-ev-d">Indexed to 100 before the restructure. Cost per acquisition fell to 72, 28% lower. Qualified leads rose to 165, 65% more.</desc>
-        <line x1="0" x2={W} y1={evBase} y2={evBase} class="axis" />
-        {ev.map((g, i) => {
-          const x0 = 56 + i * 220;
-          const hb = scale(g.before), ha = scale(g.after);
-          return (
-            <g>
-              <path class="bar bar--before" d={`M${x0},${evBase} V${evBase - hb + 4} q0,-4 4,-4 h${bw - 8} q4,0 4,4 V${evBase} Z`}><title>{`${g.name}, before: 100`}</title></path>
-              <path class="bar bar--after" d={`M${x0 + bw + 2},${evBase} V${evBase - ha + 4} q0,-4 4,-4 h${bw - 8} q4,0 4,4 V${evBase} Z`}><title>{`${g.name}, after: ${g.after} (${g.text})`}</title></path>
-              <text class="v" x={x0 + bw / 2} y={evBase - hb - 8} text-anchor="middle">100</text>
-              <text class="v v--strong" x={x0 + bw * 1.5 + 2} y={evBase - ha - 8} text-anchor="middle">{g.after}</text>
-              <text class="n" x={x0} y={evBase + 22}>{g.name}</text>
-              <text class="n n--muted" x={x0} y={evBase + 40}>{g.text}</text>
-            </g>
-          );
-        })}
-      </svg>
+      <div class="ev" aria-hidden="true">
+        <div class="ev-plot">
+          {ev.map((g) => (
+            <div class="ev-g">
+              <div class="ev-bars">
+                <span class="ev-bar ev-bar--before" style={`--h: ${pct(1)}`} data-ratio="1" />
+                <span class="ev-bar ev-bar--after" style={`--h: ${pct(g.after)}`} data-ratio={g.after} />
+              </div>
+              <p class="ev-n">{g.name}</p>
+            </div>
+          ))}
+        </div>
+        <p class="ev-key">
+          <span class="ev-key-i"><span class="ev-sw ev-sw--before" />Before</span>
+          <span class="ev-key-i"><span class="ev-sw ev-sw--after" />After</span>
+        </p>
+      </div>
     )
   }
   {
     slug === 'i-heart-uni' && (
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="ch-ihu-t ch-ihu-d">
-        <title id="ch-ihu-t">I Heart Uni social audience, start and current</title>
-        <desc id="ch-ihu-d">The audience grew from 400 at the start to 13,200.</desc>
-        <text class="n" x="0" y="54">Start</text>
-        <path class="bar bar--before" d={`M96,40 h${Math.max(6, (360 * 400) / 13200)} v20 h-${Math.max(6, (360 * 400) / 13200)} Z`}><title>Start: 400</title></path>
-        <text class="v" x={96 + Math.max(6, (360 * 400) / 13200) + 10} y="54">400</text>
-        <text class="n" x="0" y="124">Current</text>
-        <path class="bar bar--after" d="M96,110 h356 q4,0 4,4 v12 q0,4 -4,4 h-356 Z"><title>Current: 13,200</title></path>
-        <text class="v v--strong" x="456" y="152" text-anchor="end">13,200</text>
-        <line x1="96" x2="96" y1="28" y2="140" class="axis" />
-      </svg>
+      <div class="ihu" style={`--start: ${startPct}%`}>
+        <div class="ihu-plot">
+          <svg class="ihu-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+            <line class="ihu-base" x1="0" y1="100" x2="100" y2="100" vector-effect="non-scaling-stroke" />
+            <line class="ihu-line" x1="0" y1={100 - Number(startPct)} x2="100" y2="0" vector-effect="non-scaling-stroke" />
+          </svg>
+          <span class="ihu-dot ihu-dot--a" aria-hidden="true" />
+          <span class="ihu-dot ihu-dot--b" aria-hidden="true" />
+        </div>
+        <p class="ihu-v ihu-v--a"><span class="ihu-k">Start</span> <span class="ihu-n">400</span></p>
+        <p class="ihu-v ihu-v--b"><span class="ihu-k">Current</span> <span class="ihu-n">13,200</span></p>
+      </div>
     )
   }
-  {
-    slug === 'the-lil-project' && (
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="ch-lil-t ch-lil-d">
-        <title id="ch-lil-t">768 children reached to date, organisation total</title>
-        <desc id="ch-lil-d">A grid of 768 dots, one for each child reached by The Lil Project to date. This is an organisation total.</desc>
-        <g class="dots">{dots.map((d) => <circle cx={d.x} cy={d.y} r="2.4" />)}</g>
-        <text class="n" x="8" y="214">One dot per child reached. Organisation total.</text>
-      </svg>
-    )
-  }
+  {slug === 'the-lil-project' && <div class="lil" aria-hidden="true" data-cols="48" data-rows="16" />}
+  {Astro.slots.has('default') && <figcaption class="chart-cap"><slot /></figcaption>}
 </figure>
 
 <style>
-  .chart { margin: 0; }
-  .chart svg { width: 100%; height: auto; overflow: visible; }
-  .axis { stroke: var(--line-strong); stroke-width: 1; }
-  .bar--before { fill: rgb(243 238 228 / .16); }
-  .bar--after { fill: var(--text); }
-  .v { font: 500 12px var(--mono); fill: var(--text-2); }
-  .v--strong { fill: var(--text); }
-  .n { font: 400 13px var(--ui); fill: var(--text-2); }
-  .n--muted { fill: var(--text-3); }
-  .dots circle { fill: var(--text); opacity: .82; }
-  @media (forced-colors: active) { .bar--after, .dots circle { fill: CanvasText; } .bar--before { fill: GrayText; } }
+  .chart { margin: 0; display: grid; gap: 16px; }
+  .chart-cap { font: 400 13px / 18px var(--ui); color: var(--text-2); max-width: 46ch; }
+
+  /* Evitech: paired bars on one baseline. Before is a quiet fill, after is the text colour. */
+  .ev { display: grid; gap: 14px; }
+  .ev-plot { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
+  .ev-bars { display: flex; align-items: flex-end; gap: 6px; height: 132px; border-bottom: 1px solid var(--line-strong); }
+  .ev-bar { width: 44px; height: var(--h); border-radius: 6px 6px 0 0; }
+  .ev-bar--before { background: rgb(243 238 228 / .16); }
+  .ev-bar--after { background: var(--text); }
+  .ev-n { margin-top: 10px; font: 400 13px / 18px var(--ui); color: var(--text-2); }
+  .ev-key { display: flex; gap: 20px; font: 500 11px / 1.4 var(--mono); letter-spacing: .08em; color: var(--text-3); }
+  .ev-key-i { display: inline-flex; align-items: center; gap: 8px; }
+  .ev-sw { width: 10px; height: 10px; border-radius: 2px; }
+  .ev-sw--before { background: rgb(243 238 228 / .16); }
+  .ev-sw--after { background: var(--text); }
+
+  /* I Heart Uni: zero-based, so the start sits just above the baseline. */
+  .ihu { position: relative; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto 132px auto; column-gap: 16px; }
+  .ihu-plot { position: relative; grid-column: 1 / -1; grid-row: 2; }
+  .ihu-svg { width: 100%; height: 100%; overflow: visible; }
+  .ihu-base { stroke: var(--line-strong); stroke-width: 1; }
+  .ihu-line { stroke: var(--text); stroke-width: 2; stroke-linecap: round; }
+  .ihu-dot { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--text); transform: translate(-50%, 50%); }
+  .ihu-dot--a { left: 0; bottom: var(--start); }
+  .ihu-dot--b { left: 100%; bottom: 100%; }
+  .ihu-v { display: flex; align-items: baseline; gap: 8px; }
+  .ihu-v--a { grid-column: 1; grid-row: 3; margin-top: 10px; }
+  .ihu-v--b { grid-column: 2; grid-row: 1; margin-bottom: 12px; justify-self: end; }
+  .ihu-k { font: 500 11px / 1.4 var(--mono); letter-spacing: .08em; color: var(--text-3); }
+  .ihu-n { font: 500 15px / 1 var(--ui); color: var(--text); font-variant-numeric: tabular-nums; }
+
+  /* The Lil Project: one tile per child, 48 across and 16 down (768). Square tiles, so the box is 3:1. */
+  .lil {
+    aspect-ratio: 48 / 16; width: 100%; max-width: 560px;
+    background-image: radial-gradient(circle closest-side, rgb(243 241 236 / .82) 0 52%, transparent 60%);
+    background-size: calc(100% / 48) calc(100% / 16);
+    background-repeat: repeat;
+  }
+
+  @media (forced-colors: active) {
+    .ev-bar--after, .ev-sw--after, .ihu-dot { background: CanvasText; forced-color-adjust: none; }
+    .ev-bar--before, .ev-sw--before { background: GrayText; forced-color-adjust: none; }
+    .ihu-line { stroke: CanvasText; }
+    .lil { forced-color-adjust: none; background-image: radial-gradient(circle closest-side, CanvasText 0 52%, transparent 60%); }
+  }
 </style>

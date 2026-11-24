@@ -1,0 +1,193 @@
+---
+// The work index (Task 6): three case covers with one chart each, capability filters, then the growth-work
+// ledger and the page's notes. Rendered live on /work/ and as an inert, unnamed copy under every case sheet.
+// Filters are radio inputs read by CSS :has(), so they work without JavaScript; src/scripts/work.ts only
+// announces the count. Copy: site.ts, src/data/notes.ts and docs/v3/story.md (sections 3 and 6) only.
+import { cases, capabilities, growthWork, type Result } from '../data/site';
+import { notes } from '../data/notes';
+import { covers, noteRegistry, scopeNotes, tagsForCase, workTags, type CoverSlug } from '../lib/work';
+import { countByTag } from '../lib/filters';
+import CaseFigure from './CaseFigure.astro';
+import CaseChart from './CaseChart.astro';
+import Ledger from './Ledger.astro';
+import Notes from './Notes.astro';
+import Footnote from './Footnote.astro';
+
+interface Props { inert?: boolean }
+const { inert = false } = Astro.props;
+const reg = noteRegistry(inert ? 'fn-wu' : 'fn-w');
+const p = inert ? 'u-' : '';
+
+const tags = workTags(capabilities);
+const items = cases.map((c) => {
+  const slug = c.slug as CoverSlug;
+  const cover = covers[slug];
+  return { c, slug, cover, tags: tagsForCase(c.slug, capabilities), mark: reg.mark(cover.note), chartMark: slug === 'i-heart-uni' ? reg.mark(notes.audience) : undefined };
+});
+const counts = new Map(countByTag(items).map((x) => [x.tag, x.count]));
+const chips = [{ id: 'all', label: 'All' }, ...tags];
+// The Evitech chart notes the spend range with site.ts's own sentence.
+const spend = cases[0].brief.match(/[^.]*\$[\d,]+K[^.]*\./)?.[0].trim();
+
+// Ledger notes. The B2B row drops the 2.6× company revenue figure: notes.closed says the company's revenue
+// growth appears only in the Evitech case, so that row keeps $2M+ with the "closed" note.
+const rowNote: Record<string, string | undefined> = {
+  'Paid acquisition': notes.evitechPair,
+  'Lead qualification and CRM routing': scopeNotes['Company pipeline'],
+  'Organic audience growth': notes.audience,
+  'Event marketing and brand development': growthWork.find((g) => g.t === 'Event marketing and brand development')?.note,
+  'B2B sales and commercial growth': notes.closed,
+};
+const ONLY_IN_CASE = new Set(['2.6×']);
+const rows = growthWork.map((g) => {
+  const results: Result[] = g.results.filter((r) => !ONLY_IN_CASE.has(r.v));
+  const note = rowNote[g.t];
+  return { t: g.t, org: g.org, did: g.did, results, note: note ? reg.mark(note) : undefined };
+});
+
+// One :has() rule per tag hides the covers that don't carry it.
+const filterCss = tags
+  .map((t) => `.chips:has(.chip-in[value="${t.id}"]:checked) ~ .covers .cover:not([data-tags~="${t.id}"]) { display: none; }`)
+  .join('\n');
+---
+
+<div class="work wrap" data-work-index={inert ? 'inert' : 'live'}>
+  <header class="work-head">
+    <h1 class="h1">Work</h1>
+    <p class="body work-intro">Three cases, and each figure’s footnote says whose result it is.</p>
+  </header>
+
+  <fieldset class="chips" data-work-filter>
+    <legend class="sr">Filter cases by capability</legend>
+    {
+      chips.map((t) => (
+        <label class="chip" for={`${p}wt-${t.id}`}>
+          <input class="chip-in" type="radio" name={`${p}work-tag`} id={`${p}wt-${t.id}`} value={t.id} checked={t.id === 'all'} data-count={counts.get(t.id)} />
+          <span class="chip-l">
+            {t.label}
+            <span class="chip-n">{counts.get(t.id)}</span>
+          </span>
+        </label>
+      ))
+    }
+  </fieldset>
+  {!inert && <p class="sr" aria-live="polite" data-work-count />}
+
+  <ol class="covers">
+    {
+      items.map(({ c, slug, cover, tags: t, mark, chartMark }) => (
+        <li class="cover" id={inert ? undefined : `case-${slug}`} data-cover={slug} data-tags={t.join(' ')}>
+          <div class="cover-a">
+            <CaseFigure slug={slug} figs={cover.figs} note={mark} named={!inert} />
+            <p class="cover-label">
+              {cover.label}
+              {'scope' in cover && <span class="cover-scope label">{cover.scope}</span>}
+            </p>
+            {'caption' in cover && <p class="cover-cap">{cover.caption}</p>}
+          </div>
+          <div class="cover-b">
+            {slug === 'evitech' && <CaseChart slug="evitech">{spend}</CaseChart>}
+            {slug === 'i-heart-uni' && chartMark && (
+              <CaseChart slug="i-heart-uni">
+                Social audience
+                <Footnote {...chartMark} />
+              </CaseChart>
+            )}
+            {slug === 'the-lil-project' && <CaseChart slug="the-lil-project" />}
+            <h2 class="cover-t">
+              {inert ? (
+                <a href={`/work/${slug}/`}>{c.org}: {c.title}</a>
+              ) : (
+                <a href={`/work/${slug}/`} data-case-link={slug} data-astro-prefetch="viewport" data-track="case_open" data-slug={slug} data-from="work">
+                  {c.org}: {c.title}
+                </a>
+              )}
+            </h2>
+            <p class="body cover-sum">{c.summary}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+
+  <section class="ledger-sec" aria-labelledby={`${p}ledger-h`}>
+    <h2 class="h1 ledger-h" id={`${p}ledger-h`}>Growth projects</h2>
+    <Ledger rows={rows} />
+  </section>
+
+  <section class="work-notes" aria-label="Notes">
+    <Notes notes={reg.list()} />
+  </section>
+</div>
+<Fragment set:html={`<style>${filterCss}</style>`} />
+
+<style>
+  .work { padding-top: 152px; }
+  .work-head { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: end; }
+  .work-head .h1 { grid-column: 1 / 7; }
+  .work-intro { grid-column: 7 / 13; }
+
+  /* Filter chips: radio inputs under pill labels. Arrow keys move between them, as in any radio group. */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 56px 0 0; padding: 0; border: 0; min-width: 0; }
+  .chip { position: relative; display: inline-flex; }
+  .chip-in { position: absolute; left: 0; top: 0; width: 1px; height: 1px; margin: 0; opacity: 0; pointer-events: none; }
+  .chip-l {
+    display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 16px; border-radius: 22px;
+    border: 1px solid var(--line-strong); font: 500 14px / 1 var(--ui); color: var(--text-2); cursor: pointer;
+    transition: background-color var(--dur-fast) ease-out, color var(--dur-fast) ease-out, border-color var(--dur-fast) ease-out, transform var(--dur-fast) ease-out;
+  }
+  .chip-n { font: 500 11px / 1 var(--mono); letter-spacing: .08em; color: var(--text-3); font-variant-numeric: tabular-nums; transition: color var(--dur-fast) ease-out; }
+  .chip-in:checked + .chip-l { background: var(--text); border-color: var(--text); color: var(--bg); }
+  .chip-in:checked + .chip-l .chip-n { color: rgb(18 17 16 / .62); }
+  .chip-in:focus-visible + .chip-l { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .chip-in:active + .chip-l { transform: scale(.97); }
+  @media (hover: hover) and (pointer: fine) {
+    .chip-in:not(:checked):hover + .chip-l { color: var(--text); border-color: rgb(243 238 228 / .26); background: rgb(255 250 240 / .04); }
+  }
+
+  .covers { margin-top: 32px; }
+  .cover {
+    position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter);
+    padding: 48px 0 56px; border-top: 1px solid var(--line); align-items: start;
+  }
+  .cover-a { grid-column: 1 / 8; display: grid; gap: 20px; align-content: start; }
+  .cover-label { font: 460 var(--fs-line) / 1.2 var(--display); letter-spacing: -.018em; text-wrap: balance; max-width: 22ch; }
+  .cover-scope { display: inline-block; margin-left: 10px; vertical-align: middle; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--text-2); }
+  .cover-cap { color: var(--text-2); font-size: 15px; margin-top: -8px; }
+  .cover-b { grid-column: 9 / 13; display: grid; gap: 14px; padding-top: 10px; align-content: start; }
+  .cover-t { font: 500 17px / 1.35 var(--ui); margin-top: 26px; }
+  .cover-t a { text-decoration: underline; text-decoration-color: transparent; transition: text-decoration-color var(--dur-fast) ease-out; }
+  .cover-t a::after { content: ''; position: absolute; inset: 0; border-radius: 4px; }
+  .cover-sum { font-size: 15px; }
+  /* The figure has a view-transition-name, so it is its own stacking context: lift it over the stretched link,
+     let clicks fall through it to the link, and keep only its footnote marker clickable. */
+  .cover :global(.case-fig) { position: relative; z-index: 2; pointer-events: none; }
+  .cover :global(.fn), .cover :global(.chart-cap) { position: relative; z-index: 2; pointer-events: auto; }
+  @media (hover: hover) and (pointer: fine) {
+    .cover:hover .cover-t a { text-decoration-color: var(--accent); }
+  }
+
+  .ledger-sec { padding-top: 144px; }
+  .ledger-h { margin-bottom: 40px; }
+  .work-notes { padding-top: 96px; }
+
+  @media (max-width: 899px) {
+    .work { padding-top: 112px; }
+    .work-head .h1, .work-intro, .cover-a, .cover-b { grid-column: 1 / -1; }
+    .work-intro { margin-top: 16px; }
+    .chips { margin-top: 36px; }
+    .cover { padding: 36px 0 44px; }
+    .cover-b { margin-top: 32px; padding-top: 0; }
+    .cover-t { margin-top: 18px; }
+    .ledger-sec { padding-top: 104px; }
+  }
+  /* Phones: one swipeable row of chips, edge to edge, instead of four stacked rows. */
+  @media (max-width: 639px) {
+    .chips {
+      flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none;
+      margin-inline: calc(-1 * var(--edge)); padding: 4px var(--edge); scroll-padding-inline: var(--edge);
+    }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip { flex: none; }
+  }
+</style>

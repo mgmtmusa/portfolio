@@ -1,0 +1,75 @@
+---
+// A case's headline figure: display type with its footnote. On /work/ and in the open sheet it carries
+// transition:name="fig-<slug>" (the same name as the home teaser), so the figure lifts into the sheet headline.
+// The inert copy of the index under a sheet renders it unnamed (named={false}): two elements may never share a name.
+// This file also holds the view-transition styles for the figure and the sheet, since both pages render it.
+import Footnote from './Footnote.astro';
+interface Props { slug: string; figs: readonly string[]; note: { n: number; id: string; note: string }; named?: boolean; class?: string }
+const { slug, figs, note, named = false, class: cls } = Astro.props;
+const fact = figs.join('|');
+---
+
+{
+  named ? (
+    <p class:list={['case-fig', cls]} data-fig={slug} data-fact={fact} transition:name={`fig-${slug}`}>
+      {figs.map((f, i) => (
+        <span class="case-fig-n">{f}{i === figs.length - 1 && <Footnote {...note} />}</span>
+      ))}
+    </p>
+  ) : (
+    <p class:list={['case-fig', cls]} data-fig={slug} data-fact={fact}>
+      {figs.map((f, i) => (
+        <span class="case-fig-n">{f}{i === figs.length - 1 && <Footnote {...note} />}</span>
+      ))}
+    </p>
+  )
+}
+
+<style>
+  .case-fig { display: flex; flex-wrap: wrap; gap: 0 .28em; font: 500 var(--fs-fig) / .86 var(--display); letter-spacing: -.045em; color: var(--text); font-variant-numeric: lining-nums proportional-nums; }
+  .case-fig-n { display: inline-flex; align-items: flex-start; white-space: nowrap; }
+  .case-fig-n :global(.fn) { vertical-align: top; margin-top: .08em; margin-left: .04em; }
+  @media (max-width: 899px) { .case-fig { font-size: clamp(64px, 18vw, 112px); } }
+</style>
+
+<style is:global>
+  /* Figure → sheet: the figure travels 520ms on expo-out; its text snapshot is never stretched (plan F6). */
+  ::view-transition-group(fig-evitech),
+  ::view-transition-group(fig-i-heart-uni),
+  ::view-transition-group(fig-the-lil-project) { animation-duration: var(--dur-sheet); animation-timing-function: var(--ease-out); }
+  ::view-transition-old(fig-evitech), ::view-transition-new(fig-evitech),
+  ::view-transition-old(fig-i-heart-uni), ::view-transition-new(fig-i-heart-uni),
+  ::view-transition-old(fig-the-lil-project), ::view-transition-new(fig-the-lil-project) { height: 100%; object-fit: none; object-position: left top; }
+
+  /* The sheet rises in over the index and drops away on Close. */
+  ::view-transition-group(sheet) { animation: none; }
+  ::view-transition-new(sheet):only-child { animation: vt-sheet-in var(--dur-sheet) var(--ease-out) both; }
+  ::view-transition-old(sheet):only-child { animation: vt-sheet-out 240ms cubic-bezier(.4, 0, 1, 1) both; }
+  /* Sheet to sheet: a horizontal slide, next from the right, previous from the left. */
+  ::view-transition-old(sheet):not(:only-child) { animation: vt-slide-out var(--dur-sheet) var(--ease-out) both; }
+  ::view-transition-new(sheet):not(:only-child) { animation: vt-slide-in var(--dur-sheet) var(--ease-out) both; }
+  html[data-astro-transition='back']::view-transition-old(sheet):not(:only-child) { animation-name: vt-slide-out-back; }
+  html[data-astro-transition='back']::view-transition-new(sheet):not(:only-child) { animation-name: vt-slide-in-back; }
+  /* During a sheet-to-sheet swap the figures ride inside the sliding sheet. */
+  html.vt-sheet-swap [data-fig] { view-transition-name: none !important; }
+
+  @keyframes vt-sheet-in { from { opacity: 0; transform: translateY(56px); } }
+  @keyframes vt-sheet-out { to { opacity: 0; transform: translateY(40px); } }
+  @keyframes vt-slide-out { to { opacity: 0; transform: translateX(-8%); } }
+  @keyframes vt-slide-in { from { opacity: 0; transform: translateX(8%); } }
+  @keyframes vt-slide-out-back { to { opacity: 0; transform: translateX(8%); } }
+  @keyframes vt-slide-in-back { from { opacity: 0; transform: translateX(-8%); } }
+  @keyframes vt-fade-out { to { opacity: 0; } }
+  @keyframes vt-fade-in { from { opacity: 0; } }
+
+  /* Reduced motion: no lift and no slide. Every snapshot cross-fades in place over 160ms. The :root prefix
+     outranks Astro's own reduced-motion `animation: none !important`, which would otherwise cut with no fade. */
+  @media (prefers-reduced-motion: reduce) {
+    :root::view-transition-group(*) { animation: none !important; }
+    :root::view-transition-old(*) { animation: vt-fade-out 160ms ease-out both !important; }
+    :root::view-transition-new(*) { animation: vt-fade-in 160ms ease-out both !important; }
+  }
+  :root[data-motion='reduce']::view-transition-group(*) { animation: none !important; }
+  :root[data-motion='reduce']::view-transition-old(*) { animation: vt-fade-out 160ms ease-out both !important; }
+  :root[data-motion='reduce']::view-transition-new(*) { animation: vt-fade-in 160ms ease-out both !important; }
+</style>

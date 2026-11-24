@@ -1,0 +1,268 @@
+---
+// The case sheet (Task 7): a solid sheet with a glass header, opened over the inert work index. Year chip,
+// the headline figure (it shares transition:name with the cover and the home teaser), the outcome, the facts,
+// the results with their scope notes, then the story. Every string is from site.ts, notes.ts or story.md;
+// rows site.ts has no copy for (Channels, Measured by, and Tools outside Evitech) are left out.
+import { cases, growthWork } from '../data/site';
+import { caseNav, closeHref, covers, noteRegistry, resultGroups, scopeNotes, yearChip, type CoverSlug } from '../lib/work';
+import CaseFigure from './CaseFigure.astro';
+import Footnote from './Footnote.astro';
+import Notes from './Notes.astro';
+
+interface Props { slug: CoverSlug }
+const { slug } = Astro.props;
+const c = cases.find((x) => x.slug === slug)!;
+const cover = covers[slug];
+const slugs = cases.map((x) => x.slug);
+const nav = caseNav(slug, slugs);
+const prev = cases.find((x) => x.slug === nav.prev)!;
+const next = cases.find((x) => x.slug === nav.next)!;
+
+const reg = noteRegistry('fn-s');
+const headMark = reg.mark(cover.note);
+const groups = resultGroups(slug, c.results, growthWork).map((g) => {
+  const last = g.results[g.results.length - 1];
+  const scoped = !g.note && last.scope ? reg.mark(scopeNotes[last.scope] ?? last.scope) : undefined;
+  return { ...g, mark: scoped };
+});
+const ext = (href: string) => /^https?:/.test(href);
+---
+
+<article class="sheet glass-rim" data-sheet={slug} aria-labelledby="sheet-h" transition:name="sheet" transition:animate="initial">
+  <header class="sheet-bar glass">
+    <a class="sheet-close" href={closeHref(slug)} data-sheet-close>
+      <svg class="sheet-x" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 4l8 8M12 4l-8 8" /></svg>
+      Close
+    </a>
+    <nav class="sheet-step" aria-label="Cases">
+      <a class="sheet-step-a" href={`/work/${prev.slug}/`} rel="prev" data-sheet-step="back">
+        Previous<span class="sr"> case: {prev.org}</span>
+      </a>
+      <span class="sheet-count" data-sheet-count>{nav.counter}</span>
+      <a class="sheet-step-a" href={`/work/${next.slug}/`} rel="next" data-sheet-step="forward">
+        Next<span class="sr"> case: {next.org}</span>
+      </a>
+    </nav>
+  </header>
+
+  <div class="sheet-head">
+    <p class="sheet-chip label">{yearChip(c.when)}</p>
+    <CaseFigure slug={slug} figs={cover.figs} note={headMark} named class="sheet-fig" />
+    <p class="sheet-label">
+      {cover.label}
+      {'scope' in cover && <span class="pill label">{cover.scope}</span>}
+    </p>
+    {'caption' in cover && <p class="sheet-cap">{cover.caption}</p>}
+    <h1 class="sheet-h" id="sheet-h" tabindex="-1">{c.org}: {c.title}</h1>
+    <p class="sheet-out">{c.summary}</p>
+  </div>
+
+  <dl class="sheet-facts">
+    <div class="fact"><dt class="label">Role</dt><dd>{c.role}</dd></div>
+    <div class="fact"><dt class="label">Where</dt><dd>{c.where}</dd></div>
+    {c.tools && <div class="fact fact--wide"><dt class="label">Tools</dt><dd>{c.tools.join(', ')}</dd></div>}
+  </dl>
+
+  <section class="sec" aria-labelledby="sec-res">
+    <h2 class="sec-k" id="sec-res">Results</h2>
+    <ul class="sec-c res">
+      {
+        groups.map((g) => (
+          <li class="res-g" data-fact={g.results.map((r) => r.v).join('|')}>
+            <div class="res-figs">
+              {g.results.map((r, i) => (
+                <p class="res-r">
+                  <span class="res-v">
+                    {r.v}
+                    {i === g.results.length - 1 && g.mark && <Footnote {...g.mark} />}
+                  </span>
+                  <span class="res-l">
+                    {r.l}
+                    {r.scope && <span class="pill label">{r.scope}</span>}
+                  </span>
+                </p>
+              ))}
+            </div>
+            {g.note && <p class="res-note">{g.note}</p>}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <section class="sec" aria-labelledby="sec-brief">
+    <h2 class="sec-k" id="sec-brief">Brief</h2>
+    <p class="sec-c sec-p">{c.brief}</p>
+  </section>
+
+  <section class="sec" aria-labelledby="sec-q">
+    <h2 class="sec-k" id="sec-q">Question</h2>
+    <p class="sec-c sec-p sec-p--q">{c.question}</p>
+  </section>
+
+  <section class="sec" aria-labelledby="sec-resp">
+    <h2 class="sec-k" id="sec-resp">Responsibilities</h2>
+    <ul class="sec-c ticks">{c.responsibilities.map((r) => <li>{r}</li>)}</ul>
+  </section>
+
+  <section class="sec" aria-labelledby="sec-dec">
+    <h2 class="sec-k" id="sec-dec">Decisions</h2>
+    <ol class="sec-c decs">
+      {
+        c.decisions.map((d) => (
+          <li class="dec">
+            <h3 class="dec-t">{d.t}</h3>
+            <p class="dec-d">{d.d}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  {
+    c.execution && (
+      <section class="sec" aria-labelledby="sec-ex">
+        <h2 class="sec-k" id="sec-ex">Execution</h2>
+        <ul class="sec-c ticks">{c.execution.map((x) => <li>{x}</li>)}</ul>
+      </section>
+    )
+  }
+
+  <section class="sec" aria-labelledby="sec-ev">
+    <h2 class="sec-k" id="sec-ev">Evidence</h2>
+    <div class="sec-c">
+      <p class="sec-p">{c.evidence.text}</p>
+      {
+        c.evidence.href && (
+          <a class="textlink ev-link" href={c.evidence.href} {...(ext(c.evidence.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+            {c.evidence.label}
+            {ext(c.evidence.href) && <span class="sr"> (opens in a new tab)</span>}
+          </a>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="sec sec--notes" aria-label="Notes">
+    <div class="sec-c"><Notes notes={reg.list()} /></div>
+  </section>
+
+  <nav class="sheet-foot" aria-label="More cases">
+    <a class="foot-a" href={`/work/${prev.slug}/`} data-sheet-step="back">
+      <span class="label">Previous case</span>
+      <span class="foot-t">{prev.org}: {prev.title}</span>
+    </a>
+    <a class="foot-a foot-a--next" href={`/work/${next.slug}/`} data-sheet-step="forward">
+      <span class="label">Next case</span>
+      <span class="foot-t">{next.org}: {next.title}</span>
+    </a>
+  </nav>
+</article>
+
+<style>
+  .sheet {
+    --pad: clamp(24px, 5vw, 72px);
+    max-width: 1180px; margin: 0 auto; padding: 12px 12px 0; border-radius: 30px;
+    background: var(--raised);
+    box-shadow: 0 0 0 1px rgb(var(--shadow-ink) / .6), 0 28px 80px rgb(var(--shadow-ink) / .55);
+  }
+  .sheet::before { z-index: 6; }
+
+  /* Glass header: the only blurred part of the sheet. Body text never sits on glass. */
+  .sheet-bar {
+    --rim: .3; position: sticky; top: 44px; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    height: 56px; padding: 0 8px; border-radius: 28px; background: rgb(33 31 28 / .66);
+    font: 500 14px / 1 var(--ui);
+  }
+  .sheet-close, .sheet-step-a {
+    display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 16px; border-radius: 22px;
+    color: var(--text); text-decoration: none; transition: background-color var(--dur-fast) ease-out, transform var(--dur-fast) ease-out;
+  }
+  .sheet-x { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
+  .sheet-step { display: flex; align-items: center; gap: 2px; }
+  .sheet-count { min-width: 52px; text-align: center; font: 500 11px / 1 var(--mono); letter-spacing: .08em; color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .sheet-close:active, .sheet-step-a:active { transform: scale(.97); }
+  @media (hover: hover) and (pointer: fine) {
+    .sheet-close:hover, .sheet-step-a:hover { background: rgb(255 250 240 / .06); }
+  }
+
+  .sheet-head { display: grid; justify-items: start; padding: 72px var(--pad) 0; }
+  .sheet-chip { padding: 6px 10px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--text-2); }
+  .sheet-head :global(.sheet-fig) { margin-top: 36px; }
+  .sheet-label { margin-top: 24px; font: 460 var(--fs-line) / 1.2 var(--display); letter-spacing: -.018em; text-wrap: balance; max-width: 26ch; }
+  .sheet-cap { margin-top: 10px; color: var(--text-2); font-size: 15px; }
+  .sheet-h { margin-top: 64px; font: 520 clamp(34px, 4vw, 56px) / 1 var(--display); letter-spacing: -.03em; text-wrap: balance; max-width: 18ch; }
+  .sheet-h:focus { outline: none; }
+  .sheet-out { margin-top: 20px; font: 400 19px / 1.5 var(--ui); color: var(--text-2); max-width: 58ch; text-wrap: pretty; }
+
+  .pill { display: inline-block; margin-left: 10px; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--text-2); vertical-align: middle; }
+
+  .sheet-facts {
+    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); row-gap: 24px;
+    margin: 56px var(--pad) 0; padding: 28px 0; border-block: 1px solid var(--line);
+  }
+  .fact { grid-column: span 4; display: grid; gap: 8px; align-content: start; }
+  .fact--wide { grid-column: span 4; }
+  .fact dd { margin: 0; font: 400 15px / 1.5 var(--ui); color: var(--text); }
+
+  .sec { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); padding: 64px var(--pad) 0; }
+  .sec-k { grid-column: 1 / 4; font: 500 15px / 1.5 var(--ui); color: var(--text-2); }
+  .sec-c { grid-column: 4 / 12; min-width: 0; }
+  .sec-p { font: 400 var(--fs-body) / 1.6 var(--ui); color: var(--text); max-width: 64ch; text-wrap: pretty; }
+  .sec-p--q { font: 460 var(--fs-line) / 1.25 var(--display); letter-spacing: -.018em; max-width: 30ch; text-wrap: balance; }
+
+  .res { display: grid; gap: 0; }
+  .res-g { padding: 22px 0 24px; border-top: 1px solid var(--line); display: grid; gap: 14px; }
+  .res-g:first-child { border-top: 0; padding-top: 0; }
+  .res-figs { display: flex; flex-wrap: wrap; gap: 18px 48px; }
+  .res-r { display: grid; gap: 8px; }
+  .res-v { font: 500 clamp(40px, 4vw, 60px) / .95 var(--display); letter-spacing: -.035em; white-space: nowrap; font-variant-numeric: lining-nums proportional-nums; }
+  .res-v :global(.fn) { vertical-align: top; margin-top: .1em; }
+  .res-l { font: 400 13px / 18px var(--ui); color: var(--text-2); max-width: 32ch; }
+  .res-note { font: 400 13px / 18px var(--ui); color: var(--text-3); }
+
+  .ticks { display: grid; gap: 12px; font: 400 var(--fs-body) / 1.55 var(--ui); max-width: 64ch; }
+  .ticks li { position: relative; padding-left: 22px; }
+  .ticks li::before { content: ''; position: absolute; left: 0; top: .78em; width: 10px; height: 1px; background: var(--text-3); }
+
+  .decs { display: grid; gap: 28px; counter-reset: none; }
+  .dec { display: grid; gap: 8px; max-width: 64ch; }
+  .dec-t { font: 500 var(--fs-body) / 1.4 var(--ui); color: var(--text); }
+  .dec-d { font: 400 var(--fs-body) / 1.6 var(--ui); color: var(--text-2); text-wrap: pretty; }
+
+  .ev-link { display: inline-flex; margin-top: 16px; }
+  .sec--notes { padding-top: 72px; }
+
+  .sheet-foot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 88px 0 0; padding: 0 0 12px; }
+  .foot-a {
+    display: grid; gap: 10px; align-content: start; min-height: 120px; padding: 24px 28px; border-radius: 20px;
+    background: rgb(255 250 240 / .025); border: 1px solid var(--line); text-decoration: none;
+    transition: background-color var(--dur-fast) ease-out, border-color var(--dur-fast) ease-out, transform var(--dur-fast) ease-out;
+  }
+  .foot-a--next { text-align: right; justify-items: end; }
+  .foot-t { font: 500 17px / 1.35 var(--ui); color: var(--text); text-wrap: balance; }
+  .foot-a:active { transform: scale(.985); }
+  @media (hover: hover) and (pointer: fine) {
+    .foot-a:hover { background: rgb(255 250 240 / .05); border-color: var(--line-strong); }
+  }
+
+  @media (max-width: 899px) {
+    .sheet { border-radius: 24px 24px 0 0; padding: 8px 8px 0; }
+    .sheet-bar { top: 36px; height: 52px; padding: 0 4px; }
+    .sheet-close, .sheet-step-a { padding: 0 12px; }
+    .sheet-head { padding-top: 48px; }
+    .sheet-h { margin-top: 48px; }
+    .sheet-out { font-size: 17px; }
+    .fact, .fact--wide { grid-column: 1 / -1; }
+    .sec { padding-top: 52px; }
+    .sec-k, .sec-c { grid-column: 1 / -1; }
+    .sec-k { margin-bottom: 14px; }
+    .sheet-foot { grid-template-columns: 1fr; margin-top: 64px; }
+    .foot-a--next { text-align: left; justify-items: start; }
+  }
+  @media (max-width: 380px) {
+    .sheet-step-a { padding: 0 10px; }
+    .sheet-count { min-width: 40px; }
+  }
+</style>

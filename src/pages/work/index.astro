@@ -1,0 +1,15 @@
+---
+// /work/: the three cases with their charts, the capability filters and the growth-work ledger (Task 6).
+// Title and description come from src/lib/meta.ts (story.md section 6).
+import Base from '../../layouts/Base.astro';
+import WorkIndex from '../../components/WorkIndex.astro';
+---
+
+<Base path="/work/">
+  <WorkIndex />
+</Base>
+<script>
+  ((window as unknown as { __afterPaint: (() => void)[] }).__afterPaint ??= []).push(() => {
+    import('../../scripts/work').then((m) => m.start());
+  });
+</script>
