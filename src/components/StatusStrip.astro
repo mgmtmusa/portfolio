@@ -1,8 +1,7 @@
 ---
 import { site } from '../data/site';
-// The clock already says Melbourne, so the strip drops the availability sentence's first clause.
-// The full sentence appears verbatim in each page's next step.
-const availability = site.availability.replace(/^Based in Melbourne\.\s*/, '');
+// Settled sentences appear verbatim or not at all (principal, G4).
+const availability = site.availability;
 ---
 
 <div class="strip" transition:persist="strip">
@@ -14,15 +13,22 @@ const availability = site.availability.replace(/^Based in Melbourne\.\s*/, '');
 <style>
   .strip {
     position: fixed; inset: 0 0 auto; z-index: 40; height: 32px;
-    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px;
-    padding: 0 var(--margin);
-    font: 400 var(--fs-label) / 1 var(--mono); letter-spacing: .08em; color: var(--text-3);
+    display: flex; align-items: center; justify-content: space-between; gap: 32px;
+    padding: 0 var(--edge);
+    font: 400 var(--fs-label) / 1 var(--mono); letter-spacing: .08em; color: var(--text-2);
     pointer-events: none;
   }
+  .strip::before {
+    content: ''; position: absolute; inset: 0 0 -32px; z-index: -1; opacity: 0;
+    background: linear-gradient(#121110 0, rgb(18 17 16 / .86) 32px, transparent 64px);
+    transition: opacity 180ms ease-out;
+  }
+  .strip[data-scrolled]::before { opacity: 1; }
   .strip p { margin: 0; white-space: nowrap; }
-  .strip-clock { color: var(--text-2); font-variant-numeric: tabular-nums; display: inline-block; min-width: 8ch; }
-  .strip-c { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-  .strip-r { justify-self: end; }
-  @media (max-width: 1100px) { .strip { grid-template-columns: auto 1fr; } .strip-c { justify-self: end; text-align: right; } .strip-r { display: none; } }
-  @media (max-width: 639px) { .strip { height: 28px; gap: 16px; } }
+  .strip-clock { color: var(--text); font-variant-numeric: tabular-nums; display: inline-block; min-width: 8ch; }
+  .strip-c { transition: opacity var(--dur-ui) ease-out; }
+  .strip-r { transition: opacity var(--dur-ui) ease-out; }
+  .strip[data-avail-hidden] .strip-c, .strip[data-avail-hidden] .strip-r { opacity: 0; }
+  @media (max-width: 1179px) { .strip-c { display: none; } }
+  @media (max-width: 639px) { .strip { height: 28px; } .strip-r { display: none; } }
 </style>

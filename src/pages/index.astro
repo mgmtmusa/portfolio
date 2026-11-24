@@ -1,6 +1,7 @@
 ---
-// Home. The hero is a temporary stub while the principal picks a direction (Task 5 replaces it).
+// Home: direction C, "Cover line" (contract: .impeccable/surfaces/src-pages-index-astro.md).
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
 import Path from '../components/Path.astro';
 import Approach from '../components/Approach.astro';
 import CaseTeasers from '../components/CaseTeasers.astro';
@@ -20,10 +21,7 @@ const pageNotes = [
 ---
 
 <Base title={`${site.name}, ${site.role}`} path="/">
-  <section class="wrap" style="padding-top: 160px">
-    <h1 class="h1">{site.name}</h1>
-    <p class="lede" style="margin-top: 24px">{site.line}</p>
-  </section>
+  <Hero />
   <Path />
   <Approach />
   <CaseTeasers />
@@ -31,5 +29,5 @@ const pageNotes = [
   <section class="wrap" style="padding-top: 120px" aria-label="Notes"><Notes notes={pageNotes} /></section>
 </Base>
 <script>
-  import '../scripts/footnotes';
+  import '../scripts/hero';
 </script>

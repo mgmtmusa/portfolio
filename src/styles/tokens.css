@@ -34,6 +34,8 @@
 
   /* Layout */
   --margin: clamp(20px, 4vw, 58px);
+  --hero-u: min(calc(100vw / 1440), calc(100svh / 900), 1px);
+  --edge: max(clamp(20px, 4vw, 58px), calc((100vw - 1440 * var(--hero-u)) / 2 + 58 * var(--hero-u)));
   --gutter: 24px;
   --max: 1440px;
 

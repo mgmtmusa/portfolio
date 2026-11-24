@@ -21,7 +21,7 @@ const groups: CommandGroup[] = ['Pages', 'Cases', 'Actions'];
       enterkeyhint="go"
       placeholder="Search pages, cases and actions"
     />
-    <div id="cmdk-list" class="cmdk-list" role="listbox" aria-label="Results">
+    <div id="cmdk-list" class="cmdk-list" role="listbox" aria-label="Results" data-lenis-prevent>
       {
         groups.map((g) => (
           <div class="cmdk-group" role="group" aria-labelledby={`cmdk-g-${g}`} data-group={g}>

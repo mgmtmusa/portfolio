@@ -55,7 +55,7 @@ var bandF = [SIMD3<Float>?](repeating: nil, count: W*H)
 do {
   // "deep" = at least 2px inside the matte; the outer 2px of the subject still carry backdrop grey
   var deep = alpha
-  for _ in 0..<2 {
+  for _ in 0..<4 {
     var nx = deep
     for y in 0..<H { for x in 0..<W { var m = deep[y*W+x]
       if x > 0 { m = min(m, deep[y*W+x-1]) }; if x < W-1 { m = min(m, deep[y*W+x+1]) }
@@ -90,6 +90,8 @@ do { var s3 = SIMD3<Float>(0,0,0); var n: Float = 0
 let bayer: [Float] = [0,8,2,10, 12,4,14,6, 3,11,1,9, 15,7,13,5].map { ($0 / 15 - 0.5) * 2 / 255 }
 func smooth(_ e0: Float, _ e1: Float, _ x: Float) -> Float { let t = min(max((x-e0)/(e1-e0),0),1); return t*t*(3-2*t) }
 var out = [UInt8](repeating: 0, count: W*H*4)
+var fc = [SIMD3<Float>](repeating: .zero, count: W*H)
+var fa = [Float](repeating: 0, count: W*H)
 var prev = [UInt8](repeating: 0, count: W*H*4)
 var rng = SystemRandomNumberGenerator()
 for y in 0..<H { for x in 0..<W {
@@ -155,11 +157,61 @@ for y in 0..<H { for x in 0..<W {
   }
   if al < 0.05 { let d = bayer[(y % 4) * 4 + (x % 4)]; c += SIMD3(d, d, d); oa = max(0, min(1, oa + d * (oa > 0 && oa < 1 ? 1 : 0))) }
   c = simd_clamp(c, page, SIMD3<Float>(1,1,1))      // nothing darker than the page
+  fc[i] = c; fa[i] = oa
+}}
+// Stray backdrop specks on the hair outline (the matte counted white backdrop between strands as subject):
+// neutral, bright, within 3px of the wall, and not continuing inward as a real strand. Replace each with the
+// median of hair pixels 6 to 10px inward, kept within the wall's level + 4.
+do {
+  let lumOf = { (k: Int) -> Float in let v = fc[k]*fa[k] + page*(1-fa[k]); return (v.x*0.2126 + v.y*0.7152 + v.z*0.0722) * 255 }
+  var fixed = 0
+  for _ in 0..<4 {
+  for y in 90..<min(H, 380) { for x in 300..<min(W, 900) {
+    let k = y*W+x
+    let v = fc[k]*fa[k] + page*(1-fa[k])
+    let L = lumOf(k)
+    if L < 50 { continue }
+    let mx = max(v.x, v.y, v.z) * 255, mn = min(v.x, v.y, v.z) * 255
+    if mx - mn > 16 { continue }
+    // near the wall: some pixel within 3px is darker than L 24
+    var wallL: Float = 999; var nearWall = false
+    for dy in -3...3 { for dx in -3...3 { let yy = y+dy, xx = x+dx; if yy < 0 || yy >= H || xx < 0 || xx >= W { continue }
+      let l = lumOf(yy*W+xx); if l < 24 { nearWall = true; wallL = min(wallL, l) } } }
+    if !nearWall { continue }
+    // inward = away from the nearest wall pixel (searched outward 1 to 3px in eight directions)
+    var wd: (Int, Int)? = nil
+    search: for r in 1...3 { for (dx, dy) in [(r,0),(-r,0),(0,r),(0,-r),(r,r),(-r,-r),(r,-r),(-r,r)] {
+      let xx = min(W-1, max(0, x+dx)), yy = min(H-1, max(0, y+dy)); if lumOf(yy*W+xx) < 24 { wd = (dx, dy); break search } } }
+    guard let w0 = wd else { continue }
+    let sx: Int = w0.0 > 0 ? -1 : (w0.0 < 0 ? 1 : 0)
+    let sy: Int = w0.1 > 0 ? -1 : (w0.1 < 0 ? 1 : 0)
+    let ix = Float(sx), iy = Float(sy)
+    var carry = 0
+    for st in 2...8 { let xx = x + Int((ix*Float(st)).rounded()), yy = y + Int((iy*Float(st)).rounded())
+      if xx < 0 || xx >= W || yy < 0 || yy >= H { continue }
+      if lumOf(yy*W+xx) >= max(40, 0.55*L) { carry += 1 } }
+    if carry >= 3 { continue }
+    var samples: [SIMD3<Float>] = []
+    for st in 6...10 { let xx = x + Int((ix*Float(st)).rounded()), yy = y + Int((iy*Float(st)).rounded())
+      if xx < 0 || xx >= W || yy < 0 || yy >= H { continue }; samples.append(fc[yy*W+xx]) }
+    if samples.isEmpty { continue }
+    samples.sort { ($0.x+$0.y+$0.z) < ($1.x+$1.y+$1.z) }
+    var m = samples[samples.count/2]
+    let cap = (wallL + 4) / 255
+    let ml = m.x*0.2126 + m.y*0.7152 + m.z*0.0722
+    if ml > cap && ml > 0 { m *= cap / ml }
+    fc[k] = simd_clamp(m, page, SIMD3<Float>(1,1,1)); fa[k] = 1
+    fixed += 1
+  } }
+  }
+  print("stray specks fixed:", fixed)
+}
+for i in 0..<W*H {
+  let j = i*4, c = fc[i], oa = fa[i]
   out[j] = UInt8((c.x*oa*255).rounded()); out[j+1] = UInt8((c.y*oa*255).rounded()); out[j+2] = UInt8((c.z*oa*255).rounded()); out[j+3] = UInt8((oa*255).rounded())
-  // preview on page colour
   let pv = c*oa + page*(1-oa)
   prev[j] = UInt8((pv.x*255).rounded()); prev[j+1] = UInt8((pv.y*255).rounded()); prev[j+2] = UInt8((pv.z*255).rounded()); prev[j+3] = 255
-}}
+}
 func save(_ buf: [UInt8], _ path: String) {
   var b = buf
   let ctx = CGContext(data: &b, width: W, height: H, bitsPerComponent: 8, bytesPerRow: W*4, space: CGColorSpace(name: CGColorSpace.sRGB)!, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
