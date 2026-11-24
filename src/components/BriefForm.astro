@@ -1,0 +1,185 @@
+---
+// The brief (Task 8): four fields beside a one-page brief that typesets itself as you write.
+// Without JavaScript the form is a plain mailto: (F18) and the preview stays hidden; with it, src/scripts/brief.ts
+// fills the preview, shows the exact error copy and composes the subject and body with src/lib/brief.ts.
+// Slots: "head" (the page heading and intro) sits above the fields; the default slot sits under the send button.
+// From 1024px the form is `display: contents`, so the fields, the preview and the send block share one grid with
+// the heading and the preview can stand beside all of it, while the DOM keeps fields, preview, send in that order.
+import Footnote from './Footnote.astro';
+import Notes from './Notes.astro';
+import { BRIEF_LABELS } from '../lib/brief';
+import { site } from '../data/site';
+
+const fields = [
+  { key: 'who', label: 'Who you are', help: 'Your name, role and company.', required: true, max: 200, autocomplete: 'name' },
+  { key: 'role', label: 'The role or project', help: 'A line or two is enough. A link to the job ad works too.', required: true, max: 2000, multiline: true },
+  { key: 'timeline', label: 'Timeline (optional)', help: 'When you’re hoping to decide or start.', max: 200 },
+  { key: 'source', label: 'How you found me (optional)', help: 'For example, LinkedIn or a referral.', max: 200 },
+] as const;
+const lines = (['who', 'role', 'timeline', 'source'] as const).map((key) => ({ key, label: BRIEF_LABELS[key] }));
+// Scope note for the one figure on the page, the date: the settled reply time, verbatim, and its calendar.
+const replyNote = `${site.replyTime.text} Business days are Monday to Friday, Melbourne time.`;
+---
+
+<div class="brief edge">
+  <div class="brief-head"><slot name="head" /></div>
+
+  <form class="bf" method="post" enctype="text/plain" action={`mailto:${site.email}?subject=Brief`} data-brief data-email={site.email}>
+    <div class="bf-fields">
+      {
+        fields.map((f) => {
+          const id = `bf-${f.key}`;
+          const describedBy = 'required' in f ? `${id}-help ${id}-error` : `${id}-help`;
+          return (
+            <div class="bf-field">
+              <label class="bf-label" for={id}>{f.label}</label>
+              <p class="bf-help" id={`${id}-help`}>{f.help}</p>
+              {'required' in f && <p class="bf-error" id={`${id}-error`} data-error={f.key} hidden />}
+              {'multiline' in f ? (
+                <textarea class="bf-input bf-area" id={id} name={f.key} rows="4" maxlength={f.max} required aria-describedby={describedBy} />
+              ) : (
+                <input
+                  class="bf-input"
+                  id={id}
+                  name={f.key}
+                  type="text"
+                  maxlength={f.max}
+                  required={'required' in f}
+                  autocomplete={'autocomplete' in f ? f.autocomplete : 'off'}
+                  aria-describedby={describedBy}
+                />
+              )}
+            </div>
+          );
+        })
+      }
+    </div>
+
+    <section class="bp" aria-labelledby="bp-title" data-preview>
+      <div class="bp-body" data-preview-body>
+        <p class="bp-empty" data-empty>Your brief appears here as you type.</p>
+        <h2 class="bp-title" id="bp-title" data-title hidden>Brief</h2>
+        <dl class="bp-lines">
+          {
+            lines.map((l) => (
+              <div class="bp-line" data-line={l.key} hidden>
+                <dt>{l.label}</dt>
+                <dd data-text />
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <div class="bp-foot">
+        <p class="bp-reply">
+          <span class="bp-reply-a">Aim to reply by</span>
+          <span class="bp-reply-d"><span data-reply-date></span><Footnote n={1} id="fn-brief-reply" note={replyNote} /></span>
+        </p>
+        <Notes notes={[{ n: 1, id: 'fn-brief-reply', note: replyNote }]} />
+      </div>
+    </section>
+
+    <div class="bf-send">
+      <button class="cta bf-submit" type="submit">Email the brief</button>
+      <div class="bf-notes">
+        <p>Opens your email app with everything filled in. Nothing you type is stored on this site.</p>
+        <p>{site.replyTime.text}</p>
+      </div>
+    </div>
+  </form>
+
+  <div class="brief-after"><slot /></div>
+</div>
+
+<script>
+  ((window as unknown as { __afterPaint: (() => void)[] }).__afterPaint ??= []).push(() => {
+    import('../scripts/brief').then((m) => m.start());
+  });
+</script>
+
+<style>
+  .brief { --top: clamp(88px, 13vh, 150px); padding-top: var(--top); }
+
+  /* Fields: label, then the hint, then the error, then the input (the hint is read before typing). */
+  .bf-fields { display: grid; gap: 32px; margin-top: 56px; }
+  .bf-field { display: grid; }
+  .bf-label { font: 500 15px / 1.35 var(--ui); color: var(--text); }
+  .bf-help { margin-top: 4px; font: 400 14px / 1.45 var(--ui); color: var(--text-2); }
+  .bf-error { margin-top: 6px; font: 500 14px / 1.45 var(--ui); color: var(--text); }
+  .bf-input {
+    margin-top: 12px; width: 100%; min-height: 52px; padding: 13px 16px;
+    border: 1px solid var(--line-strong); border-radius: 14px; background: var(--raised);
+    font: 400 17px / 1.5 var(--ui); color: var(--text); /* 17px: phones never zoom on focus */
+    scroll-margin: 140px 0 120px;
+    transition: border-color var(--dur-fast) ease-out;
+  }
+  .bf-area { min-height: 136px; resize: vertical; }
+  @media (hover: hover) and (pointer: fine) { .bf-input:hover { border-color: rgb(243 238 228 / .24); } }
+  .bf-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .bf-input[aria-invalid='true'] { border-color: var(--text-2); }
+
+  /* The one-page brief. Solid (body text never sits on glass), lit like everything else from the top left. */
+  .bp {
+    container: brief / inline-size;
+    display: flex; flex-direction: column;
+    min-height: 340px; margin-top: 56px;
+    border: 1px solid var(--line); border-radius: 24px; background: var(--raised);
+    box-shadow: 10px 16px 40px rgb(var(--shadow-ink) / .42);
+  }
+  :global(html:not(.js)) .bp { display: none; }
+  .bp-body { flex: 1 1 auto; min-height: 0; position: relative; padding: 28px 24px 24px; overflow-wrap: anywhere; }
+  .bp-empty { max-width: 18ch; font: 480 24px / 1.15 var(--display); letter-spacing: -.02em; color: var(--text-2); }
+  .bp-title { font: 520 clamp(28px, 6.4cqi, 40px) / 1.06 var(--display); letter-spacing: -.028em; color: var(--text); }
+  .bp-lines { margin-top: 28px; }
+  .bp-line { display: grid; gap: 6px; padding: 16px 0 18px; border-top: 1px solid var(--line); }
+  .bp-line[hidden] { display: none; }
+  .bp-line dt { font: 400 13px / 18px var(--ui); color: var(--text-2); transition: color var(--dur-fast) ease-out; }
+  .bp-line[data-active] dt { color: var(--text); }
+  .bp-line dd { font: 400 17px / 1.55 var(--ui); color: var(--text); white-space: pre-line; }
+  @container brief (min-width: 500px) {
+    .bp-line { grid-template-columns: 148px minmax(0, 1fr); column-gap: 24px; align-items: baseline; }
+  }
+  .bp-foot { flex: none; padding: 20px 24px 24px; border-top: 1px solid var(--line); }
+  .bp:not([data-ready]) .bp-foot { visibility: hidden; } /* the date arrives with the script; its two lines are already reserved */
+  .bp-reply { font: 500 24px / 1.12 var(--display); letter-spacing: -.022em; color: var(--text); }
+  .bp-reply > span { display: block; }
+  .bp-reply-d { white-space: nowrap; }
+  .bp-reply :global(.fn) { vertical-align: top; margin-top: .12em; }
+  .bp-foot :global(.notes) { margin-top: 14px; }
+
+  .bf-send { display: grid; justify-items: start; gap: 16px; margin-top: 40px; }
+  .bf-submit { border: 0; cursor: pointer; }
+  .bf-notes { display: grid; gap: 4px; max-width: 46ch; font-size: var(--fs-small); color: var(--text-2); }
+
+  .brief-after { margin-top: 64px; }
+
+  @media (max-width: 1023px) {
+    .brief-head, .bf, .brief-after { max-width: 680px; }
+  }
+  @media (min-width: 640px) {
+    .bp-body { padding: 36px 32px 28px; }
+    .bp-foot { padding: 22px 32px 28px; }
+    .bp-reply { font-size: clamp(24px, 5cqi, 30px); }
+  }
+
+  /* Desktop: heading, fields, send and the alternatives on the left; the brief stands beside them, pinned. */
+  @media (min-width: 1024px) {
+    .brief {
+      --bp-max: calc(100svh - var(--top) - 96px); /* clears the dock at rest and when pinned */
+      display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); align-items: start;
+    }
+    .bf { display: contents; }
+    .brief-head, .bf-fields, .bf-send, .brief-after { grid-column: 1 / span 5; }
+    .brief-head { grid-row: 1; }
+    .bf-fields { grid-row: 2; }
+    .bf-send { grid-row: 3; }
+    .brief-after { grid-row: 4; }
+    .bp {
+      grid-column: 7 / -1; grid-row: 1 / span 4; margin-top: 0;
+      position: sticky; top: 64px; min-height: min(600px, var(--bp-max)); max-height: var(--bp-max);
+    }
+    .bp-body { overflow-y: auto; overscroll-behavior: contain; padding: 40px 40px 28px; }
+    .bp-body::-webkit-scrollbar-thumb { border-color: var(--raised); }
+    .bp-foot { padding: 24px 40px 32px; }
+  }
+</style>
