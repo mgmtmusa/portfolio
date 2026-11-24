@@ -61,3 +61,9 @@ Next steps, in order:
 - Reasons, rulings, accepted and modified changes, and guardrails G1 to G8: `docs/v3/reviews/phase2-directions.md` (end). Alternatives kept for the hand-back: A "Cover" (most editorial; the name behind his shoulder) and B "Stage" (the glass bar is the navigation), both in `prototypes/v3-hero/`.
 - The H1 is the name; the CMO's line keeps its weight by position and size and is read first.
 - Usage limit hit around 06:20 while the creative director (contract approval) and the head of engineering (Task 5 approval) were reviewing; both resumed after the 10:20 reset.
+
+## Phase 2 contract
+
+- Creative director on the contract: CHANGES REQUIRED, with the accent (#D8C69E) and the fonts (Host Grotesk 480 to 540, Geist, Geist Mono) approved and fixed. M8 approved (the slab is not shown under reduced transparency, contrast-more and forced colours). Corrections D1 to D10 (DESIGN.md), B1 to B6 (surface brief) and five portrait fixes applied; the portrait now measures all four edges within 1 level, a ±1 ordered dither in the falloff, no fringe on the left hair or beard (8 curl-highlight pixels up to 8 levels at the top right), R ≥ G ≥ B in the hair, black at 18,17,16. Sent back for the re-read.
+- Head of engineering: Task 5 (direction C) APPROVED as amended (H1 to L14).
+- Build started on Task 5: the bend field, hero maths and analytics filter, test first (50 unit tests, plus the reply-by suite under America/Los_Angeles).
