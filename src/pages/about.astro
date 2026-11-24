@@ -1,0 +1,127 @@
+---
+// About: the signed note (a draft for Musa’s approval), then recognition, the stage and the cause work.
+// Copy: docs/v3/story.md §6 and §7, verbatim. Facts: src/data/site.ts. Scope notes: src/data/notes.ts.
+import Base from '../layouts/Base.astro';
+import Footnote from '../components/Footnote.astro';
+import Notes from '../components/Notes.astro';
+import NextStep from '../components/NextStep.astro';
+import { site, recognition, experience, cases } from '../data/site';
+import { notes } from '../data/notes';
+
+const pageNotes = [
+  { n: 1, id: 'fn-ab-hub', note: notes.hub },
+  { n: 2, id: 'fn-ab-events', note: notes.events },
+  { n: 3, id: 'fn-ab-lil', note: notes.lil },
+];
+const [hub, events, lil] = pageNotes;
+
+// Each credit's wording from story.md §7; the title and year come from site.ts.
+const creditWording: Record<string, string> = {
+  'Asian Schools Debate Championship': 'Represented Bangladesh in Kuala Lumpur, among 28 nations.',
+  'UNESCO ASPnet ESD Summit': 'One of four delegates selected nationally, in Okayama, Japan, with 60 nations attending.',
+  'SBI-NUJS Parliamentary Debate': 'Represented Bangladesh in Kolkata.',
+  'Rajuk Nationals Debate Championship': 'Convener for 60 schools; raised $30K AUD.',
+};
+const credits = recognition.map((r) => ({ t: `${r.t}, ${r.when}.`, d: creditWording[r.t] ?? r.d }));
+
+const ambassador = experience.find((e) => e.org === 'University of Melbourne')!;
+const lilCase = cases.find((c) => c.slug === 'the-lil-project')!;
+const lilYears = experience.find((e) => e.org === lilCase.org)!.when;
+const lilResult = lilCase.results[0];
+---
+
+<Base
+  title={`About ${site.name}`}
+  description={`${site.name} moved from field sales into marketing. He has been an O-Week MC and represented Bangladesh at the 2014 Asian Schools Debate Championship.`}
+  path="/about/"
+>
+  <article class="ab edge" aria-labelledby="ab-h" aria-describedby="ab-draft">
+    <h1 class="ab-h" id="ab-h">About</h1>
+
+    <div class="ab-letter">
+      <p class="draft" id="ab-draft" data-draft>Draft for Musa’s approval</p>
+      <div class="note" data-note>
+        <p>
+          I started at Evitech in April 2021, selling solar, battery and HVAC upgrades door to door. Within six months I was a team
+          leader in B2B sales, <span data-fact="23">and in 2022 I helped establish the NSW hub and recruited 23 sales executives for it.<Footnote {...hub} /></span>
+        </p>
+        <p>
+          Since January 2023 I’ve run Evitech’s paid media, reporting and CRM. Because of those years in sales, I judge that work on
+          qualified leads and cost per acquisition. <span data-fact="18">I’ve also managed the <span class="nw">I Heart Uni</span> brand since 2021, and hosted
+          18 sold-out events as its lead MC across five cities.<Footnote {...events} /></span>
+        </p>
+        <p class="sig">{site.name}</p>
+      </div>
+    </div>
+
+    <div class="ab-more">
+      <section class="row" aria-labelledby="rec-h">
+        <h2 class="row-h" id="rec-h">Recognition</h2>
+        <ul class="row-b credits">
+          {credits.map((c) => <li><span class="credit-t">{c.t}</span> {c.d}</li>)}
+        </ul>
+      </section>
+
+      <section class="row" aria-labelledby="stage-h">
+        <h2 class="row-h" id="stage-h">The stage</h2>
+        <p class="row-b">MC for {ambassador.org} O-Week cohorts of 1,000 students, as a {ambassador.role}.</p>
+      </section>
+
+      <section class="row" aria-labelledby="cause-h">
+        <h2 class="row-h" id="cause-h">Cause work</h2>
+        <p class="row-b">
+          {lilCase.role} for <a class="inline" href={`/work/${lilCase.slug}/`}>{lilCase.org}</a>, {lilYears}: gigs with Melbourne
+          artists that fund school construction in Zambia. <span data-fact={lilResult.v}>{lilResult.v} {lilResult.l} ({lilResult.scope}).<Footnote {...lil} /></span>
+        </p>
+      </section>
+    </div>
+  </article>
+
+  <NextStep from="about" />
+  <section class="edge ab-notes" aria-label="Notes"><Notes notes={pageNotes} /></section>
+</Base>
+
+<style>
+  .ab { padding-top: clamp(128px, 20vh, 220px); }
+  .ab-h { font: 540 clamp(64px, 10vw, 160px) / .86 var(--display); letter-spacing: -.045em; color: var(--ink-mast); }
+
+  /* The letter: the draft label sits in the margin column, the note on columns 4 to 11. */
+  .ab-letter { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); margin-top: clamp(56px, 8vh, 96px); }
+  .draft {
+    grid-column: 1 / 4; align-self: start; justify-self: start; margin-top: .55em;
+    display: inline-flex; align-items: center; min-height: 28px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 999px;
+    font: 500 var(--fs-label) / 1 var(--mono); letter-spacing: .08em; color: var(--text-2); white-space: nowrap;
+  }
+  .note { grid-column: 4 / 12; font: 460 clamp(24px, 2.1vw, 30px) / 1.36 var(--display); letter-spacing: -.014em; color: var(--text); text-wrap: pretty; }
+  .note p + p { margin-top: .9em; }
+  .note :global(.fn) { font-size: 12px; }
+  /* A typeset signature until the handwriting scan arrives. */
+  .note p + p.sig {
+    width: max-content; margin-top: 1.6em; padding-top: 18px; border-top: 1px solid var(--line-strong);
+    font: 540 clamp(30px, 2.8vw, 42px) / 1 var(--display); letter-spacing: -.035em; color: var(--ink-mast);
+  }
+
+  /* Recognition, the stage and the cause work: a typeset ledger. */
+  .ab-more { margin-top: clamp(120px, 16vh, 176px); }
+  .row { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); padding: 28px 0 40px; border-top: 1px solid var(--line); }
+  .row-h { grid-column: 1 / 4; font: 520 clamp(24px, 2vw, 30px) / 1.1 var(--display); letter-spacing: -.02em; }
+  .row-b { grid-column: 4 / 13; color: var(--text-2); max-width: 75ch; text-wrap: pretty; padding-top: 4px; }
+  .credits li { padding: 12px 0; }
+  .credits li:first-child { padding-top: 0; }
+  .credits li + li { border-top: 1px solid var(--line); }
+  .credit-t { color: var(--text); font-weight: 500; }
+  .inline { color: var(--text); text-decoration-color: rgb(243 241 236 / .3); transition: text-decoration-color var(--dur-fast) ease-out; }
+  @media (hover: hover) and (pointer: fine) { .inline:hover { text-decoration-color: var(--accent); } }
+
+  .ab-notes { padding-top: 120px; }
+  .nw { white-space: nowrap; }
+  @media (max-width: 639px) { .ab { padding-top: 112px; } }
+
+  @media (max-width: 899px) {
+    .draft, .note, .row-h, .row-b { grid-column: 1 / -1; }
+    .draft { margin-top: 0; }
+    .note { margin-top: 24px; }
+    .row { row-gap: 16px; }
+    .row-b { padding-top: 0; }
+  }
+</style>

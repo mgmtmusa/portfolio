@@ -1,0 +1,74 @@
+---
+// The three cases on a company link, lead case first. Same figures, labels and notes as the home teasers
+// (docs/v3/story.md §3); each figure keeps its footnote marker.
+import Footnote from './Footnote.astro';
+import type { Case } from '../data/site';
+
+export type ForCase = {
+  c: Case;
+  figs: string[];
+  label: string;
+  caption?: string;
+  scope?: string;
+  note: { n: number; id: string; note: string };
+};
+interface Props { items: ForCase[] }
+const { items } = Astro.props;
+---
+
+<section class="fc edge" aria-labelledby="fc-h">
+  <h2 class="h1 fc-h" id="fc-h">Work</h2>
+  <ol class="fc-list">
+    {
+      items.map((t, i) => (
+        <li class:list={['fc-case', { 'fc-lead': i === 0 }]} data-case={t.c.slug}>
+          <p class="fc-fig" data-fact={t.figs.join(' ')}>
+            {t.figs.map((f, j) => (
+              <span class="fc-n">{f}{j === t.figs.length - 1 && <Footnote {...t.note} />}</span>
+            ))}
+          </p>
+          <div class="fc-body">
+            <p class="fc-label">
+              {t.label}
+              {t.scope && <span class="fc-scope label">{t.scope}</span>}
+            </p>
+            {t.caption && <p class="fc-cap">{t.caption}</p>}
+            <h3 class="fc-t">
+              <a href={`/work/${t.c.slug}/`} data-track="case_open" data-slug={t.c.slug} data-from="for">{t.c.org}: {t.c.title}</a>
+            </h3>
+            <p class="body fc-sum">{t.c.summary}</p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+  <a class="textlink fc-all" href="/work/">See all work and growth projects</a>
+</section>
+
+<style>
+  .fc { padding-top: 160px; }
+  .fc-list { margin-top: 56px; }
+  .fc-case { position: relative; display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); align-items: start; padding: 40px 0 48px; border-top: 1px solid var(--line); }
+  .fc-fig { grid-column: 1 / 7; display: flex; gap: .28em; font: 500 clamp(64px, 7.4vw, 112px) / .86 var(--display); letter-spacing: -.045em; white-space: nowrap; }
+  /* The lead case is the feature: its figure takes the full row, its story sits under it. */
+  .fc-lead .fc-fig { grid-column: 1 / -1; font-size: var(--fs-fig); }
+  .fc-lead .fc-body { grid-column: 1 / 9; padding-top: 28px; }
+  .fc-n { display: inline-flex; align-items: flex-start; }
+  .fc-n :global(.fn) { vertical-align: top; margin-top: .08em; margin-left: .04em; }
+  .fc-body { grid-column: 7 / 13; display: grid; gap: 12px; padding-top: 8px; }
+  .fc-label { font: 460 var(--fs-line) / 1.2 var(--display); letter-spacing: -.018em; text-wrap: balance; }
+  .fc-scope { display: inline-block; margin-left: 10px; vertical-align: middle; padding: 4px 8px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--text-2); }
+  .fc-cap { color: var(--text-2); font-size: 15px; }
+  .fc-t { margin-top: 16px; font: 500 17px / 1.35 var(--ui); }
+  .fc-t a { text-decoration: none; }
+  .fc-t a::after { content: ''; position: absolute; inset: 0; }
+  .fc-case :global(.fn) { position: relative; z-index: 2; }
+  @media (hover: hover) and (pointer: fine) { .fc-case:hover .fc-t a { text-decoration: underline; text-decoration-color: var(--accent); } }
+  .fc-sum { font-size: 15px; }
+  .fc-all { display: inline-flex; min-height: 44px; align-items: center; margin-top: 16px; }
+  @media (max-width: 899px) {
+    .fc-fig, .fc-body { grid-column: 1 / -1; }
+    .fc-fig, .fc-lead .fc-fig { font-size: clamp(52px, 16vw, 96px); flex-wrap: wrap; }
+    .fc-body { margin-top: 20px; }
+  }
+</style>

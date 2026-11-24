@@ -1,0 +1,79 @@
+---
+// Company links: /for/<key>/ tailors the intro line and the lead case for one target company.
+// Static, noindex, canonical to /, never in the sitemap. Unknown keys: Astro builds no page, and on Vercel
+// the vercel.json rewrite (/for/:key → /) serves the normal home page. Nothing is swapped after load.
+import Base from '../../layouts/Base.astro';
+import ForCases from '../../components/ForCases.astro';
+import Approach from '../../components/Approach.astro';
+import NextStep from '../../components/NextStep.astro';
+import Notes from '../../components/Notes.astro';
+import { site, cases, growthWork } from '../../data/site';
+import { notes } from '../../data/notes';
+import { forPages, type ForPage } from '../../data/for';
+
+export function getStaticPaths() {
+  return forPages(import.meta.env.VERCEL_ENV).map((page) => ({ params: { key: page.key }, props: { page } }));
+}
+
+const { page } = Astro.props as { page: ForPage };
+
+// The home teasers' figures and labels (story.md §3), all from site.ts.
+const paid = growthWork.find((g) => g.t === 'Paid acquisition')!;
+const ihu = cases.find((c) => c.slug === 'i-heart-uni')!;
+const lilResult = cases.find((c) => c.slug === 'the-lil-project')!.results[0];
+const teasers: Record<string, { figs: string[]; label: string; caption?: string; scope?: string; note: string }> = {
+  evitech: { figs: paid.results.map((r) => r.v), label: 'lower cost per acquisition, and more qualified leads', caption: paid.note, note: notes.evitechPair },
+  'i-heart-uni': { figs: [ihu.card.v], label: `${ihu.card.l}, across five cities`, note: notes.events },
+  'the-lil-project': { figs: [lilResult.v], label: lilResult.l, scope: lilResult.scope, note: notes.lil },
+};
+
+// Lead case first, then the others in their usual order.
+const lead = cases.find((c) => c.slug === page.leadCase) ?? cases[0];
+const items = [lead, ...cases.filter((c) => c !== lead)].map((c, i) => ({
+  c,
+  ...teasers[c.slug],
+  note: { n: i + 1, id: `fn-for-${c.slug}`, note: teasers[c.slug].note },
+}));
+const pageNotes = items.map((t) => t.note);
+---
+
+<Base title={page.ogTitle} ogTitle={page.ogTitle} path={`/for/${page.key}/`} canonicalPath="/" noindex>
+  <header class="fr edge" data-for-key={page.key}>
+    <h1 class="fr-name">{site.name}</h1>
+    <p class="fr-role">{site.role}, {site.city}</p>
+    <p class="fr-intro">{page.intro}</p>
+    <div class="fr-acts">
+      <a class="cta" href="/contact/" data-track="contact_click" data-from="for">Get in touch</a>
+      <a class="textlink" href={site.cv} download data-track="cv_download" data-from="for">Download CV (PDF)</a>
+    </div>
+  </header>
+  <ForCases items={items} />
+  <Approach />
+  <NextStep from="for" />
+  <section class="edge fr-notes" aria-label="Notes"><Notes notes={pageNotes} /></section>
+</Base>
+
+<script>
+  // for_view {key}: the key only, never anything a visitor typed. Only where analytics is on (Vercel).
+  const send = async () => {
+    const el = document.querySelector<HTMLElement>('[data-for-key]:not([data-viewed])');
+    if (!el || document.documentElement.dataset.analytics !== 'on') return;
+    el.dataset.viewed = '';
+    const [{ track }, { safeProps }] = await Promise.all([import('@vercel/analytics'), import('../../lib/analytics')]);
+    track('for_view', safeProps({ key: el.dataset.forKey }));
+  };
+  send();
+  document.addEventListener('astro:page-load', send);
+</script>
+
+<style>
+  .fr { padding-top: clamp(128px, 20vh, 220px); display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); }
+  .fr-name { grid-column: 1 / -1; font: 540 clamp(56px, 9vw, 152px) / .86 var(--display); letter-spacing: -.045em; color: var(--ink-mast); text-wrap: balance; }
+  .fr-role { grid-column: 1 / -1; margin-top: 28px; font: 500 15px / 1.3 var(--ui); color: var(--text-2); }
+  .fr-intro { grid-column: 1 / 9; margin-top: 20px; font: 480 clamp(26px, 2.8vw, 40px) / 1.1 var(--display); letter-spacing: -.022em; text-wrap: balance; }
+  .fr-acts { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; margin-top: 36px; }
+  .fr-acts .textlink { display: inline-flex; min-height: 44px; align-items: center; }
+  .fr-notes { padding-top: 120px; }
+  @media (max-width: 899px) { .fr-intro { grid-column: 1 / -1; } }
+  @media (max-width: 639px) { .fr { padding-top: 112px; } }
+</style>

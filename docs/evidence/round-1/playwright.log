@@ -1,0 +1,169 @@
+
+Running 164 tests using 5 workers
+
+[1/164] [chromium] › tests/e2e/bend.spec.ts:70:3 › the slab bend (brief 2.5, point 4) › without canvas the plain slab stays, with no bend and no console error
+[2/164] [chromium] › tests/e2e/bend.spec.ts:10:3 › the slab bend (brief 2.5, point 4) › bends at the edges and stays neutral in the middle
+[3/164] [chromium] › tests/e2e/bend.spec.ts:81:3 › the slab bend (brief 2.5, point 4) › on touch the bend is off while the slab moves and back once it settles
+[4/164] [chromium] › tests/e2e/bend.spec.ts:38:3 › the slab bend (brief 2.5, point 4) › registration: at strength 0 the copy sits on the page within 2 device px
+[5/164] [chromium] › tests/e2e/glass.spec.ts:20:3 › glass budget and fallbacks › at most 4 blurred surfaces: rest, mid-flight, docked, ⌘K open with a toast
+[6/164] [chromium] › tests/e2e/glass.spec.ts:37:3 › glass budget and fallbacks › on phones every blurred element is fixed or small
+[7/164] [chromium] › tests/e2e/glass.spec.ts:51:3 › glass budget and fallbacks › reduced transparency (Chromium, through CDP): solid chrome, no slab, the name fully visible
+[8/164] [chromium] › tests/e2e/glass.spec.ts:64:3 › glass budget and fallbacks › high contrast and forced colours: no slab
+[9/164] [chromium] › tests/e2e/home.spec.ts:5:3 › home hero (direction C) › the name is the H1; role, line and actions are on the first screen
+[10/164] [chromium] › tests/e2e/home.spec.ts:16:3 › home hero (direction C) › proof: three footnoted figures, the pair carries its qualifier and spend
+[11/164] [chromium] › tests/e2e/home.spec.ts:27:3 › home hero (direction C) › a footnote opens its scope note on click and with the keyboard
+[12/164] [chromium] › tests/e2e/home.spec.ts:44:3 › home hero (direction C) › availability and reply time appear verbatim
+[13/164] [chromium] › tests/e2e/home.spec.ts:50:3 › home hero (direction C) › no sideways scroll
+[14/164] [chromium] › tests/e2e/home.spec.ts:55:3 › home hero (direction C) › the portrait never renders taller than 620px
+[15/164] [chromium] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1440×789: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[16/164] [chromium] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1280×720: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[17/164] [chromium] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1024×768: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[18/164] [chromium] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1920×1080: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[19/164] [chromium] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 2560×1440: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[20/164] [chromium] › tests/e2e/home.spec.ts:74:5 › home hero at other sizes › phone 375px wide: no sideways scroll, CTA in the first screen
+[21/164] [chromium] › tests/e2e/home.spec.ts:74:5 › home hero at other sizes › phone 390px wide: no sideways scroll, CTA in the first screen
+[22/164] [chromium] › tests/e2e/home.spec.ts:74:5 › home hero at other sizes › phone 412px wide: no sideways scroll, CTA in the first screen
+[23/164] [chromium] › tests/e2e/home.spec.ts:85:3 › scene and dock › rest: the dock is hidden and inert; Tab never reaches it
+[24/164] [chromium] › tests/e2e/home.spec.ts:99:3 › scene and dock › past 90px the slab settles into the dock; below 60px it comes back
+[25/164] [chromium] › tests/e2e/home.spec.ts:113:3 › scene and dock › the dock’s Get in touch hides while the hero CTA is in view
+[26/164] [chromium] › tests/e2e/home.spec.ts:123:3 › scene and dock › the strip’s availability yields while the hero shows it
+[27/164] [chromium] › tests/e2e/home.spec.ts:131:3 › scene and dock › coming back to home scrolled past 90px shows the dock, not the slab
+[28/164] [chromium] › tests/e2e/home.spec.ts:145:3 › slab drag › drags 1:1 and keeps the grab offset; rubber-bands past line 1; lands clear of glyph edges
+[29/164] [chromium] › tests/e2e/home.spec.ts:179:3 › slab drag › press scales the slab and it returns
+[30/164] [chromium] › tests/e2e/home.spec.ts:193:3 › slab drag › a vertical swipe that starts on the slab scrolls the page
+[31/164] [chromium] › tests/e2e/hygiene.spec.ts:9:3 › copy hygiene on /
+[32/164] [chromium] › tests/e2e/hygiene.spec.ts:20:3 › axe finds no WCAG 2.2 AA violations on /
+[33/164] [chromium] › tests/e2e/hygiene.spec.ts:9:3 › copy hygiene on /missing-page/
+[34/164] [chromium] › tests/e2e/hygiene.spec.ts:20:3 › axe finds no WCAG 2.2 AA violations on /missing-page/
+[35/164] [chromium] › tests/e2e/hygiene.spec.ts:29:1 › the home page has no console errors
+[36/164] [chromium] › tests/e2e/hygiene.spec.ts:36:1 › llms.txt carries every case with its scope labels
+[37/164] [chromium] › tests/e2e/hygiene.spec.ts:44:1 › reduced motion: nothing animates, the slab sits at rest and scrolls with the hero
+[38/164] [chromium] › tests/e2e/hygiene.spec.ts:56:1 › no JavaScript: every hero fact is in the HTML and the dock is visible
+[39/164] [chromium] › tests/e2e/layout.spec.ts:5:3 › layout guardrails › G1: the masthead is two lines inside the margins (desktop)
+[40/164] [chromium] › tests/e2e/layout.spec.ts:22:3 › layout guardrails › G6: no line of the pitch or the availability block ends on a single word
+[41/164] [chromium] › tests/e2e/layout.spec.ts:43:3 › layout guardrails › G3: the strip lines up with the page edge at 1920
+[42/164] [webkit] › tests/e2e/bend.spec.ts:10:3 › the slab bend (brief 2.5, point 4) › bends at the edges and stays neutral in the middle
+[43/164] [webkit] › tests/e2e/bend.spec.ts:38:3 › the slab bend (brief 2.5, point 4) › registration: at strength 0 the copy sits on the page within 2 device px
+[44/164] [webkit] › tests/e2e/bend.spec.ts:70:3 › the slab bend (brief 2.5, point 4) › without canvas the plain slab stays, with no bend and no console error
+[45/164] [webkit] › tests/e2e/bend.spec.ts:81:3 › the slab bend (brief 2.5, point 4) › on touch the bend is off while the slab moves and back once it settles
+[46/164] [webkit] › tests/e2e/glass.spec.ts:37:3 › glass budget and fallbacks › on phones every blurred element is fixed or small
+[47/164] [webkit] › tests/e2e/glass.spec.ts:20:3 › glass budget and fallbacks › at most 4 blurred surfaces: rest, mid-flight, docked, ⌘K open with a toast
+[48/164] [webkit] › tests/e2e/glass.spec.ts:51:3 › glass budget and fallbacks › reduced transparency (Chromium, through CDP): solid chrome, no slab, the name fully visible
+[49/164] [webkit] › tests/e2e/glass.spec.ts:64:3 › glass budget and fallbacks › high contrast and forced colours: no slab
+[50/164] [webkit] › tests/e2e/home.spec.ts:5:3 › home hero (direction C) › the name is the H1; role, line and actions are on the first screen
+[51/164] [webkit] › tests/e2e/home.spec.ts:16:3 › home hero (direction C) › proof: three footnoted figures, the pair carries its qualifier and spend
+[52/164] [webkit] › tests/e2e/home.spec.ts:27:3 › home hero (direction C) › a footnote opens its scope note on click and with the keyboard
+[53/164] [webkit] › tests/e2e/home.spec.ts:44:3 › home hero (direction C) › availability and reply time appear verbatim
+[54/164] [webkit] › tests/e2e/home.spec.ts:50:3 › home hero (direction C) › no sideways scroll
+[55/164] [webkit] › tests/e2e/home.spec.ts:55:3 › home hero (direction C) › the portrait never renders taller than 620px
+[56/164] [webkit] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1440×789: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[57/164] [webkit] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1280×720: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[58/164] [webkit] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1024×768: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[59/164] [webkit] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1920×1080: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[60/164] [webkit] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 2560×1440: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[61/164] [webkit] › tests/e2e/home.spec.ts:74:5 › home hero at other sizes › phone 375px wide: no sideways scroll, CTA in the first screen
+[62/164] [webkit] › tests/e2e/home.spec.ts:74:5 › home hero at other sizes › phone 390px wide: no sideways scroll, CTA in the first screen
+[63/164] [webkit] › tests/e2e/home.spec.ts:74:5 › home hero at other sizes › phone 412px wide: no sideways scroll, CTA in the first screen
+[64/164] [webkit] › tests/e2e/home.spec.ts:85:3 › scene and dock › rest: the dock is hidden and inert; Tab never reaches it
+[65/164] [webkit] › tests/e2e/home.spec.ts:99:3 › scene and dock › past 90px the slab settles into the dock; below 60px it comes back
+[66/164] [webkit] › tests/e2e/home.spec.ts:113:3 › scene and dock › the dock’s Get in touch hides while the hero CTA is in view
+[67/164] [webkit] › tests/e2e/home.spec.ts:123:3 › scene and dock › the strip’s availability yields while the hero shows it
+[68/164] [webkit] › tests/e2e/home.spec.ts:131:3 › scene and dock › coming back to home scrolled past 90px shows the dock, not the slab
+[69/164] [webkit] › tests/e2e/home.spec.ts:145:3 › slab drag › drags 1:1 and keeps the grab offset; rubber-bands past line 1; lands clear of glyph edges
+[70/164] [webkit] › tests/e2e/home.spec.ts:179:3 › slab drag › press scales the slab and it returns
+[71/164] [webkit] › tests/e2e/home.spec.ts:193:3 › slab drag › a vertical swipe that starts on the slab scrolls the page
+[72/164] [webkit] › tests/e2e/hygiene.spec.ts:9:3 › copy hygiene on /
+[73/164] [webkit] › tests/e2e/hygiene.spec.ts:20:3 › axe finds no WCAG 2.2 AA violations on /
+[74/164] [webkit] › tests/e2e/hygiene.spec.ts:9:3 › copy hygiene on /missing-page/
+[75/164] [webkit] › tests/e2e/hygiene.spec.ts:20:3 › axe finds no WCAG 2.2 AA violations on /missing-page/
+[76/164] [webkit] › tests/e2e/hygiene.spec.ts:29:1 › the home page has no console errors
+[77/164] [webkit] › tests/e2e/hygiene.spec.ts:36:1 › llms.txt carries every case with its scope labels
+[78/164] [webkit] › tests/e2e/hygiene.spec.ts:44:1 › reduced motion: nothing animates, the slab sits at rest and scrolls with the hero
+[79/164] [webkit] › tests/e2e/hygiene.spec.ts:56:1 › no JavaScript: every hero fact is in the HTML and the dock is visible
+[80/164] [webkit] › tests/e2e/layout.spec.ts:5:3 › layout guardrails › G1: the masthead is two lines inside the margins (desktop)
+[81/164] [webkit] › tests/e2e/layout.spec.ts:22:3 › layout guardrails › G6: no line of the pitch or the availability block ends on a single word
+[82/164] [webkit] › tests/e2e/layout.spec.ts:43:3 › layout guardrails › G3: the strip lines up with the page edge at 1920
+[83/164] [mobile-chrome] › tests/e2e/bend.spec.ts:10:3 › the slab bend (brief 2.5, point 4) › bends at the edges and stays neutral in the middle
+[84/164] [mobile-chrome] › tests/e2e/bend.spec.ts:38:3 › the slab bend (brief 2.5, point 4) › registration: at strength 0 the copy sits on the page within 2 device px
+[85/164] [mobile-chrome] › tests/e2e/bend.spec.ts:70:3 › the slab bend (brief 2.5, point 4) › without canvas the plain slab stays, with no bend and no console error
+[86/164] [mobile-chrome] › tests/e2e/bend.spec.ts:81:3 › the slab bend (brief 2.5, point 4) › on touch the bend is off while the slab moves and back once it settles
+[87/164] [mobile-chrome] › tests/e2e/glass.spec.ts:20:3 › glass budget and fallbacks › at most 4 blurred surfaces: rest, mid-flight, docked, ⌘K open with a toast
+[88/164] [mobile-chrome] › tests/e2e/glass.spec.ts:37:3 › glass budget and fallbacks › on phones every blurred element is fixed or small
+[89/164] [mobile-chrome] › tests/e2e/glass.spec.ts:51:3 › glass budget and fallbacks › reduced transparency (Chromium, through CDP): solid chrome, no slab, the name fully visible
+[90/164] [mobile-chrome] › tests/e2e/glass.spec.ts:64:3 › glass budget and fallbacks › high contrast and forced colours: no slab
+[91/164] [mobile-chrome] › tests/e2e/home.spec.ts:5:3 › home hero (direction C) › the name is the H1; role, line and actions are on the first screen
+[92/164] [mobile-chrome] › tests/e2e/home.spec.ts:16:3 › home hero (direction C) › proof: three footnoted figures, the pair carries its qualifier and spend
+[93/164] [mobile-chrome] › tests/e2e/home.spec.ts:27:3 › home hero (direction C) › a footnote opens its scope note on click and with the keyboard
+[94/164] [mobile-chrome] › tests/e2e/home.spec.ts:44:3 › home hero (direction C) › availability and reply time appear verbatim
+[95/164] [mobile-chrome] › tests/e2e/home.spec.ts:50:3 › home hero (direction C) › no sideways scroll
+[96/164] [mobile-chrome] › tests/e2e/home.spec.ts:55:3 › home hero (direction C) › the portrait never renders taller than 620px
+[97/164] [mobile-chrome] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1440×789: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[98/164] [mobile-chrome] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1280×720: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[99/164] [mobile-chrome] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1024×768: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[100/164] [mobile-chrome] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1920×1080: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[101/164] [mobile-chrome] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 2560×1440: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[102/164] [mobile-chrome] › tests/e2e/home.spec.ts:74:5 › home hero at other sizes › phone 375px wide: no sideways scroll, CTA in the first screen
+[103/164] [mobile-chrome] › tests/e2e/home.spec.ts:74:5 › home hero at other sizes › phone 390px wide: no sideways scroll, CTA in the first screen
+[104/164] [mobile-chrome] › tests/e2e/home.spec.ts:74:5 › home hero at other sizes › phone 412px wide: no sideways scroll, CTA in the first screen
+[105/164] [mobile-chrome] › tests/e2e/home.spec.ts:85:3 › scene and dock › rest: the dock is hidden and inert; Tab never reaches it
+[106/164] [mobile-chrome] › tests/e2e/home.spec.ts:99:3 › scene and dock › past 90px the slab settles into the dock; below 60px it comes back
+[107/164] [mobile-chrome] › tests/e2e/home.spec.ts:113:3 › scene and dock › the dock’s Get in touch hides while the hero CTA is in view
+[108/164] [mobile-chrome] › tests/e2e/home.spec.ts:123:3 › scene and dock › the strip’s availability yields while the hero shows it
+[109/164] [mobile-chrome] › tests/e2e/home.spec.ts:131:3 › scene and dock › coming back to home scrolled past 90px shows the dock, not the slab
+[110/164] [mobile-chrome] › tests/e2e/home.spec.ts:145:3 › slab drag › drags 1:1 and keeps the grab offset; rubber-bands past line 1; lands clear of glyph edges
+[111/164] [mobile-chrome] › tests/e2e/home.spec.ts:179:3 › slab drag › press scales the slab and it returns
+[112/164] [mobile-chrome] › tests/e2e/home.spec.ts:193:3 › slab drag › a vertical swipe that starts on the slab scrolls the page
+[113/164] [mobile-chrome] › tests/e2e/hygiene.spec.ts:9:3 › copy hygiene on /
+[114/164] [mobile-chrome] › tests/e2e/hygiene.spec.ts:20:3 › axe finds no WCAG 2.2 AA violations on /
+[115/164] [mobile-chrome] › tests/e2e/hygiene.spec.ts:9:3 › copy hygiene on /missing-page/
+[116/164] [mobile-chrome] › tests/e2e/hygiene.spec.ts:20:3 › axe finds no WCAG 2.2 AA violations on /missing-page/
+[117/164] [mobile-chrome] › tests/e2e/hygiene.spec.ts:29:1 › the home page has no console errors
+[118/164] [mobile-chrome] › tests/e2e/hygiene.spec.ts:36:1 › llms.txt carries every case with its scope labels
+[119/164] [mobile-chrome] › tests/e2e/hygiene.spec.ts:44:1 › reduced motion: nothing animates, the slab sits at rest and scrolls with the hero
+[120/164] [mobile-chrome] › tests/e2e/hygiene.spec.ts:56:1 › no JavaScript: every hero fact is in the HTML and the dock is visible
+[121/164] [mobile-chrome] › tests/e2e/layout.spec.ts:5:3 › layout guardrails › G1: the masthead is two lines inside the margins (desktop)
+[122/164] [mobile-chrome] › tests/e2e/layout.spec.ts:22:3 › layout guardrails › G6: no line of the pitch or the availability block ends on a single word
+[123/164] [mobile-chrome] › tests/e2e/layout.spec.ts:43:3 › layout guardrails › G3: the strip lines up with the page edge at 1920
+[124/164] [mobile-safari] › tests/e2e/bend.spec.ts:10:3 › the slab bend (brief 2.5, point 4) › bends at the edges and stays neutral in the middle
+[125/164] [mobile-safari] › tests/e2e/bend.spec.ts:38:3 › the slab bend (brief 2.5, point 4) › registration: at strength 0 the copy sits on the page within 2 device px
+[126/164] [mobile-safari] › tests/e2e/bend.spec.ts:70:3 › the slab bend (brief 2.5, point 4) › without canvas the plain slab stays, with no bend and no console error
+[127/164] [mobile-safari] › tests/e2e/bend.spec.ts:81:3 › the slab bend (brief 2.5, point 4) › on touch the bend is off while the slab moves and back once it settles
+[128/164] [mobile-safari] › tests/e2e/glass.spec.ts:20:3 › glass budget and fallbacks › at most 4 blurred surfaces: rest, mid-flight, docked, ⌘K open with a toast
+[129/164] [mobile-safari] › tests/e2e/glass.spec.ts:37:3 › glass budget and fallbacks › on phones every blurred element is fixed or small
+[130/164] [mobile-safari] › tests/e2e/glass.spec.ts:51:3 › glass budget and fallbacks › reduced transparency (Chromium, through CDP): solid chrome, no slab, the name fully visible
+[131/164] [mobile-safari] › tests/e2e/glass.spec.ts:64:3 › glass budget and fallbacks › high contrast and forced colours: no slab
+[132/164] [mobile-safari] › tests/e2e/home.spec.ts:5:3 › home hero (direction C) › the name is the H1; role, line and actions are on the first screen
+[133/164] [mobile-safari] › tests/e2e/home.spec.ts:16:3 › home hero (direction C) › proof: three footnoted figures, the pair carries its qualifier and spend
+[134/164] [mobile-safari] › tests/e2e/home.spec.ts:27:3 › home hero (direction C) › a footnote opens its scope note on click and with the keyboard
+[135/164] [mobile-safari] › tests/e2e/home.spec.ts:44:3 › home hero (direction C) › availability and reply time appear verbatim
+[136/164] [mobile-safari] › tests/e2e/home.spec.ts:50:3 › home hero (direction C) › no sideways scroll
+[137/164] [mobile-safari] › tests/e2e/home.spec.ts:55:3 › home hero (direction C) › the portrait never renders taller than 620px
+[138/164] [mobile-safari] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1440×789: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[139/164] [mobile-safari] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1280×720: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[140/164] [mobile-safari] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1024×768: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[141/164] [mobile-safari] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 1920×1080: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[142/164] [mobile-safari] › tests/e2e/home.spec.ts:64:5 › home hero at other sizes › fits 2560×1440: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px
+[143/164] [mobile-safari] › tests/e2e/home.spec.ts:74:5 › home hero at other sizes › phone 375px wide: no sideways scroll, CTA in the first screen
+[144/164] [mobile-safari] › tests/e2e/home.spec.ts:74:5 › home hero at other sizes › phone 390px wide: no sideways scroll, CTA in the first screen
+[145/164] [mobile-safari] › tests/e2e/home.spec.ts:74:5 › home hero at other sizes › phone 412px wide: no sideways scroll, CTA in the first screen
+[146/164] [mobile-safari] › tests/e2e/home.spec.ts:85:3 › scene and dock › rest: the dock is hidden and inert; Tab never reaches it
+[147/164] [mobile-safari] › tests/e2e/home.spec.ts:99:3 › scene and dock › past 90px the slab settles into the dock; below 60px it comes back
+[148/164] [mobile-safari] › tests/e2e/home.spec.ts:113:3 › scene and dock › the dock’s Get in touch hides while the hero CTA is in view
+[149/164] [mobile-safari] › tests/e2e/home.spec.ts:123:3 › scene and dock › the strip’s availability yields while the hero shows it
+[150/164] [mobile-safari] › tests/e2e/home.spec.ts:131:3 › scene and dock › coming back to home scrolled past 90px shows the dock, not the slab
+[151/164] [mobile-safari] › tests/e2e/home.spec.ts:145:3 › slab drag › drags 1:1 and keeps the grab offset; rubber-bands past line 1; lands clear of glyph edges
+[152/164] [mobile-safari] › tests/e2e/home.spec.ts:179:3 › slab drag › press scales the slab and it returns
+[153/164] [mobile-safari] › tests/e2e/home.spec.ts:193:3 › slab drag › a vertical swipe that starts on the slab scrolls the page
+[154/164] [mobile-safari] › tests/e2e/hygiene.spec.ts:9:3 › copy hygiene on /
+[155/164] [mobile-safari] › tests/e2e/hygiene.spec.ts:20:3 › axe finds no WCAG 2.2 AA violations on /
+[156/164] [mobile-safari] › tests/e2e/hygiene.spec.ts:9:3 › copy hygiene on /missing-page/
+[157/164] [mobile-safari] › tests/e2e/hygiene.spec.ts:20:3 › axe finds no WCAG 2.2 AA violations on /missing-page/
+[158/164] [mobile-safari] › tests/e2e/hygiene.spec.ts:29:1 › the home page has no console errors
+[159/164] [mobile-safari] › tests/e2e/hygiene.spec.ts:36:1 › llms.txt carries every case with its scope labels
+[160/164] [mobile-safari] › tests/e2e/hygiene.spec.ts:44:1 › reduced motion: nothing animates, the slab sits at rest and scrolls with the hero
+[161/164] [mobile-safari] › tests/e2e/hygiene.spec.ts:56:1 › no JavaScript: every hero fact is in the HTML and the dock is visible
+[162/164] [mobile-safari] › tests/e2e/layout.spec.ts:5:3 › layout guardrails › G1: the masthead is two lines inside the margins (desktop)
+[163/164] [mobile-safari] › tests/e2e/layout.spec.ts:22:3 › layout guardrails › G6: no line of the pitch or the availability block ends on a single word
+[164/164] [mobile-safari] › tests/e2e/layout.spec.ts:43:3 › layout guardrails › G3: the strip lines up with the page edge at 1920
+  34 skipped
+  130 passed (1.2m)
