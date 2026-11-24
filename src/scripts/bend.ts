@@ -43,7 +43,7 @@ function baselineOf(line: HTMLElement): number {
 }
 
 /** Glyph boxes of a line, in viewport coordinates. */
-export type Glyph = { ch: string; left: number; right: number; top: number };
+export type Glyph = { ch: string; left: number; right: number; top: number; bottom: number };
 export function glyphBoxes(line: HTMLElement): Glyph[] {
   const out: Glyph[] = [];
   const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
@@ -54,7 +54,7 @@ export function glyphBoxes(line: HTMLElement): Glyph[] {
       r.setEnd(node, i + 1);
       const b = r.getBoundingClientRect();
       if (!b.width && node.data[i] !== ' ') continue;
-      out.push({ ch: node.data[i], left: b.left, right: b.right, top: b.top });
+      out.push({ ch: node.data[i], left: b.left, right: b.right, top: b.top, bottom: b.bottom });
     }
   }
   return out;
@@ -186,5 +186,20 @@ export function buildBend(
       svg.remove();
       pane.dataset.bend = 'off';
     },
+  };
+}
+
+// Test-only hook (perf gate, head of engineering finding 9): a cold build with the map cache cleared. Absent in production.
+if (typeof window !== 'undefined' && (window as unknown as { __v3test?: boolean }).__v3test) {
+  (window as unknown as { __bendBuild?: () => number | null }).__bendBuild = () => {
+    const hero = document.querySelector<HTMLElement>('[data-hero]');
+    const slab = hero?.querySelector<HTMLElement>('[data-slab]');
+    const img = hero?.querySelector<HTMLImageElement>('[data-portrait]');
+    if (!hero || !slab || !img) return null;
+    const phone = innerWidth < 700;
+    maps.clear();
+    const t0 = performance.now();
+    buildBend(slab, hero, { lines: [...hero.querySelectorAll<HTMLElement>('.mast [data-line]')], images: [img], band: phone ? 20 : 40, strength: phone ? 9 : 18 });
+    return performance.now() - t0;
   };
 }

@@ -2,17 +2,58 @@
 
 export type Rect = { x: number; y: number; w: number; h: number };
 
-/** Nearest x (within bounds) where both vertical edges of a pane of width w leave every glyph fragment ≥ minFrag. */
+const EPS = 1e-3;
+/** Masthead tracking is negative, so neighbouring glyph boxes overlap slightly: a cut leaving under 0.5px is no cut. */
+const TOUCH = 0.5;
+
+/** Horizontal glyph intervals, relative to `originX`, of every glyph whose box overlaps the band top..bottom (any row). */
+export function glyphsUnder(boxes: { left: number; right: number; top: number; bottom: number }[], top: number, bottom: number, originX = 0): [number, number][] {
+  return boxes.filter((g) => g.right > g.left && g.top < bottom && g.bottom > top).map((g) => [g.left - originX, g.right - originX]);
+}
+
+/**
+ * The narrowest glyph fragment either vertical edge of a pane at x (width w) leaves: Infinity when neither edge
+ * cuts a glyph. An edge on a glyph boundary (or within 0.5px of it) cuts nothing.
+ */
+export function worstFragment(x: number, w: number, glyphs: [number, number][]): number {
+  let worst = Infinity;
+  for (const e of [x, x + w]) for (const [a, b] of glyphs) if (e > a + TOUCH && e < b - TOUCH) worst = Math.min(worst, e - a, b - e);
+  return worst;
+}
+
+/** True when both vertical edges leave every glyph fragment at least minFrag wide. */
+export const edgesClear = (x: number, w: number, glyphs: [number, number][], minFrag: number) => worstFragment(x, w, glyphs) >= minFrag - EPS;
+
+/**
+ * Nearest x (within bounds) where both vertical edges of a pane of width w leave every glyph fragment ≥ minFrag.
+ * Exact: the blocked positions are open intervals, so the answer is x itself, a bound or an interval end.
+ * When no position in bounds is clear, returns the one whose worst fragment is widest (nearest x on ties).
+ */
 export function snapClearX(x: number, w: number, glyphs: [number, number][], minFrag: number, bounds: [number, number]): number {
-  const clear = (e: number) => glyphs.every(([a, b]) => e <= a || e >= b || (e - a >= minFrag && b - e >= minFrag));
-  const ok = (v: number) => clear(v) && clear(v + w);
   const [lo, hi] = bounds;
-  const start = Math.min(hi, Math.max(lo, Math.round(x)));
-  for (let d = 0; d <= hi - lo; d++) {
-    if (start - d >= lo && ok(start - d)) return start - d;
-    if (start + d <= hi && ok(start + d)) return start + d;
+  const start = Math.min(hi, Math.max(lo, x));
+  const cands = [start, lo, hi];
+  for (const off of [0, w]) {
+    for (const [a, b] of glyphs) {
+      // An edge at e is blocked on (a, a + minFrag) and (b - minFrag, b), or all of (a, b) when the glyph is narrower than 2 × minFrag.
+      cands.push(a - off, b - off, a + minFrag - off, b - minFrag - off);
+    }
   }
-  return start;
+  let best: number | null = null;
+  for (const c of cands) {
+    if (c < lo - EPS || c > hi + EPS || !edgesClear(c, w, glyphs, minFrag)) continue;
+    if (best === null || Math.abs(c - start) < Math.abs(best - start)) best = c;
+  }
+  if (best !== null) return Math.min(hi, Math.max(lo, best));
+  // Nothing clears: the widest worst fragment, over every glyph boundary (an edge there cuts nothing) and a 0.25px sweep.
+  const tries = cands.filter((c) => c >= lo - EPS && c <= hi + EPS);
+  for (let c = lo; c <= hi + EPS; c += 0.25) tries.push(c);
+  let pick = start, score = worstFragment(start, w, glyphs);
+  for (const c of tries) {
+    const f = worstFragment(c, w, glyphs);
+    if (f > score + EPS || (Math.abs(f - score) <= EPS && Math.abs(c - start) < Math.abs(pick - start))) { pick = c; score = f; }
+  }
+  return Math.min(hi, Math.max(lo, pick));
 }
 
 export const lerp = (a: number, b: number, t: number) => a + (b - a) * t;

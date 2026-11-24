@@ -1,7 +1,7 @@
 // The hero slab (direction C): glide in, drag along the name, let the name slide up through it for 90px,
 // then settle into the dock. Built per page load; torn down before every swap.
 import { buildBend, glyphBoxes, type Bend } from './bend';
-import { springAt, project, rubberband, snapClearX, flip, type Rect } from '../lib/hero-math';
+import { springAt, project, rubberband, snapClearX, edgesClear, glyphsUnder, flip, type Rect } from '../lib/hero-math';
 
 declare global {
   interface Window { __v3test?: boolean; __bend?: Bend | null; __scene?: { state: () => string; setProgress: (y: number) => void } }
@@ -31,8 +31,9 @@ function init() {
   const heroAvail = hero.querySelector<HTMLElement>('[data-hero-avail]');
   const strip = document.querySelector<HTMLElement>('.strip');
   const coarse = matchMedia('(pointer: coarse)').matches;
-  const phone = matchMedia('(max-width: 639px)').matches;
-  const BAND = phone ? 20 : 40, STR = phone ? 9 : 18;
+  let phone = false, BAND = 40, STR = 18;
+  const sizeClass = () => { phone = matchMedia('(max-width: 639px)').matches; BAND = phone ? 20 : 40; STR = phone ? 9 : 18; };
+  sizeClass();
   const off: (() => void)[] = [];
   const on = <K extends keyof WindowEventMap>(t: Window | Document | HTMLElement, ev: K | string, fn: (e: any) => void, opt?: AddEventListenerOptions) => {
     t.addEventListener(ev, fn, opt);
@@ -44,6 +45,7 @@ function init() {
 
   let reduced = reducedNow();
   let bend: Bend | null = null;
+  let nudge = 0; // rest offset that keeps both vertical edges clear of glyph slivers
   let built = { dx: 0, s: 0 };
   let dragX = 0, settledX = 0;
   let mode: 'rest' | 'docked' | 'flying' = 'rest';
@@ -62,7 +64,14 @@ function init() {
   };
   let R0 = measureRest();
   const radius = () => parseFloat(getComputedStyle(slab).borderTopLeftRadius) || 52;
-  const glyphs = (): [number, number][] => glyphBoxes(lines[0]).filter((g) => g.ch !== ' ').map((g) => [g.left - R0.x, g.right - R0.x]);
+  const unit = () => R0.w / (phone ? 210 : 360);
+  // Glyphs of every masthead row under the slab (relative to R0.x), with the name slid up by `cover` px.
+  const edgeGlyphs = (cover: number): [number, number][] => {
+    const sy = scrollY;
+    const boxes = lines.flatMap((l) => glyphBoxes(l)).filter((g) => g.ch.trim()).map((g) => ({ left: g.left, right: g.right, top: g.top + sy, bottom: g.bottom + sy }));
+    return glyphsUnder(boxes, R0.y + cover, R0.y + cover + R0.h, R0.x);
+  };
+  const cover = () => (reduced ? 0 : Math.min(scrollY, SLIDE));
   const l1 = () => { const g = glyphBoxes(lines[0]); return { min: Math.min(...g.map((x) => x.left)) - R0.x, max: Math.max(...g.map((x) => x.right)) - R0.x - R0.w }; };
 
   function showDock(yes: boolean) {
@@ -72,29 +81,53 @@ function init() {
 
   // While at rest the slab is pinned where it sits at scrollY 0 (fixed), so the name slides up through it.
   const pin = () => {
-    if (reduced) return; // reduced motion: the slab scrolls with the hero (no scroll-linked motion)
+    // Reduced motion: the slab scrolls with the hero (no scroll-linked motion); only the rest nudge applies.
+    if (reduced) { slab.style.marginLeft = shadow.style.marginLeft = `${nudge}px`; return; }
+    slab.style.removeProperty('margin-left'); shadow.style.removeProperty('margin-left');
     Object.assign(slab.style, { position: 'fixed', left: `${R0.x}px`, top: `${R0.y}px`, width: `${R0.w}px`, height: `${R0.h}px` });
     Object.assign(shadow.style, { position: 'fixed', left: `${R0.x}px`, top: `${R0.y}px`, width: `${R0.w}px`, height: `${R0.h}px` });
   };
   const unpin = () => {
-    for (const el of [slab, shadow]) for (const k of ['position', 'left', 'top', 'width', 'height']) el.style.removeProperty(k);
+    for (const el of [slab, shadow]) for (const k of ['position', 'left', 'top', 'width', 'height', 'margin-left']) el.style.removeProperty(k);
   };
   const place = () => {
     slab.style.translate = `${dragX}px 0`;
     shadow.style.translate = `${dragX}px 0`;
-    if (bend) bend.shift(dragX - built.dx, (reduced ? 0 : Math.min(scrollY, SLIDE)) - built.s);
+    if (bend) bend.shift(dragX - built.dx, cover() - built.s);
   };
 
+  // Rest geometry: the slab's own layout rect plus the clear-edge nudge (every masthead row under it,
+  // ±12u, wider only if needed). Clears every transform first, so it never reads a docked or squashed slab.
+  const restGeometry = () => {
+    unpin();
+    slab.style.transform = ''; slab.style.clipPath = ''; shadow.style.transform = '';
+    nudge = 0;
+    R0 = measureRest();
+    const u = unit(), gl = edgeGlyphs(0), min = 18 * u;
+    let n = snapClearX(0, R0.w, gl, min, [-12 * u, 12 * u]);
+    // No clear x within ±48u keeps the widest worst fragment (snapClearX's fallback); the design call is the creative director's.
+    if (!edgesClear(n, R0.w, gl, min)) n = snapClearX(0, R0.w, gl, min, [-48 * u, 48 * u]);
+    nudge = n;
+    R0 = { ...R0, x: R0.x + n };
+    pin();
+  };
+
+  const dropBend = () => {
+    bend?.destroy(); bend = null;
+    if (window.__v3test) window.__bend = null;
+  };
+  // Always built from the slab's rest rect: no FLIP transform, clip or drag offset while measuring.
   const buildNow = () => {
-    bend?.destroy();
-    const prevTr = slab.style.translate;
-    slab.style.translate = 'none';
-    built = { dx: 0, s: reduced ? 0 : Math.min(scrollY, SLIDE) };
-    if (reduced) built.s = 0;
+    dropBend();
+    const prev = { tr: slab.style.translate, tf: slab.style.transform, cp: slab.style.clipPath };
+    slab.style.translate = 'none'; slab.style.transform = 'none'; slab.style.clipPath = '';
+    // Pinned, the slab is fixed while the hero scrolls, so the copy is offset by the full scroll; unpinned, by nothing.
+    built = { dx: 0, s: reduced ? 0 : scrollY };
     bend = buildBend(slab, hero, { lines, images: [img], band: BAND, strength: STR });
-    slab.style.translate = prevTr;
+    slab.style.translate = prev.tr; slab.style.transform = prev.tf; slab.style.clipPath = prev.cp;
     window.__bend = window.__v3test ? bend : undefined;
-    if (bend) { bend.setVisible(getComputedStyle(slab).opacity !== '0' && mode === 'rest'); place(); }
+    const opacity = slab.style.opacity || getComputedStyle(slab).opacity;
+    if (bend) { bend.setVisible(opacity !== '0' && mode === 'rest'); place(); }
   };
 
   // On touch, the bend stays off while the slab moves and rises over 200ms once it settles.
@@ -114,7 +147,7 @@ function init() {
   const restRect = (): Rect => ({ x: R0.x + dragX, y: R0.y, w: R0.w, h: R0.h });
   function render() {
     if (t <= 0) {
-      slab.style.transform = ''; slab.style.clipPath = ''; shadow.style.transform = ''; shadow.style.opacity = '';
+      slab.style.transform = ''; slab.style.clipPath = ''; shadow.style.transform = ''; shadow.style.opacity = '1';
       return;
     }
     const from = restRect(), to = dockRect();
@@ -132,13 +165,16 @@ function init() {
     if (target === 0) showDock(false);
     slab.style.visibility = '';
     if (reduced) {
-      t = target;
+      // A cross-fade in place: no morph, so nothing is left scaled or clipped at the dock.
+      t = target; tv = 0;
+      slab.style.transform = ''; slab.style.clipPath = ''; shadow.style.transform = '';
       slab.style.transition = 'opacity 160ms ease-out';
       slab.style.opacity = target ? '0' : '1';
       shadow.style.opacity = target ? '0' : '1';
       land(target);
       return;
     }
+    slab.style.transition = ''; slab.style.opacity = '1';
     const from = t, v0 = tv, t0 = performance.now();
     let alive = true;
     stopFlight = () => { alive = false; };
@@ -164,7 +200,9 @@ function init() {
       mode = 'rest';
       slab.style.visibility = '';
       showDock(false);
-      if (bend) { bend.setVisible(true); place(); } else buildNow();
+      // A bend dropped while away (dock arrival, resize, fonts, motion change) is rebuilt from the rest rect.
+      if (bend) bend.setVisible(true); else buildNow();
+      place();
     }
   }
 
@@ -210,9 +248,8 @@ function init() {
     const v = ((z.x - a.x) / Math.max(1, z.t - a.t)) * 1000;
     drag = null;
     const b = l1();
-    const unit = R0.w / (phone ? 210 : 360);
     const projected = Math.min(b.max, Math.max(b.min, reduced ? dragX : dragX + project(v)));
-    const target = snapClearX(projected, R0.w, glyphs(), 18 * unit, [Math.ceil(b.min), Math.floor(b.max)]);
+    const target = snapClearX(projected, R0.w, edgeGlyphs(cover()), 18 * unit(), [b.min, b.max]);
     if (reduced) { dragX = target; settledX = target; place(); bendMoving(false); return; }
     const from = dragX, t0 = performance.now();
     let alive = true;
@@ -242,29 +279,20 @@ function init() {
   off.push(() => { io.disconnect(); delete dock.dataset.ctaHidden; if (strip) delete strip.dataset.availHidden; });
 
   // ----- Start -----
+  let stopGlide: (() => void) | null = null;
   const start = () => {
-    R0 = measureRest();
+    restGeometry();
     if (scrollY > SLIDE) {
-      // Back or a restored scroll: arrive docked.
+      // Back or a restored scroll: arrive docked. The bend waits for the return to rest (land(0)).
       mode = 'docked'; t = 1;
-      slab.style.opacity = '1'; slab.style.translate = 'none';
-      pin(); render(); slab.style.visibility = 'hidden'; shadow.style.opacity = '0';
+      slab.style.opacity = '1'; slab.style.translate = 'none'; shadow.style.translate = 'none';
+      if (!reduced) render();
+      slab.style.visibility = 'hidden'; shadow.style.opacity = '0';
       showDock(true);
-      buildNow(); bend?.setVisible(false);
+      dropBend();
       return;
     }
     showDock(false);
-    pin();
-    // Rest position: nudge (±12u, wider only if needed) so no glyph fragment under an edge is narrower than 18u.
-    {
-      const u = R0.w / (phone ? 210 : 360);
-      const gl = glyphs();
-      let nudge = snapClearX(0, R0.w, gl, 18 * u, [Math.round(-12 * u), Math.round(12 * u)]);
-      const clear = (e: number) => gl.every(([a, b]) => e <= a || e >= b || (e - a >= 18 * u && b - e >= 18 * u));
-      if (!(clear(nudge) && clear(nudge + R0.w))) nudge = snapClearX(0, R0.w, gl, 18 * u, [Math.round(-48 * u), Math.round(48 * u)]);
-      R0 = { ...R0, x: R0.x + nudge };
-      pin();
-    }
     if (reduced) { slab.style.opacity = '1'; shadow.style.opacity = '1'; slab.style.translate = 'none'; shadow.style.translate = 'none'; buildNow(); return; }
     // Glide in from −240u: opacity over the first 200ms, a critically damped spring (response 1.1).
     const startX = -240 * (R0.w / 360);
@@ -272,7 +300,10 @@ function init() {
     bend?.setStrength(0);
     bendMoving(true);
     const t0 = performance.now();
+    let alive = true;
+    stopGlide = () => { alive = false; stopGlide = null; slab.style.opacity = shadow.style.opacity = '1'; };
     const step = (now: number) => {
+      if (!alive) return;
       const el = (now - t0) / 1000;
       const s = springAt(el, startX, 0, 1.1, 1, 0);
       dragX = s.x;
@@ -280,7 +311,7 @@ function init() {
       slab.style.opacity = o; shadow.style.opacity = o;
       place();
       if (!coarse && bend) { bend.setVisible(true); bend.setStrength(STR * Math.min(1, el / 1.1)); }
-      if (Math.abs(s.x) < 0.3 && el > 0.3) { dragX = 0; settledX = 0; place(); if (!coarse) bend?.setStrength(STR); bendMoving(false); return; }
+      if (Math.abs(s.x) < 0.3 && el > 0.3) { stopGlide = null; dragX = 0; settledX = 0; place(); if (!coarse) bend?.setStrength(STR); bendMoving(false); return; }
       requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
@@ -293,17 +324,33 @@ function init() {
   on(window, 'resize', () => {
     if (innerWidth === lastW) return; // iOS fires resize as its toolbar moves
     lastW = innerWidth;
-    unpin(); slab.style.transform = ''; slab.style.clipPath = '';
-    R0 = measureRest(); dragX = settledX = 0;
-    if (mode !== 'docked') { pin(); buildNow(); } else { pin(); render(); }
+    sizeClass();
+    stopDrag?.(); drag = null;
+    dragX = settledX = 0;
+    restGeometry();
+    // At rest, rebuild now; anywhere else, drop the bend (and its mask hole) so land(0) rebuilds it.
+    if (mode === 'rest') buildNow(); else { dropBend(); if (t > 0 && !reduced) render(); }
+    place();
   });
-  on(document.fonts as unknown as HTMLElement, 'loadingdone', () => { if (mode === 'rest') buildNow(); });
+  on(document.fonts as unknown as HTMLElement, 'loadingdone', () => { if (mode === 'rest') buildNow(); else dropBend(); });
   on(window, 'motionchange', () => {
     reduced = reducedNow();
-    unpin(); slab.style.translate = 'none';
-    R0 = measureRest();
-    if (!reduced) pin();
-    if (mode === 'rest') buildNow();
+    stopGlide?.(); stopFlight?.(); stopDrag?.(); drag = null;
+    slab.style.transition = ''; delete slab.dataset.moving;
+    slab.style.translate = shadow.style.translate = 'none';
+    dragX = settledX = 0;
+    restGeometry(); // also resets transform and clip-path
+    const docked = mode === 'docked' || (mode === 'flying' && scrollY > BACK);
+    t = docked ? 1 : 0; tv = 0;
+    slab.style.opacity = '1';
+    dropBend();
+    if (docked) {
+      if (!reduced) render(); // sit on the dock so the spring back starts there
+      land(1);
+    } else {
+      shadow.style.opacity = '1';
+      land(0);
+    }
   });
 
   if (window.__v3test) {
@@ -315,7 +362,7 @@ function init() {
 
   teardown = () => {
     off.forEach((f) => f());
-    stopFlight?.(); stopDrag?.(); cancelAnimationFrame(raf); cancelAnimationFrame(riseRaf); clearTimeout(scrollRest);
+    stopGlide?.(); stopFlight?.(); stopDrag?.(); cancelAnimationFrame(raf); cancelAnimationFrame(riseRaf); clearTimeout(scrollRest);
     bend?.destroy(); bend = null;
     unpin();
     showDock(true);
