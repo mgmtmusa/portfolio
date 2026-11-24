@@ -1,0 +1,34 @@
+start Tue Nov 24 14:16:49 AEDT 2026 base http://localhost:4323
+== deploy 14:16:49
+deploy exit 0
+https://portfolio-h5kr9i9xa-musa-c771.vercel.app
+== capture 14:17:32
+capture exit 1
+  "over": [],
+  "errs": [
+   "404 http://localhost:4323/contact/"
+  ]
+ },
+ {
+  "page": "/cv/",
+  "vp": "375",
+  "overflowX": false,
+  "over": [],
+  "errs": [
+   "404 http://localhost:4323/cv/"
+  ]
+ }
+]
+== hero-states 14:19:13
+hero exit 0
+chromium [["rest",{"mode":"rest","bend":"on","dockShown":false,"dockInert":true}],["slide-45",{"mode":"rest","bend":"on","dockShown":false,"dockInert":true}],["docked",{"mode":"docked","bend":"on","dockShown":true,"dockInert":false}],["still docked ~185",{"mode":"docked","bend":"on","dockShown":true,"dockInert":false}],["back at rest",{"mode":"rest","bend":"on","dockShown":false,"dockInert":true}],["dragged",{"mode":"rest","bend":"on","dockShown":false,"dockInert":true,"movedBy":360}]] no errors
+webkit [["rest",{"mode":"rest","bend":"on","dockShown":false,"dockInert":true}],["slide-45",{"mode":"rest","bend":"on","dockShown":false,"dockInert":true}],["docked",{"mode":"docked","bend":"on","dockShown":true,"dockInert":false}],["still docked ~185",{"mode":"docked","bend":"on","dockShown":true,"dockInert":false}],["back at rest",{"mode":"rest","bend":"on","dockShown":false,"dockInert":true}],["dragged",{"mode":"rest","bend":"on","dockShown":false,"dockInert":true,"movedBy":361}]] no errors
+== playwright 14:19:36
+playwright exit 0
+[161/164] [mobile-safari] › tests/e2e/hygiene.spec.ts:56:1 › no JavaScript: every hero fact is in the HTML and the dock is visible
+[162/164] [mobile-safari] › tests/e2e/layout.spec.ts:5:3 › layout guardrails › G1: the masthead is two lines inside the margins (desktop)
+[163/164] [mobile-safari] › tests/e2e/layout.spec.ts:22:3 › layout guardrails › G6: no line of the pitch or the availability block ends on a single word
+[164/164] [mobile-safari] › tests/e2e/layout.spec.ts:43:3 › layout guardrails › G3: the strip lines up with the page edge at 1920
+  34 skipped
+  130 passed (1.2m)
+done Tue Nov 24 14:20:50 AEDT 2026
