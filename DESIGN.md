@@ -79,7 +79,7 @@ Option 1 everywhere: the whole photo graded, the backdrop darkened toward a warm
 
 ### The status strip and the dock
 
-- Strip: 32px (28 on phones), no fill at rest, a scroll-edge mask once scrolled (`linear-gradient(#121110 0, rgb(18 17 16 / .86) 32px, transparent 64px)`), Melbourne time with seconds, `site.availability` verbatim on one line or not at all, `site.replyTime` verbatim; below 1180px the availability slot drops; phones show the clock only. Padding aligned with the hero's 58u margin.
+- Strip: 32px (28 on phones), no fill at rest, a scroll-edge mask once scrolled (`linear-gradient(#121110 0, rgb(18 17 16 / .86) 32px, transparent 64px)`), Melbourne time with seconds, `site.availability` verbatim on one line or not at all, `site.replyTime` verbatim; below 1180px the availability slot drops; phones show the clock only. `padding-inline: var(--edge)`.
 - Every strip label measures at least 4.5:1 against the real pixels behind it. On home the availability slot hides while the hero availability block is at least 50% in view.
 - Dock: one rounded glass object, bottom centre on every screen, never over the masthead at rest. Get in touch is a direct button and hides while the hero CTA is at least 50% in view; Menu (⌘K) opens with Download CV (PDF), LinkedIn and Copy email as its first visible rows. `inert` while hidden.
 
