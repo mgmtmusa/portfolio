@@ -1,6 +1,6 @@
 {
   "inp": {
-    "worstMs": 88,
+    "worstMs": 72,
     "interactions": 21,
     "steps": [
       "⌘K open",
@@ -14,11 +14,11 @@
     ],
     "pass": true
   },
-  "bendBuild_desktop_ms": 13.2,
-  "bendBuild_phone_ms": 13.8,
+  "bendBuild_desktop_ms": 14.3,
+  "bendBuild_phone_ms": 13.4,
   "frames": {
-    "frames": 552,
-    "shareUnder16_7": 0.996,
+    "frames": 601,
+    "shareUnder16_7": 1,
     "longTasksMs": [],
     "pass": true
   }

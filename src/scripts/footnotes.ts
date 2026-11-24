@@ -22,3 +22,5 @@ document.addEventListener('astro:page-load', wire);
 // A note closes once the page has really moved on (not on the scroll that brought its marker into view).
 let openedAt = 0;
 addEventListener('scroll', () => { if (Math.abs(scrollY - openedAt) > 48) document.querySelectorAll<HTMLElement>('.fn-pop:popover-open').forEach((p) => p.hidePopover()); }, { passive: true });
+
+export {};
