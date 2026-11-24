@@ -309,10 +309,10 @@ export const capabilities = [
 export const tools = ['Google Ads', 'Meta Ads Manager', 'Meta Business Suite', 'Meta Pixel', 'GA4', 'Tag Manager', 'Search Console', 'Looker Studio', 'HubSpot', 'GoHighLevel', 'Salesforce', 'Zoho', 'Zapier', 'Canva', 'Adobe Express', 'ChatGPT', 'Claude', 'Excel'];
 
 export const recognition = [
-  { when: '2014', t: 'Asian Schools Debate Championship', d: 'Represented Bangladesh in Kuala Lumpur, 28 nations.' },
-  { when: '2014', t: 'UNESCO ASPnet ESD Summit', d: 'One of four delegates selected nationally. Okayama, Japan, 60 nations.' },
+  { when: '2014', t: 'Asian Schools Debate Championship', d: 'Represented Bangladesh in Kuala Lumpur, among 28 nations.' },
+  { when: '2014', t: 'UNESCO ASPnet ESD Summit', d: 'One of four delegates selected nationally, in Okayama, Japan, with 60 nations attending.' },
   { when: '2015', t: 'SBI-NUJS Parliamentary Debate', d: 'Represented Bangladesh in Kolkata.' },
-  { when: '2015', t: 'Rajuk Nationals Debate Championship', d: 'Convener for 60 schools. Raised $30K AUD.' },
+  { when: '2015', t: 'Rajuk Nationals Debate Championship', d: 'Convener for 60 schools; raised $30K AUD.' },
 ];
 
 export const caseBySlug = (slug: string) => cases.find((c) => c.slug === slug)!;

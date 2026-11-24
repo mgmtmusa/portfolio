@@ -50,7 +50,9 @@ Host weights by role, one variable file (axis 480 to 540): 480 the line, 500 fig
 
 12 columns, 24px gutters. The hero unit is `u = min(100vw / 1440, 100svh / 900, 1px)` (never above 1px, so the 1254px portrait never renders over 620 CSS px); the hero is `100svh` tall (min 600px), `min(100%, 1440u)` wide, centred. One edge for the whole page: `--edge: max(clamp(20px, 4vw, 58px), calc((100vw - 1440 * var(--u)) / 2 + 58 * var(--u)))`, used by the strip, the hero, every section and the footer.
 
-Phone role line: the line ("I carried a sales target / first, so I judge / marketing by what closes.") stays three rows at 360, 375, 390, 402 and 412 and sits at y 61 to 145 at 390×664 (role label at y 38 to 55 above it). This replaces the earlier 44 to 128; the portrait follows at y 148 to 428.
+Phone role line: the line ("I carried a sales target / first, so I judge / marketing by what closes.") stays three rows at 360, 375, 390, 402 and 412 (below 360px, e.g. 320, the line is 24px, still three rows, and the portrait moves down 12px) and sits at y 61 to 145 at 390×664 (role label at y 38 to 55 above it). This replaces the earlier 44 to 128; the portrait follows at y 148 to 428.
+
+Text rise: the hero text rise starts at paint (first paint), not after load or fonts.
 
 Below 1440px wide the cover lines start at 88u instead of 128u, and below 1180px the availability block widens to x 996 to 1382u, so the proof column clears the cap line of "Abdullah" by 24u and the availability block clears its baseline by 24u at every width.
 
@@ -60,7 +62,7 @@ Below 1440px wide the cover lines start at 88u instead of 128u, and below 1180px
 - The slab (hero): no backdrop blur at rest; `radial-gradient(70% 110% at 10% 0%, rgb(255 226 190 / .10), transparent 58%), linear-gradient(180deg, rgb(255 248 236 / .05), rgb(255 248 236 / .015) 60%)`; `box-shadow: inset 0 1px 0 rgb(255 244 224 / .24), inset 1px 0 0 rgb(255 244 224 / .10), inset 0 -12px 24px rgb(6 5 4 / .26), 0 0 0 1px rgb(6 5 4 / .45)`; rim 1.5px with a top-left catch of .80; an inner rim inset 7px; contact shadow `rgb(6 5 4 / .25)`, offset (10u, 16u), blur 28u. The bend is an inline SVG copy of what lies under the slab (glyphs placed one by one from the page's own layout), sampled inward, band 40 / scale 18 desktop, band 20 / scale 9 phone, never folding (scale < 1.2 × band).
   - Registration: at strength 0 the bent copy matches the page within 1px at 2× in Chromium and WebKit.
   - Knock-out: the originals are cut out under the slab only while its opacity is above 0.
-  - Edges: no horizontal slab edge within 24u of the cap line or baseline of any glyph under it; no glyph fragment narrower than 18u at either vertical edge.
+  - Edges: no horizontal slab edge within 24u of the cap line or baseline of any glyph under it; no glyph fragment narrower than 18u at either vertical edge at 640px and up; below 640px the floor is 16 CSS px. The snap always picks the position that maximises the smallest fragment.
   - No text or controls on the slab.
   - In flight (to and from the dock): bend off, `backdrop-filter: blur(4px)`, body gradient and rim kept.
   - Hover: rim .95 and contact shadow (14u, 22u) over 160ms; press: scale .985; cursor `grab` / `grabbing`. Touch: the bend switches off while the slab moves and rises over 200ms (ease-out) once it settles.

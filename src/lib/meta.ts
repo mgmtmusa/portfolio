@@ -91,7 +91,8 @@ export type HeadProps = {
 export type Head = {
   title: string;
   description: string;
-  canonical: string;
+  /** Absent on the noindex 404: it has no URL of its own to point at. */
+  canonical?: string;
   robots?: string;
   ogTitle: string;
   ogDescription: string;
@@ -139,7 +140,7 @@ export function resolveHead(props: HeadProps, origin: string): Head {
   return {
     title,
     description,
-    canonical: new URL(isFor ? '/' : props.canonicalPath ?? props.path, origin).href,
+    canonical: props.path === '/404/' ? undefined : new URL(isFor ? '/' : props.canonicalPath ?? props.path, origin).href,
     robots: noindex ? 'noindex' : undefined,
     ogTitle,
     ogDescription,

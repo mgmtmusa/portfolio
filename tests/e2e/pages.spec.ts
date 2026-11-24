@@ -172,10 +172,10 @@ test.describe('CV', () => {
     await expect(page.locator('.cap-t')).toHaveText(['Performance marketing', 'Analytics and reporting', 'CRM and automation', 'Brand, events and teams']);
     for (const t of ['Google Ads', 'GA4', 'Tag Manager', 'Looker Studio', 'HubSpot', 'GoHighLevel', 'Salesforce', 'Zapier', 'Claude']) await expect(page.locator('.tools')).toContainText(t);
     await expect(page.locator('.recs li')).toHaveText([
-      'Asian Schools Debate Championship, 2014. Represented Bangladesh in Kuala Lumpur, 28 nations.',
-      'UNESCO ASPnet ESD Summit, 2014. One of four delegates selected nationally. Okayama, Japan, 60 nations.',
+      'Asian Schools Debate Championship, 2014. Represented Bangladesh in Kuala Lumpur, among 28 nations.',
+      'UNESCO ASPnet ESD Summit, 2014. One of four delegates selected nationally, in Okayama, Japan, with 60 nations attending.',
       'SBI-NUJS Parliamentary Debate, 2015. Represented Bangladesh in Kolkata.',
-      'Rajuk Nationals Debate Championship, 2015. Convener for 60 schools. Raised $30K AUD.',
+      'Rajuk Nationals Debate Championship, 2015. Convener for 60 schools; raised $30K AUD.',
     ]);
   });
 

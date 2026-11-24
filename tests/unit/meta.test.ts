@@ -39,7 +39,11 @@ describe('resolveHead', () => {
     expect(h.ogTitle).toBe('For Acme');
     expect(h.ogImage).toBe(`${origin}/og/home.png`);
   });
-  it('noindexes the 404', () => expect(resolveHead({ path: '/404/' }, origin).robots).toBe('noindex'));
+  it('noindexes the 404 and gives it no canonical', () => {
+    const h = resolveHead({ path: '/404/' }, origin);
+    expect(h.robots).toBe('noindex');
+    expect(h.canonical).toBeUndefined();
+  });
   it('puts JSON-LD on home only', () => {
     expect(resolveHead({ path: '/' }, origin).jsonLd).toBeTruthy();
     expect(resolveHead({ path: '/about/' }, origin).jsonLd).toBeUndefined();

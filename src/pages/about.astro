@@ -15,14 +15,7 @@ const pageNotes = [
 ];
 const [hub, events, lil] = pageNotes;
 
-// Each credit's wording from story.md §7; the title and year come from site.ts.
-const creditWording: Record<string, string> = {
-  'Asian Schools Debate Championship': 'Represented Bangladesh in Kuala Lumpur, among 28 nations.',
-  'UNESCO ASPnet ESD Summit': 'One of four delegates selected nationally, in Okayama, Japan, with 60 nations attending.',
-  'SBI-NUJS Parliamentary Debate': 'Represented Bangladesh in Kolkata.',
-  'Rajuk Nationals Debate Championship': 'Convener for 60 schools; raised $30K AUD.',
-};
-const credits = recognition.map((r) => ({ t: `${r.t}, ${r.when}.`, d: creditWording[r.t] ?? r.d }));
+const credits = recognition.map((r) => ({ t: `${r.t}, ${r.when}.`, d: r.d }));
 
 const ambassador = experience.find((e) => e.org === 'University of Melbourne')!;
 const lilCase = cases.find((c) => c.slug === 'the-lil-project')!;

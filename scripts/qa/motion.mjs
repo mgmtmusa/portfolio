@@ -6,7 +6,7 @@ import { mkdirSync, writeFileSync, readdirSync, renameSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 const [, , base = 'http://127.0.0.1:4322', out = 'docs/evidence/round-4/motion'] = process.argv;
 mkdirSync(out, { recursive: true });
-const MAX = 25;
+const MAX = 25; // default frame cap; sequences may raise it with { max }
 const e0 = {}, e1 = {};
 const hasFfmpeg = (() => { try { execFileSync('ffmpeg', ['-version'], { stdio: 'ignore' }); return true; } catch { return false; } })();
 const t00 = Date.now();
@@ -15,13 +15,13 @@ const pad = (n) => String(n).padStart(5, '0');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Run `action` while grabbing frames until it ends and `tail` ms passed, or MAX frames.
-async function record(page, ctx, mode, seq, action, { duration = 2500, interval = 100 } = {}) {
+async function record(page, ctx, mode, seq, action, { duration = 2500, interval = 100, max = MAX } = {}) {
   const prefix = `${ctx}-${mode}-${seq}`;
   const frames = []; const notes = [];
   const t0 = Date.now();
   let done = false;
   const act = Promise.resolve().then(action).then((r) => { done = true; return r; }).catch((e) => { done = true; notes.push('action error: ' + e.message.split('\n')[0]); });
-  while (frames.length < MAX && Date.now() - t0 < duration) {
+  while (frames.length < max && Date.now() - t0 < duration) {
     const ts = Date.now() - t0;
     const file = `${prefix}-${pad(ts)}.png`;
     try { await page.screenshot({ path: `${out}/${file}`, animations: 'allow', caret: 'initial', timeout: 3000 }); frames.push({ ms: ts, file }); } catch (e) { if (!notes.some((n) => n.startsWith('shot error'))) notes.push('shot error (before first paint, frames skipped): ' + e.message.split('\n')[0]); await sleep(40); }
@@ -30,7 +30,7 @@ async function record(page, ctx, mode, seq, action, { duration = 2500, interval 
   }
   await act;
   if (!done) notes.push('action not finished');
-  if (frames.length >= MAX && Date.now() - t0 < duration) notes.push(`frame cap hit at ${frames[frames.length - 1].ms}ms of ${duration}ms`);
+  if (frames.length >= max && Date.now() - t0 < duration) notes.push(`frame cap hit at ${frames[frames.length - 1].ms}ms of ${duration}ms`);
   if (hasFfmpeg && frames.length) {
     for (const f of frames) {
       const p = `${out}/${f.file}`;
@@ -38,6 +38,8 @@ async function record(page, ctx, mode, seq, action, { duration = 2500, interval 
     }
     try { execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-pattern_type', 'glob', '-i', `${out}/${prefix}-*.png`, '-vf', 'scale=320:-1,tile=5x5:padding=4', '-frames:v', '1', `${out}/sheet-${prefix}.png`]); } catch { notes.push('contact sheet failed'); }
   }
+  const gaps = frames.slice(1).map((f, i) => f.ms - frames[i].ms);
+  if (gaps.length) notes.push(`frame gaps ms: median ${[...gaps].sort((a, b) => a - b)[gaps.length >> 1]}, max ${Math.max(...gaps)}`);
   const entry = { context: ctx, mode, sequence: seq, frameCount: frames.length, frames, sheet: hasFfmpeg ? `sheet-${prefix}.png` : null, notes };
   index.sequences.push(entry);
   return entry;
@@ -62,7 +64,7 @@ for (const [ctx, bt, opts, phone] of contexts) {
     };
     const settle = async (page) => { await page.goto(base + '/', { waitUntil: 'load' }); await page.waitForTimeout(3200); };
     const wheel = async (page, dy) => {
-      if (phone) { const steps = 12; for (let i = 0; i < steps; i++) { await page.evaluate((d) => window.scrollBy(0, d), dy / steps); await page.waitForTimeout(25); } return; } await page.mouse.move(opts.viewport?.width ? opts.viewport.width / 2 : 195, 400); await page.mouse.wheel(0, dy); };
+      if (phone) { const steps = Math.max(8, Math.round(Math.abs(dy) / 12)); for (let i = 0; i < steps; i++) { await page.evaluate((d) => window.scrollBy(0, d), dy / steps); await page.waitForTimeout(30); } return; } await page.mouse.move(opts.viewport?.width ? opts.viewport.width / 2 : 195, 400); await page.mouse.wheel(0, dy); };
     const scrollY = (page) => page.evaluate(() => Math.round(window.scrollY));
 
     // 1 first load
@@ -71,13 +73,24 @@ for (const [ctx, bt, opts, phone] of contexts) {
       const e = await record(page, ctx, mode, 'load', async () => { await nav; await page.waitForTimeout(2300); }, { duration: 2800, interval: 100 });
       console.log(ctx, mode, 'load', e.frameCount); await page.close(); }
 
+    // 1b chromium only: CDP screencast started before navigation, so frames before the first paint are kept.
+    if (ctx === 'chromium') { const page = await fresh(); const cdp = await context.newCDPSession(page);
+      const frames = []; const t0 = Date.now();
+      cdp.on('Page.screencastFrame', async (f) => { const ms = Date.now() - t0; const file = `${ctx}-${mode}-loadcast-${pad(ms)}.jpg`; writeFileSync(`${out}/${file}`, Buffer.from(f.data, 'base64')); frames.push({ ms, file }); cdp.send('Page.screencastFrameAck', { sessionId: f.sessionId }).catch(() => {}); });
+      await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 70, everyNthFrame: 1 });
+      await page.goto(base + '/', { waitUntil: 'load' }).catch(() => {}); await page.waitForTimeout(2300);
+      await cdp.send('Page.stopScreencast').catch(() => {});
+      index.sequences.push({ context: ctx, mode, sequence: 'loadcast', frameCount: frames.length, frames, sheet: null, notes: ['CDP screencast from before navigation; ms is time since screencast start (navigation begins about 0 to 30ms later); frames only exist where the compositor produced one'] });
+      console.log(ctx, mode, 'loadcast', frames.length); await page.close(); }
+
     // 2 scroll to dock and back
     { const page = await fresh(); await settle(page);
       const e = await record(page, ctx, mode, 'scroll', async () => {
-        await wheel(page, 45); await page.waitForTimeout(300); await wheel(page, 250); await page.waitForTimeout(900);
+        // Phone: scripted scrollBy in ~12px steps (a swipe, slower than the desktop wheel), long enough to reach the dock and return.
+        await wheel(page, 45); await page.waitForTimeout(300); await wheel(page, phone ? 420 : 250); await page.waitForTimeout(phone ? 1400 : 900);
         e0.docked = await scrollY(page);
-        await wheel(page, -700); await page.waitForTimeout(1000);
-      }, { duration: 3400, interval: 140 });
+        await wheel(page, phone ? -900 : -700); await page.waitForTimeout(1200);
+      }, { duration: phone ? 7000 : 3400, interval: 140, max: phone ? 50 : MAX });
       e.notes.push(`scrollY at dock ${e0.docked}`);
       console.log(ctx, mode, 'scroll', e.frameCount); await page.close(); }
 
@@ -91,7 +104,7 @@ for (const [ctx, bt, opts, phone] of contexts) {
           await page.mouse.move(x, y); await page.mouse.down();
           for (let i = 1; i <= 10; i++) { await page.mouse.move(x + i * 20, y); await page.waitForTimeout(16); }
           await page.waitForTimeout(250); await page.mouse.up(); await page.waitForTimeout(1100);
-        }, { duration: 2200, interval: 90 });
+        }, { duration: 1900, interval: 40, max: 55 }); // dense (about 40ms) through the drag and the release
         if (phone) e.notes.push('mouse events used on webkit phone (no CDP touch)');
         console.log(ctx, mode, 'drag', e.frameCount);
       }
