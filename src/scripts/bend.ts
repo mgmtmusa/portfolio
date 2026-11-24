@@ -134,22 +134,35 @@ export function buildBend(
   }
   pane.prepend(svg);
 
-  const hole = `url("data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns='${SVG}' width='${pw}' height='${ph}'><rect width='${pw}' height='${ph}' rx='${radius}'/></svg>`)}")`;
+  // The knock-out: everything outside a rounded hole, built from layers that only ever add (bands
+  // around the hole plus four corner pieces). No mask-composite: iOS Safari mis-composites the
+  // two-layer exclude/xor form and hides the whole element. Moving the slab updates positions only.
   const targets = [...o.lines, ...o.images].map((el) => {
     const r = el.getBoundingClientRect();
-    return { el, base: { x: P.left - r.left, y: P.top - r.top } };
+    return { el, w: r.width, h: r.height, base: { x: P.left - r.left, y: P.top - r.top } };
   });
+  const rr = Math.min(radius, pw / 2, ph / 2);
+  const solid = 'linear-gradient(#000 0 0)';
+  const corner = (at: string) => `radial-gradient(circle at ${at}, transparent ${rr - 0.5}px, #000 ${rr + 0.5}px)`;
+  const layers = [solid, solid, solid, solid, corner('100% 100%'), corner('0% 100%'), corner('100% 0%'), corner('0% 0%')].join(', ');
+  const clamp = (v: number, max: number) => Math.min(Math.max(v, 0), max);
   let dx = 0, dy = 0, visible = false;
   const paintMasks = () => {
-    for (const { el, base } of targets) {
-      const st = el.style;
-      if (!visible) { st.webkitMaskImage = st.maskImage = ''; continue; }
-      st.webkitMaskImage = st.maskImage = `linear-gradient(#000 0 0), ${hole}`;
+    for (const t of targets) {
+      const st = t.el.style;
+      const hx = t.base.x + dx, hy = t.base.y + dy;
+      const hit = visible && hx < t.w && hx + pw > 0 && hy < t.h && hy + ph > 0;
+      if (!hit) { st.webkitMaskImage = st.maskImage = ''; continue; }
+      const L = clamp(hx, t.w), R = clamp(hx + pw, t.w), T = clamp(hy, t.h), B = clamp(hy + ph, t.h);
+      const px = (n: number) => `${n.toFixed(2)}px`;
+      // left band, right band, top and bottom bands (1px wider each side so no seam shows), four corners
+      const size = [`${px(L)} 100%`, `${px(t.w - R)} 100%`, `${px(pw + 2)} ${px(T)}`, `${px(pw + 2)} ${px(t.h - B)}`, ...Array(4).fill(`${px(rr)} ${px(rr)}`)];
+      const pos = [`0 0`, `${px(R)} 0`, `${px(hx - 1)} 0`, `${px(hx - 1)} ${px(B)}`,
+        `${px(hx)} ${px(hy)}`, `${px(hx + pw - rr)} ${px(hy)}`, `${px(hx)} ${px(hy + ph - rr)}`, `${px(hx + pw - rr)} ${px(hy + ph - rr)}`];
+      st.webkitMaskImage = st.maskImage = layers;
       st.webkitMaskRepeat = st.maskRepeat = 'no-repeat';
-      st.webkitMaskSize = st.maskSize = `100% 100%, ${pw}px ${ph}px`;
-      st.webkitMaskPosition = st.maskPosition = `0 0, ${base.x + dx}px ${base.y + dy}px`;
-      st.setProperty('-webkit-mask-composite', 'xor');
-      st.setProperty('mask-composite', 'exclude');
+      st.webkitMaskSize = st.maskSize = size.join(', ');
+      st.webkitMaskPosition = st.maskPosition = pos.join(', ');
     }
   };
   pane.dataset.bend = 'on';
