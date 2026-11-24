@@ -6,9 +6,11 @@ import StatusStrip from '../components/StatusStrip.astro';
 import Dock from '../components/Dock.astro';
 import CommandMenu from '../components/CommandMenu.astro';
 import { site } from '../data/site';
+import { resolveHead } from '../lib/meta';
 
 interface Props {
-  title: string;
+  /** Used for pages without a story.md §6 entry; known pages take their title from src/lib/meta.ts. */
+  title?: string;
   description?: string;
   /** Path for the canonical URL, e.g. "/" or "/work/evitech/" */
   path: string;
@@ -24,21 +26,9 @@ interface Props {
   /** The LCP image, preloaded ahead of everything else. */
   lcpImage?: { srcset: string; sizes: string; type: string };
 }
-const {
-  title,
-  description = site.description,
-  path,
-  og = '/og/home.png',
-  ogTitle = title,
-  ogDescription = description,
-  ogAlt = `${site.name}, ${site.role}, ${site.city}`,
-  jsonLd,
-  noindex = false,
-  canonicalPath,
-  lcpImage,
-} = Astro.props;
-const canonical = new URL(canonicalPath ?? path, site.url).href;
-const ogImage = new URL(og, site.url).href;
+const { lcpImage, ...headProps } = Astro.props;
+const { path } = headProps;
+const head = resolveHead(headProps, (Astro.site ?? new URL(site.url)).origin);
 const year = new Date().getFullYear();
 // Vercel Web Analytics exists only on Vercel; locally its script would 404 and log a console error.
 const analytics = Boolean(import.meta.env.VERCEL);
@@ -49,26 +39,26 @@ const analytics = Boolean(import.meta.env.VERCEL);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex" />}
+    <title>{head.title}</title>
+    <meta name="description" content={head.description} />
+    <link rel="canonical" href={head.canonical} />
+    {head.robots && <meta name="robots" content={head.robots} />}
     <meta name="theme-color" content="#121110" />
     <meta name="color-scheme" content="dark" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />
-    <meta property="og:title" content={ogTitle} />
-    <meta property="og:description" content={ogDescription} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
+    <meta property="og:title" content={head.ogTitle} />
+    <meta property="og:description" content={head.ogDescription} />
+    <meta property="og:url" content={head.canonical} />
+    <meta property="og:image" content={head.ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={ogAlt} />
+    <meta property="og:image:alt" content={head.ogAlt} />
     <meta property="og:locale" content="en_AU" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={ogTitle} />
-    <meta name="twitter:description" content={ogDescription} />
-    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:title" content={head.ogTitle} />
+    <meta name="twitter:description" content={head.ogDescription} />
+    <meta name="twitter:image" content={head.ogImage} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     {lcpImage && <link rel="preload" as="image" imagesrcset={lcpImage.srcset} imagesizes={lcpImage.sizes} type={lcpImage.type} fetchpriority="high" />}
     <link rel="preload" href="/fonts/host-grotesk.woff2" as="font" type="font/woff2" crossorigin />
@@ -101,7 +91,7 @@ const analytics = Boolean(import.meta.env.VERCEL);
       })();
     </script>
     <noscript><link rel="stylesheet" href="/fonts/late.css" /></noscript>
-    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+    {head.jsonLd && <script type="application/ld+json" set:html={JSON.stringify(head.jsonLd)} />}
     <ClientRouter fallback="swap" />
   </head>
   <body>
