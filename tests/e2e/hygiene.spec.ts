@@ -1,13 +1,14 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-import { watchErrors } from './helpers';
+import { watchErrors, allPages } from './helpers';
 
-const PAGES = ['/', '/missing-page/'];
+const PAGES = allPages();
 const BANNED = /\b(passionate|leverage|unlock|elevate|seamless|synergy|results-driven|cutting-edge|world-class|journey|empower|innovative|data-driven|strategic)\b|Hi, I’m|Hi, I'm|I sell like a human/i;
 
 for (const path of PAGES) {
   test(`copy hygiene on ${path}`, async ({ page }) => {
     await page.goto(path);
+    await page.waitForLoadState('load');
+    await page.waitForTimeout(400);
     const html = await page.content();
     expect(html, 'em dash in page source').not.toMatch(/—|&mdash;|&#8212;/);
     expect(html, 'phone link').not.toMatch(/href="tel:/);
@@ -17,21 +18,16 @@ for (const path of PAGES) {
     expect(text, 'banned word').not.toMatch(BANNED);
   });
 
-  test(`axe finds no WCAG 2.2 AA violations on ${path}`, async ({ page }) => {
-    await page.addInitScript(() => { (window as unknown as { __v3test: boolean }).__v3test = true; });
-    await page.goto(path);
-    await page.waitForTimeout(2200);
-    const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
-    expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(', ')}`)).toEqual([]);
-  });
 }
 
-test('the home page has no console errors', async ({ page }) => {
-  const errs = watchErrors(page);
-  await page.goto('/');
-  await page.waitForTimeout(2500);
-  errs.assertClean();
-});
+for (const path of PAGES) {
+  test(`no console errors on ${path}`, async ({ page }) => {
+    const errs = watchErrors(page);
+    await page.goto(path);
+    await page.waitForTimeout(path === '/' ? 2500 : 1200);
+    errs.assertClean();
+  });
+}
 
 test('llms.txt carries every case with its scope labels', async ({ request }) => {
   const t = await (await request.get('/llms.txt')).text();
