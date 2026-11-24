@@ -1,0 +1,57 @@
+{
+  "checks": [
+    {
+      "name": "rest: not a full-screen white page",
+      "ok": true,
+      "detail": {
+        "mean": 48.5,
+        "std": 60.7
+      }
+    },
+    {
+      "name": "rest: masthead not blank",
+      "ok": true,
+      "detail": {
+        "diffShare": 0.087,
+        "bg": [
+          26,
+          25,
+          23
+        ]
+      }
+    },
+    {
+      "name": "rest: portrait not blank",
+      "ok": true,
+      "detail": {
+        "diffShare": 0.184,
+        "bg": [
+          26,
+          25,
+          23
+        ]
+      }
+    },
+    {
+      "name": "rest: glyph pixels under the slab",
+      "ok": true,
+      "detail": {
+        "diffShare": 0.295
+      }
+    },
+    {
+      "name": "docked: not a full-screen white page",
+      "ok": true,
+      "detail": {
+        "mean": 41.6,
+        "std": 56.5
+      }
+    }
+  ],
+  "paintMean": 61.85510611165595,
+  "size": [
+    1206,
+    2622
+  ],
+  "pass": true
+}

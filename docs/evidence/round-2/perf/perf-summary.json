@@ -1,0 +1,32 @@
+{
+  "inp": {
+    "worstMs": 80,
+    "interactions": 20,
+    "steps": [
+      "⌘K open",
+      "⌘K typing",
+      "⌘K close",
+      "footnote",
+      "footnote close",
+      "slab press and release",
+      "slab drag",
+      "Copy email"
+    ],
+    "pass": true
+  },
+  "bendBuild_desktop_ms": null,
+  "bendBuild_desktop_pass": false,
+  "bendBuild_desktop_note": "window.__bendBuild missing: rebuild dist so the bend.ts test hook is included",
+  "bendBuild_phone_ms": null,
+  "bendBuild_phone_pass": false,
+  "bendBuild_phone_note": "window.__bendBuild missing: rebuild dist so the bend.ts test hook is included",
+  "frames": {
+    "refreshMs": 8.3,
+    "refreshHz": 120,
+    "limitMs": 12.5,
+    "frames": 600,
+    "shareWithinLimit": 0.998,
+    "longTasksMs": [],
+    "pass": true
+  }
+}
