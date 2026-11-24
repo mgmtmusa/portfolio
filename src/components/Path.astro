@@ -12,8 +12,10 @@ const rungs = [
 ---
 
 <section class="path wrap" aria-labelledby="path-h">
-  <h2 class="h1 path-h" id="path-h">From door-to-door sales to marketing, in four roles</h2>
+  <h2 class="h1 path-h" id="path-h">From <span class="nobr">door-to-door</span> sales to marketing, in four roles</h2>
   <p class="body path-intro">I joined Evitech in field sales and held three roles there before moving into marketing.</p>
+  <div class="rungs-wrap">
+  <div class="path-light" data-path-light data-rung="0" aria-hidden="true"></div>
   <ol class="rungs">
     {
       career.map((r, i) => (
@@ -29,16 +31,30 @@ const rungs = [
       ))
     }
   </ol>
+  </div>
 </section>
 
 <style>
-  /* One --key light pool high left at the start of the section (the light field, static; DESIGN.md). */
   .path { position: relative; }
-  .path::before { content: ''; position: absolute; z-index: -1; left: -300px; top: -140px; width: 1500px; height: 1040px; max-width: 120vw; pointer-events: none; background: radial-gradient(circle 900px at 300px 140px, rgb(var(--key) / .05), transparent); }
+  .nobr { white-space: nowrap; }
+  /* The key light (creative director r2, fixes 1 and 2): one --key pool that moves to the rung being read. The box holds
+     the whole circle, so it reaches zero before every edge; no max-width (body clips sideways overflow). Its resting
+     place, with no script, is the first rung's figure (centre 40px left of and 60px above it); the script only sets
+     translate. One element, translate only, no idle drift; under reduced motion it jumps. */
+  .rungs-wrap { position: relative; margin-top: 72px; }
+  .path-light {
+    /* Radius capped on narrow phones so the box stays inside the viewport (see CaseTeasers.astro). */
+    --r: min(400px, calc(100vw - 48px));
+    position: absolute; z-index: -1; left: calc(-40px - var(--r)); top: calc(8px - var(--r));
+    width: calc(2 * var(--r)); height: calc(2 * var(--r)); max-width: none; pointer-events: none;
+    background: radial-gradient(closest-side, rgb(var(--key) / .05), transparent);
+    transition: translate 900ms cubic-bezier(.16, 1, .3, 1);
+  }
+  @media (prefers-reduced-motion: reduce) { .path-light { transition: none; } }
+  :global(html[data-motion='reduce']) .path-light { transition: none; }
   .path { padding-top: 160px; }
   .path-h { max-width: 14ch; scroll-margin-top: 72px; }
   .path-intro { margin-top: 24px; }
-  .rungs { margin-top: 72px; }
   .rung { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); border-top: 1px solid var(--line); }
   .rung-in { grid-column: calc(1 + var(--i) * 2) / span 6; display: grid; gap: 10px; padding: 28px 0 36px; }
   .rung-fig { margin-top: 12px; font: 500 clamp(44px, 5.4vw, 80px) / .95 var(--display); letter-spacing: -.04em; white-space: nowrap; }
@@ -53,3 +69,42 @@ const rungs = [
   /* Below 360px the widest figure (with its marker) is wider than the stepped column, so let it wrap. */
   @media (max-width: 359px) { .rung-fig { white-space: normal; } }
 </style>
+
+<script>
+  // The key light follows the reading: the rung crossing the band 35% to 45% down the viewport gets the light.
+  let stop: (() => void) | null = null;
+  function initPathLight() {
+    stop?.();
+    stop = null;
+    const light = document.querySelector<HTMLElement>('[data-path-light]');
+    if (!light) return;
+    const rungs = [...document.querySelectorAll<HTMLElement>('.path .rung')];
+    let cur = 0;
+    const go = (i: number) => {
+      cur = i;
+      const fig = rungs[i]?.querySelector<HTMLElement>('.rung-fig');
+      const host = light.offsetParent as HTMLElement | null;
+      if (!fig || !host) return;
+      const f = fig.getBoundingClientRect(), h = host.getBoundingClientRect();
+      // Centre 40px left of and 60px above the figure's top-left, from the light's own untranslated box.
+      const x = f.left - h.left - 40 - (light.offsetLeft + light.offsetWidth / 2);
+      const y = f.top - h.top - 60 - (light.offsetTop + light.offsetHeight / 2);
+      light.style.translate = `${x.toFixed(1)}px ${y.toFixed(1)}px`;
+      light.dataset.rung = String(i);
+    };
+    // First placement is exact and instant (the CSS rest point is only an estimate of the first figure).
+    light.style.transition = 'none';
+    go(0);
+    void light.offsetWidth;
+    light.style.transition = '';
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) go(rungs.indexOf(e.target as HTMLElement));
+    }, { rootMargin: '-35% 0px -55% 0px' });
+    rungs.forEach((r) => io.observe(r));
+    const onResize = () => go(cur);
+    addEventListener('resize', onResize);
+    stop = () => { io.disconnect(); removeEventListener('resize', onResize); };
+  }
+  document.addEventListener('astro:page-load', initPathLight);
+  document.addEventListener('astro:before-swap', () => { stop?.(); stop = null; });
+</script>

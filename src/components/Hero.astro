@@ -91,7 +91,12 @@ const alt =
     margin-inline: auto;
     height: max(600px, calc(900 * var(--u)));
   }
-  .stage { position: absolute; inset: 0; }
+  .stage {
+    position: absolute; inset: 0;
+    /* The slab's fill, shared with the bent copy (below): the copy always paints over the fill, never under it. */
+    --slab-fill: radial-gradient(70% 110% at 10% 0%, rgb(255 226 190 / .10), transparent 58%), linear-gradient(180deg, rgb(255 248 236 / .05), rgb(255 248 236 / .015) 60%);
+    --slab-inset: inset 0 1px 0 rgb(255 244 224 / .24), inset 1px 0 0 rgb(255 244 224 / .10), inset 0 -12px 24px rgb(6 5 4 / .26);
+  }
   .more { position: absolute; inset: 0; pointer-events: none; }
   .more > * { pointer-events: auto; }
 
@@ -134,10 +139,8 @@ const alt =
     --rim: .80;
     position: absolute; left: calc(612 * var(--u)); top: calc(452 * var(--u)); width: calc(360 * var(--u)); height: calc(241 * var(--u));
     border-radius: var(--slab-r); z-index: 6; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none;
-    background:
-      radial-gradient(70% 110% at 10% 0%, rgb(255 226 190 / .10), transparent 58%),
-      linear-gradient(180deg, rgb(255 248 236 / .05), rgb(255 248 236 / .015) 60%);
-    box-shadow: inset 0 1px 0 rgb(255 244 224 / .24), inset 1px 0 0 rgb(255 244 224 / .10), inset 0 -12px 24px rgb(6 5 4 / .26), 0 0 0 1px rgb(6 5 4 / .45);
+    background: var(--slab-fill);
+    box-shadow: var(--slab-inset), 0 0 0 1px rgb(6 5 4 / .45);
     transition: --rim var(--dur-fast) ease-out, -webkit-backdrop-filter 120ms ease-out, backdrop-filter 120ms ease-out;
   }
   .slab::before { padding: 1.5px; }
@@ -148,10 +151,16 @@ const alt =
   /* In flight the bend eases out and a light blur eases in (120ms), and back on landing. */
   .slab[data-moving] { -webkit-backdrop-filter: blur(4px) saturate(160%) brightness(1.08); backdrop-filter: blur(4px) saturate(160%) brightness(1.08); }
   .slab[data-moving]::after { opacity: 0; }
-  .slab :global(svg.bend) { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: inherit; overflow: hidden; pointer-events: none; z-index: 1; }
+  /* The bent copy sits in the page under the slab (bend.ts): it scrolls with the masthead, so it stays in register with
+     the originals in every frame. Same layer as the slab, just before it, so the glass paints over it. */
+  .stage :global(svg.bend) { position: absolute; overflow: hidden; pointer-events: none; z-index: 6; background: var(--slab-fill); box-shadow: var(--slab-inset); }
+  /* While the copy shows, it carries the fill under itself (as when it lived inside the slab); the slab keeps its rims. */
+  .slab[data-bend='on'] { background: none; box-shadow: 0 0 0 1px rgb(6 5 4 / .45); }
   .slab-shadow {
     position: absolute; left: calc(612 * var(--u)); top: calc(452 * var(--u)); width: calc(360 * var(--u)); height: calc(241 * var(--u));
-    border-radius: calc(52 * var(--u)); z-index: 4; pointer-events: none;
+    /* Under the masthead (z 3), over the portrait (same z, later in the DOM): the contact shadow never dims the name, so
+       on touch, where the bend is off while the slab moves, the letters under the slab keep full ink (CD r2, fix 6a). */
+    border-radius: calc(52 * var(--u)); z-index: 2; pointer-events: none;
     background: rgb(var(--shadow-ink) / .25); filter: blur(calc(28 * var(--u)));
     transform: translate(calc(10 * var(--u)), calc(16 * var(--u)));
     transition: transform var(--dur-fast) ease-out;

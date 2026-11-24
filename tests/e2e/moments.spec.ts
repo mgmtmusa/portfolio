@@ -401,3 +401,150 @@ test.describe('round 1 motion', () => {
     await ctx.close();
   });
 });
+
+// Round-2 motion and creative director fixes.
+test.describe('round 2 motion', () => {
+  test('motion r2 item 1: mid-slide the cut-out stays in register, in every frame and between script updates', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'on touch the bend is off while the name slides');
+    await openHome(page);
+    await expect(page.locator('[data-slab]')).toHaveAttribute('data-bend', 'on');
+    const r = await page.evaluate(() => new Promise<{ frames: { y: number; copy: number; glass: number; hole: number }[]; frozen: number[] }>((done) => {
+      const slab = document.querySelector<HTMLElement>('[data-slab]')!;
+      const line = document.querySelector<HTMLElement>('.mast [data-line="1"]')!;
+      const svg = () => document.querySelector<SVGSVGElement>('svg.bend')!;
+      const text = () => svg().querySelector('text')!;
+      const holeTop = () => { const st = line.style as CSSStyleDeclaration & { webkitMaskPosition?: string }; const p = (st.maskPosition || st.webkitMaskPosition || '').match(/-?[\d.]+/g)!.map(Number); return line.getBoundingClientRect().top + p[1] + line.getBoundingClientRect().height; };
+      // Copy vs original: the copy's first row against line 1 (a constant offset between the two boxes when in register).
+      const copyOff = () => text().getBoundingClientRect().top - line.getBoundingClientRect().top;
+      const frames: { y: number; copy: number; glass: number; hole: number }[] = [];
+      // End of frame: ResizeObserver callbacks run after every animation-frame callback, before paint.
+      const probe = document.createElement('div');
+      probe.style.cssText = 'position:fixed;left:0;top:0;height:1px;width:1px;pointer-events:none;opacity:0';
+      document.body.append(probe);
+      const ro = new ResizeObserver(() => frames.push({ y: scrollY, copy: copyOff(), glass: slab.getBoundingClientRect().top - svg().getBoundingClientRect().top, hole: holeTop() - slab.getBoundingClientRect().top }));
+      ro.observe(probe);
+      let y = 0, w = 1;
+      const step = () => {
+        y += 4; scrollTo(0, y); probe.style.width = `${(w = 3 - w)}px`;
+        if (y < 60) { requestAnimationFrame(step); return; }
+        // Then freeze the script's updates (as when the compositor scrolls ahead of the main thread) and move 16px.
+        setTimeout(() => {
+          ro.disconnect(); probe.remove();
+          const before = copyOff();
+          window.__bend!.shift = () => {};
+          scrollTo(0, 76);
+          requestAnimationFrame(() => requestAnimationFrame(() => done({ frames, frozen: [before, copyOff()] })));
+        }, 50);
+      };
+      // The scroller's frame loop starts first and the input follows, as with the smooth scroller and a wheel.
+      requestAnimationFrame(step);
+      window.dispatchEvent(new WheelEvent('wheel', { deltaY: 0 }));
+    }));
+    expect(r.frames.length).toBeGreaterThan(8);
+    const c0 = r.frames[0].copy;
+    for (const f of r.frames) {
+      expect(Math.abs(f.copy - c0), `copy vs originals at y ${f.y}`).toBeLessThanOrEqual(1);
+      expect(Math.abs(f.glass), `glass vs copy at y ${f.y}`).toBeLessThanOrEqual(1);
+      expect(Math.abs(f.hole), `knock-out vs glass at y ${f.y}`).toBeLessThanOrEqual(1);
+    }
+    expect(Math.abs(r.frozen[1] - r.frozen[0]), 'copy stays on the originals with no script update').toBeLessThanOrEqual(1);
+  });
+
+  test('motion r2 item 2: on the way back the slab stays at opacity 0 until the dock has faded', async ({ page }) => {
+    await openHome(page);
+    await page.evaluate(() => window.__scene!.setProgress(300));
+    await page.waitForFunction(() => window.__scene?.state() === 'docked', null, { timeout: 8000 });
+    await page.waitForTimeout(600);
+    const out = await page.evaluate(() => new Promise<{ slab: number; dock: number; vis: string }[]>((done) => {
+      const slab = document.querySelector<HTMLElement>('[data-slab]')!, dock = document.querySelector<HTMLElement>('[data-dock]')!;
+      const f: { slab: number; dock: number; vis: string }[] = [];
+      const t0 = performance.now();
+      const tick = () => {
+        const cs = getComputedStyle(slab);
+        f.push({ slab: +cs.opacity, dock: +getComputedStyle(dock).opacity, vis: cs.visibility });
+        if (performance.now() - t0 < 1500) requestAnimationFrame(tick); else done(f);
+      };
+      window.__scene!.setProgress(0);
+      requestAnimationFrame(tick);
+    }));
+    const both = out.filter((f) => f.vis === 'visible' && f.slab > 0.02 && f.dock > 0.08);
+    expect(both, 'frames with the slab showing while the dock still shows').toEqual([]);
+    expect(out[out.length - 1].slab).toBe(1);
+    expect(out[out.length - 1].dock).toBe(0);
+  });
+
+  test('CD r2 fix 6a: on touch, with the bend off while the name slides, the letters under the slab keep full ink', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'touch: the bend is off while the slab moves');
+    await openHome(page);
+    await page.waitForFunction(() => document.querySelector<HTMLElement>('[data-slab]')!.dataset.bend === 'on', null, { timeout: 10000 });
+    const ink = async () => {
+      const g = await page.evaluate(() => {
+        const s = document.querySelector('[data-slab]')!.getBoundingClientRect();
+        const rg = document.createRange(); rg.selectNodeContents(document.querySelector('.mast [data-line="1"]')!);
+        const rows = [...rg.getClientRects()], row = rows[rows.length - 1];
+        return { x: s.left + 8, w: s.width - 16, y: Math.max(row.top, s.top + 8), h: Math.min(row.bottom, s.bottom - 8) - Math.max(row.top, s.top + 8), bend: document.querySelector<HTMLElement>('[data-slab]')!.dataset.bend };
+      });
+      const buf = await page.screenshot({ clip: { x: g.x, y: g.y, width: g.w, height: g.h } });
+      const p90 = await page.evaluate(async (png) => {
+        const img: ImageData = await new Promise((res) => { const i = new Image(); i.onload = () => { const c = document.createElement('canvas'); c.width = i.width; c.height = i.height; const x = c.getContext('2d')!; x.drawImage(i, 0, 0); res(x.getImageData(0, 0, i.width, i.height)); }; i.src = 'data:image/png;base64,' + png; });
+        const a: number[] = [];
+        for (let i = 0; i < img.data.length; i += 4) a.push(Math.max(img.data[i], img.data[i + 1], img.data[i + 2]));
+        a.sort((m, n) => m - n);
+        return a[Math.floor(a.length * 0.9)];
+      }, buf.toString('base64'));
+      return { p90, bend: g.bend };
+    };
+    const rest = await ink();
+    expect(rest.bend).toBe('on');
+    await page.evaluate(() => scrollTo(0, 45));
+    await page.waitForTimeout(40);
+    const moving = await ink();
+    expect(moving.bend, 'bend off while moving').toBe('off');
+    expect(moving.p90, `ink under the slab while moving (${moving.p90}) vs at rest (${rest.p90})`).toBeGreaterThanOrEqual(rest.p90 - 6);
+  });
+
+  // Creative director r2 fix 2: the third moment. One key light, translate only, moves to the rung being read.
+  test('the key light settles behind each rung’s figure in turn', async ({ page }) => {
+    await page.goto('/');
+    await page.evaluate(() => document.fonts.ready);
+    const light = page.locator('[data-path-light]');
+    expect(await light.evaluate((el) => getComputedStyle(el).transitionProperty)).toBe('translate');
+    const n = await page.locator('.path .rung').count();
+    expect(n).toBe(4);
+    for (let i = 0; i < n; i++) {
+      await page.evaluate((k) => {
+        const r = document.querySelectorAll('.path .rung')[k].getBoundingClientRect();
+        window.scrollTo({ top: scrollY + r.top - innerHeight * 0.4 + 2, behavior: 'instant' });
+      }, i);
+      await expect(light).toHaveAttribute('data-rung', String(i));
+      await page.waitForTimeout(1300);
+      const d = await page.evaluate((k) => {
+        const f = document.querySelectorAll('.path .rung-fig')[k].getBoundingClientRect();
+        const l = document.querySelector('[data-path-light]')!.getBoundingClientRect();
+        return { dx: l.left + l.width / 2 - (f.left - 40), dy: l.top + l.height / 2 - (f.top - 60) };
+      }, i);
+      expect(Math.abs(d.dx), `rung ${i} x`).toBeLessThanOrEqual(2);
+      expect(Math.abs(d.dy), `rung ${i} y`).toBeLessThanOrEqual(2);
+    }
+  });
+
+  test('reduced motion: the key light jumps (no transition); without JavaScript it rests on the first rung', async ({ browser }, info) => {
+    const ctx = await browser.newContext({ ...info.project.use, reducedMotion: 'reduce' });
+    const page = await ctx.newPage();
+    await page.goto('/');
+    expect(await page.locator('[data-path-light]').evaluate((el) => getComputedStyle(el).transitionDuration)).toBe('0s');
+    await ctx.close();
+    const nojs = await browser.newContext({ ...info.project.use, javaScriptEnabled: false });
+    const p2 = await nojs.newPage();
+    await p2.goto('/');
+    const d = await p2.evaluate(() => {
+      const f = document.querySelector('.path .rung-fig')!.getBoundingClientRect();
+      const l = document.querySelector('[data-path-light]')!.getBoundingClientRect();
+      return { dx: l.left + l.width / 2 - (f.left - 40), dy: l.top + l.height / 2 - (f.top - 60), t: getComputedStyle(document.querySelector('[data-path-light]')!).translate };
+    });
+    expect(d.t).toBe('none');
+    expect(Math.abs(d.dx), 'x').toBeLessThanOrEqual(24);
+    expect(Math.abs(d.dy), 'y').toBeLessThanOrEqual(24);
+    await nojs.close();
+  });
+});

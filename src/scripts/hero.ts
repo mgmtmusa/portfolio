@@ -12,6 +12,7 @@ const BACK = 60; // below this the slab springs back from the dock
 const FADE = 240; // ms: the slab and the dock cross-fade over the dock's own fade (--dur-ui)
 const FALL = 120; // ms: the bend eases out before the slab leaves, while the blur comes in
 const RISE = 200; // ms: the bend eases back in once the slab has settled
+const REVEAL = 160; // ms: the returning slab fades in once the dock has gone (--dur-fast)
 let teardown: (() => void) | null = null;
 let live: HTMLElement | null = null; // the hero this document is already running (astro:page-load can follow start())
 
@@ -192,7 +193,7 @@ function init() {
     bornAt = performance.now();
     slab.style.translate = prev.tr; slab.style.transform = prev.tf; slab.style.clipPath = prev.cp;
     window.__bend = window.__v3test ? bend : undefined;
-    if (bend) { bend.setStrength(strength); syncBend(); place(); }
+    if (bend) { bend.setStrength(strength); bend.setOpacity(+(slab.style.opacity || getComputedStyle(slab).opacity)); syncBend(); place(); }
   };
   const ramp = (to: number, ms: number, done?: () => void) => {
     cancelAnimationFrame(rampRaf);
@@ -246,7 +247,8 @@ function init() {
     slab.style.transform = f.transform;
     slab.style.clipPath = f.clip;
     shadow.style.transform = f.transform;
-    shadow.style.opacity = String(1 - t);
+    // Never a shadow without its glass (the returning slab waits at opacity 0 for the dock to fade).
+    shadow.style.opacity = String(Math.min(1 - t, +getComputedStyle(slab).opacity));
   }
   const fadeSlab = (to: '0' | '1', ms: number) => {
     // Keeps the blur's own 120ms ease (Hero.astro) alongside the opacity.
@@ -254,6 +256,8 @@ function init() {
     slab.style.opacity = to;
   };
   let handedOff = false;
+  let revealing = false; // returning: the slab waits at opacity 0 until the dock has faded
+  const dockFaded = () => +getComputedStyle(dock).opacity < 0.08;
   let hideTimer: ReturnType<typeof setTimeout> | undefined;
   function flyTo(target: 0 | 1) {
     // Anything in progress yields to the flight: the glide, a drag (and its pointer capture), a hold or a ramp.
@@ -272,7 +276,11 @@ function init() {
       showDock(false);
       handedOff = false;
       slab.style.pointerEvents = '';
-      fadeSlab('1', reduced ? 160 : FADE);
+      // Motion r2, item 2: no double image on the way back. The slab stays at opacity 0 until the dock has faded
+      // out, then fades in on its way to rest. A flight caught before the hand-off (the slab still showing) keeps it.
+      revealing = false;
+      if (reduced || dockFaded()) fadeSlab('1', reduced ? 160 : FADE);
+      else { revealing = true; fadeSlab('0', 0); }
     }
     if (reduced) {
       // A cross-fade in place: no morph, so nothing is left scaled or clipped at the dock.
@@ -295,6 +303,7 @@ function init() {
         const s = springAt((now - t0) / 1000, from, target, 0.5, 1, v0);
         t = Math.min(1, Math.max(0, s.x)); tv = s.v;
         render();
+        if (revealing && dockFaded()) { revealing = false; fadeSlab('1', REVEAL); }
         // Near the dock the slab hands over: it fades out while the dock fades in, at the same rect.
         if (target === 1 && !handedOff && t >= 0.85) { handedOff = true; slab.style.pointerEvents = 'none'; fadeSlab('0', FADE); showDock(true); }
         if (Math.abs(s.x - target) < 0.001 && Math.abs(s.v) < 0.01) { t = target; tv = 0; render(); land(target); return; }
@@ -314,6 +323,7 @@ function init() {
   }
   function land(target: 0 | 1) {
     stopFlight = null;
+    if (revealing) { revealing = false; if (target === 0) fadeSlab('1', REVEAL); }
     holding = false;
     delete slab.dataset.moving;
     if (target === 1) {
@@ -346,7 +356,25 @@ function init() {
 
   // ----- Scroll -----
   let scrollRest: ReturnType<typeof setTimeout> | undefined;
+  // Motion r2, item 1: the copy and the knock-out live in the page (bend.ts), so they never tear from the originals.
+  // The glass follows in the same frame too: from the first scroll input until the scroll has been still for 12 frames,
+  // a frame callback (queued after the smooth scroller's own, which starts at page load) writes the slide.
+  let followRaf = 0, still = 0, lastY = -1;
+  const follow = () => {
+    followRaf = 0;
+    if (mode !== 'rest' || reduced) return;
+    const y = scrollY;
+    if (y !== lastY) { lastY = y; still = 0; if (!drag) place(); } else still++;
+    if (still < 12) followRaf = requestAnimationFrame(follow);
+  };
+  const wake = () => { still = 0; if (!followRaf && mode === 'rest' && !reduced) followRaf = requestAnimationFrame(follow); };
+  on(window, 'wheel', wake, { passive: true });
+  on(window, 'touchstart', wake, { passive: true });
+  on(window, 'keydown', wake);
+  off.push(() => cancelAnimationFrame(followRaf));
   const onScroll = () => {
+    if (mode === 'rest' && !drag) { place(); lastY = scrollY; }
+    wake();
     cancelAnimationFrame(raf);
     raf = requestAnimationFrame(() => {
       const s = scrollY;
@@ -443,6 +471,7 @@ function init() {
       alive = false; stopGlide = null; gliding = false;
       if (coarse) touchMoving = false;
       slab.style.opacity = shadow.style.opacity = '1';
+      bend?.setOpacity(1);
       settledX = 0;
       syncBend();
     };
@@ -454,6 +483,7 @@ function init() {
       const o = String(Math.min(1, el / 0.2));
       const wasOpaque = opaque();
       slab.style.opacity = o; shadow.style.opacity = o;
+      bend?.setOpacity(+o);
       place();
       // A bend that arrives mid-glide (its cold build waits for idle) eases in over 200ms on top of the glide's own rise.
       if (bend && !coarse) { cancelAnimationFrame(rampRaf); bend.setStrength(STR * Math.min(1, el / 1.1) * easeOut(Math.min(1, (now - bornAt) / RISE))); }

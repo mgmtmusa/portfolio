@@ -12,7 +12,7 @@ const maps = new Map<string, string>();
  * setVisible(on, knock): `on` draws the bent copy; `knock` (default `on`) also cuts the originals out under the slab.
  * While the slab is still fading in, draw the copy over intact originals (knock false) so the name never dims.
  */
-export type Bend = { shift(dx: number, dy: number): void; setStrength(s: number): void; setVisible(on: boolean, knock?: boolean): void; readonly strength: number; destroy(): void };
+export type Bend = { shift(dx: number, dy: number): void; setStrength(s: number): void; setVisible(on: boolean, knock?: boolean): void; setOpacity(o: number): void; readonly strength: number; destroy(): void };
 
 export function bendSupported(): boolean {
   if (matchMedia('(prefers-reduced-transparency: reduce), (prefers-contrast: more), (forced-colors: active)').matches) return false;
@@ -24,17 +24,25 @@ export function bendSupported(): boolean {
 // at most one device pixel: feDisplacementMap samples nearest-neighbour in Chromium and WebKit, and an upscaled
 // half-resolution map turned every map pixel into a 2 to 4 device-pixel tooth. The cold build stays cheap because
 // only the edge band is computed (one quadrant, mirrored); the centre is a flat neutral fill.
-// Nearest-neighbour sampling still leaves one-device-pixel stairs on displaced contours: a sub-pixel blur, weighted by
-// the band (map B channel), smooths them without softening the undisplaced centre.
-// WebKit's blur rounds a sub-pixel deviation up to a whole box kernel (a visible 1 to 2px smear), so it gets the
-// device-resolution map alone.
-const SOFTEN = 0.35;
-const webkitOnly = () => /AppleWebKit/.test(navigator.userAgent) && !/Chrome\/|Chromium\/|Edg\//.test(navigator.userAgent);
-const soften = () => (webkitOnly() ? '' : `<feGaussianBlur in="d" stdDeviation="${SOFTEN}" result="b"/>
-      <feColorMatrix in="map" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 1 0 0" result="w"/>
-      <feComposite in="b" in2="w" operator="in" result="bw"/>
-      <feComposite in="d" in2="w" operator="out" result="dw"/>
-      <feComposite in="bw" in2="dw" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>`);
+// Nearest-neighbour sampling still leaves one-device-pixel stairs and notches on displaced contours (the "A" leg, the
+// "d" stem and foot near the corners): an output pixel takes whichever source pixel is nearest, so anti-aliasing
+// pixels are skipped or doubled where the displacement changes. The fix is supersampling inside the filter, in both
+// engines: four displacement passes, each offset by a rotated-grid sub-pixel step (in device px), averaged. The
+// offsets are weighted by the band (map B channel), so the undisplaced centre stays an exact copy. This replaces the
+// old Chromium-only blur (WebKit rounded that blur up to a visible box kernel, so WebKit had no smoothing at all).
+const RGSS: [number, number][] = [[-0.375, -0.125], [0.125, -0.375], [0.375, 0.125], [-0.125, 0.375]];
+const supersample = (scale: number) => `${RGSS.map((_, i) => `<feColorMatrix in="map" type="matrix" data-ss="${i}" values="${ssMatrix(i, scale)}" result="m${i}"/>
+      <feDisplacementMap in="SourceGraphic" in2="m${i}" scale="${scale}" xChannelSelector="R" yChannelSelector="G" result="d${i}"/>`).join('\n      ')}
+      <feComposite in="d0" in2="d1" operator="arithmetic" k1="0" k2=".5" k3=".5" k4="0" result="p"/>
+      <feComposite in="d2" in2="d3" operator="arithmetic" k1="0" k2=".5" k3=".5" k4="0" result="q"/>
+      <feComposite in="p" in2="q" operator="arithmetic" k1="0" k2=".5" k3=".5" k4="0"/>`;
+// The map channel shift that moves a pass by its sub-pixel offset: shift = scale * k * B, so k = offset / scale.
+// At scale 0 nothing is displaced (an exact copy); a small scale caps k so the channel stays inside [0, 1].
+function ssMatrix(i: number, scale: number): string {
+  const [ox, oy] = RGSS[i].map((v) => v / dpr());
+  const k = (o: number) => (scale > 0 ? Math.max(-0.45, Math.min(0.45, o / scale)) : 0).toFixed(5);
+  return `1 0 ${k(ox)} 0 0  0 1 ${k(oy)} 0 0  0 0 1 0 0  0 0 0 1 0`;
+}
 const dpr = () => Math.min(3, Math.max(1, window.devicePixelRatio || 1));
 const mapKey = (w: number, h: number, r: number, band: number) => `${Math.round(w)}x${Math.round(h)}r${r}b${band}d${dpr()}`;
 
@@ -52,7 +60,7 @@ function sdRR(px: number, py: number, hw: number, hh: number, r: number): number
 function bmpField(W: number, H: number, r: number, band: number): Uint8Array<ArrayBuffer> {
   const stride = (W * 3 + 3) & ~3, off = 54;
   const buf = new Uint8Array(off + stride * H);
-  // Neutral pixel: B 0 (B carries the band weight, used to soften only the displaced band), G 128, R 128.
+  // Neutral pixel: B 0 (B carries the supersampling weight, non-zero only in the displaced band), G 128, R 128.
   const rowT = new Uint8Array(stride);
   for (let x = 0; x < W; x++) { rowT[x * 3 + 1] = 128; rowT[x * 3 + 2] = 128; }
   for (let y = 0; y < H; y++) buf.set(rowT, off + y * stride);
@@ -79,7 +87,8 @@ function bmpField(W: number, H: number, r: number, band: number): Uint8Array<Arr
       const vx = (-gx / gl) * m * 127, vy = (-gy / gl) * m * 127;
       const R1 = Math.round(128 + vx), R2 = Math.round(128 - vx), G1 = Math.round(128 + vy), G2 = Math.round(128 - vy);
       const c1 = x * 3, c2 = (W - 1 - x) * 3; // BGR: G at +1, R at +2
-      const B = Math.round(m * 255);
+      // Full supersampling from a third of the way into the band; it fades out with the displacement itself.
+      const B = Math.round(Math.min(1, 3 * m) * 255);
       buf[row1 + c1] = B; buf[row1 + c1 + 1] = G1; buf[row1 + c1 + 2] = R1;
       buf[row1 + c2] = B; buf[row1 + c2 + 1] = G1; buf[row1 + c2 + 2] = R2;
       buf[row2 + c1] = B; buf[row2 + c1 + 1] = G2; buf[row2 + c1 + 2] = R1;
@@ -157,33 +166,41 @@ export function buildBend(
 ): Bend | null {
   if (!bendSupported()) { pane.dataset.bend = 'off'; return null; }
   assertNoFold(o.strength, o.band);
-  pane.querySelector('svg.bend')?.remove();
-  const R = root.getBoundingClientRect();
+  // The copy lives in the page, beside the slab (not inside it): it scrolls with the masthead, so between two script
+  // updates (threaded scrolling, or a smooth-scroll frame that lands after ours) the copy and the knock-out move
+  // together with the originals and never fall out of register. Only the glass edge can trail by that frame.
+  const host = pane.parentElement ?? root;
+  host.querySelectorAll(':scope > svg.bend').forEach((el) => el.remove());
+  const R = host.getBoundingClientRect();
   const P = pane.getBoundingClientRect();
   if (!P.width || !P.height) { pane.dataset.bend = 'off'; return null; }
   const px = P.left - R.left, py = P.top - R.top, pw = P.width, ph = P.height;
   const radius = parseFloat(getComputedStyle(pane).borderTopLeftRadius) || 24;
   const id = `bend-${Math.random().toString(36).slice(2, 7)}`;
-  const pad = o.band * 2;
+  // The filter only samples up to strength / 2 outside the slab.
+  const pad = Math.ceil(o.strength / 2) + 4;
 
   const svg = document.createElementNS(SVG, 'svg');
   svg.setAttribute('class', 'bend');
   svg.setAttribute('aria-hidden', 'true');
   svg.setAttribute('focusable', 'false');
   svg.setAttribute('viewBox', `${px} ${py} ${pw} ${ph}`);
+  svg.setAttribute('width', String(pw));
+  svg.setAttribute('height', String(ph));
+  Object.assign(svg.style, { left: `${px}px`, top: `${py}px`, width: `${pw}px`, height: `${ph}px`, borderRadius: `${radius}px` });
   svg.innerHTML = `<defs>
     <clipPath id="${id}-c"><rect x="${px}" y="${py}" width="${pw}" height="${ph}" rx="${radius}"/></clipPath>
     <filter id="${id}" x="${px - pad}" y="${py - pad}" width="${pw + pad * 2}" height="${ph + pad * 2}" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
       <feImage x="${px}" y="${py}" width="${pw}" height="${ph}" preserveAspectRatio="none" result="map"/>
-      <feDisplacementMap in="SourceGraphic" in2="map" scale="${o.strength}" xChannelSelector="R" yChannelSelector="G" result="d"/>
-${soften()}
+      ${supersample(o.strength)}
     </filter></defs><g clip-path="url(#${id}-c)"><g filter="url(#${id})"><g class="bend-content"></g></g></g>`;
   const fe = svg.querySelector('feImage')!;
   const url = mapUrl(pw, ph, radius, o.band);
   fe.setAttribute('href', url);
   fe.setAttributeNS(XL, 'xlink:href', url);
   const content = svg.querySelector<SVGGElement>('g.bend-content')!;
-  const dm = svg.querySelector('feDisplacementMap')!;
+  const dms = [...svg.querySelectorAll('feDisplacementMap')];
+  const cms = [...svg.querySelectorAll('feColorMatrix[data-ss]')];
 
   o.images.forEach((img, i) => {
     const r = img.getBoundingClientRect();
@@ -237,7 +254,7 @@ ${soften()}
       content.appendChild(t);
     }
   }
-  pane.prepend(svg);
+  pane.before(svg);
 
   // The knock-out: one mask layer per target, an SVG of a solid rect with the rounded hole cut out
   // (evenodd). One layer means no internal edges, so nothing can seam at a fractional device-pixel
@@ -276,10 +293,16 @@ ${soften()}
   return {
     shift(x, y) {
       dx = x; dy = y;
+      svg.style.translate = `${x}px ${y}px`;
       content.setAttribute('transform', `translate(${-x} ${-y})`);
       paintMasks();
     },
-    setStrength(v) { strength = v; dm.setAttribute('scale', String(v)); },
+    setStrength(v) {
+      strength = v;
+      dms.forEach((d) => d.setAttribute('scale', String(v)));
+      cms.forEach((c, i) => c.setAttribute('values', ssMatrix(i, v)));
+    },
+    setOpacity(v) { svg.style.opacity = v >= 1 ? '' : String(v); },
     get strength() { return strength; },
     setVisible(on, k = on) {
       visible = on; knock = on && k;

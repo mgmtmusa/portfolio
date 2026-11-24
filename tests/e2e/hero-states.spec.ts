@@ -38,7 +38,7 @@ const snap = (page: Page): Promise<Snap> =>
     return {
       slab: { x: s.left, y: s.top, w: s.width, h: s.height },
       rel: { x: s.left - hero.left, y: s.top - hero.top, w: s.width, h: s.height },
-      vb: slab.querySelector('svg.bend')?.getAttribute('viewBox')?.split(/\s+/).map(Number) ?? null,
+      vb: slab.parentElement!.querySelector(':scope > svg.bend')?.getAttribute('viewBox')?.split(/\s+/).map(Number) ?? null,
       transform: cs.transform,
       clip: cs.clipPath,
       visibility: cs.visibility,

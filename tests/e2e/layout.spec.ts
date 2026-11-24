@@ -191,6 +191,43 @@ test.describe('layout guardrails', () => {
     });
   }
 
+  // Creative director r2 fix 1 and HoE r2: both light pools fade to nothing before their box edges. Everything but the
+  // pools is hidden (the page grain too: it is noise by design); no adjacent pixels on any sampled row or column may step by more than 2 levels.
+  for (const [w, h, phone] of [[1440, 900, false], [1024, 768, false], [390, 844, true], [320, 640, true]] as const) {
+    test(`light pools have no hard edge at ${w}`, async ({ page, isMobile }) => {
+      test.skip(isMobile !== phone, phone ? 'phone widths' : 'desktop widths');
+      await page.setViewportSize({ width: w, height: h });
+      await page.goto('/');
+      await page.evaluate(() => document.fonts.ready);
+      for (const pool of ['.path-light', '.teasers']) {
+        await page.evaluate(([sel, vh]) => {
+          const el = document.querySelector<HTMLElement>(sel as string)!;
+          const r = el.getBoundingClientRect();
+          // The pool's centre: the moving light's own box centre, or the teasers pool at the section's y 120.
+          const cy = sel === '.teasers' ? r.top + 120 : r.top + r.height / 2;
+          window.scrollTo({ top: scrollY + cy - (vh as number) / 2, behavior: 'instant' });
+        }, [pool, h]);
+        await page.waitForTimeout(1200);
+        const style = await page.addStyleTag({ content: 'body::before{display:none!important}body *{visibility:hidden!important;transition:none!important}.path-light,.teasers::before{visibility:visible!important}' });
+        await page.waitForTimeout(100);
+        const shot = await page.screenshot();
+        await style.evaluate((n) => (n as Element).remove());
+        const r = await page.evaluate(async (png) => {
+          const img: ImageData = await new Promise((res) => { const i = new Image(); i.onload = () => { const cv = document.createElement('canvas'); cv.width = i.width; cv.height = i.height; const x = cv.getContext('2d')!; x.drawImage(i, 0, 0); res(x.getImageData(0, 0, i.width, i.height)); }; i.src = 'data:image/png;base64,' + png; });
+          const { width: W, height: H, data: d } = img;
+          let max = 0, at = '', lit = 0;
+          const step = (i: number, j: number) => Math.max(Math.abs(d[i] - d[j]), Math.abs(d[i + 1] - d[j + 1]), Math.abs(d[i + 2] - d[j + 2]));
+          for (let y = 0; y < H; y += 3) for (let x = 1; x < W; x++) { const s = step((y * W + x) * 4, (y * W + x - 1) * 4); if (s > max) { max = s; at = `row ${y} x ${x}`; } }
+          for (let x = 0; x < W; x += 3) for (let y = 1; y < H; y++) { const s = step((y * W + x) * 4, ((y - 1) * W + x) * 4); if (s > max) { max = s; at = `col ${x} y ${y}`; } }
+          for (let i = 0; i < d.length; i += 4) lit = Math.max(lit, d[i]);
+          return { max, at, lit };
+        }, shot.toString('base64'));
+        expect(r.lit, `${pool} is lit on screen`).toBeGreaterThan(22);
+        expect(r.max, `${pool}: largest adjacent step ${r.max} levels at ${r.at} (device px)`).toBeLessThanOrEqual(2);
+      }
+    });
+  }
+
   // Creative director fix 12: on /contact/ the dock's Get in touch (pointing at the page you are on) is gone.
   test('contact: the dock has no Get in touch', async ({ page }) => {
     await page.goto('/contact/');
