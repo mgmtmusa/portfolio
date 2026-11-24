@@ -1,0 +1,138 @@
+{
+  "checks": [
+    {
+      "name": "rest: dark page, not a white or blank load",
+      "ok": true,
+      "detail": {
+        "mean": 49.8,
+        "std": 63.9
+      }
+    },
+    {
+      "name": "rest: role line band at the top (page not scrolled)",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.125
+      }
+    },
+    {
+      "name": "rest: portrait has detail",
+      "ok": true,
+      "detail": {
+        "std": 49.2
+      }
+    },
+    {
+      "name": "rest: masthead glyphs above the slab",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.294
+      }
+    },
+    {
+      "name": "rest: masthead glyphs below the slab",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.457
+      }
+    },
+    {
+      "name": "rest: masthead glyphs right of the slab",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.342
+      }
+    },
+    {
+      "name": "rest: glyph pixels under the slab",
+      "ok": true,
+      "detail": {
+        "diffShare": 0.259
+      }
+    },
+    {
+      "name": "docked: dark page, not a white or blank load",
+      "ok": true,
+      "detail": {
+        "mean": 40.8,
+        "std": 55.7
+      }
+    },
+    {
+      "name": "docked: dock pill present in the bottom band",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.318
+      }
+    },
+    {
+      "name": "back: dark page, not a white or blank load",
+      "ok": true,
+      "detail": {
+        "mean": 50,
+        "std": 63.7
+      }
+    },
+    {
+      "name": "back: role line band at the top (page not scrolled)",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.134
+      }
+    },
+    {
+      "name": "back: portrait has detail",
+      "ok": true,
+      "detail": {
+        "std": 49.2
+      }
+    },
+    {
+      "name": "back: masthead glyphs above the slab",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.29
+      }
+    },
+    {
+      "name": "back: masthead glyphs below the slab",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.456
+      }
+    },
+    {
+      "name": "back: masthead glyphs right of the slab",
+      "ok": true,
+      "detail": {
+        "brightShare": 0.353
+      }
+    },
+    {
+      "name": "back: glyph pixels under the slab",
+      "ok": true,
+      "detail": {
+        "diffShare": 0.294
+      }
+    },
+    {
+      "name": "rest and docked captures differ",
+      "ok": true,
+      "detail": {
+        "restMean": 49.8,
+        "dockedMean": 40.8
+      }
+    },
+    {
+      "name": "docked and back captures differ",
+      "ok": true,
+      "detail": {}
+    }
+  ],
+  "paintMean": 66.26724421353664,
+  "size": [
+    1206,
+    2622
+  ],
+  "pass": true
+}
