@@ -1,11 +1,12 @@
 ---
 // Direction C, "Cover line": an inverted magazine cover. Contract: .impeccable/surfaces/src-pages-index-astro.md
-import { Picture } from 'astro:assets';
-import portrait from '../assets/portrait/musa-portrait-graded.webp';
+import { portraitSources } from '../lib/portrait';
 import Footnote from './Footnote.astro';
 import { site } from '../data/site';
 import { notes } from '../data/notes';
 
+// One picture, built by hand so each format gets its own quality.
+const pic = await portraitSources();
 const alt =
   'Studio portrait of Musa Abdullah Walid: a bearded man with swept-back black hair and gold wire-framed glasses, in a navy pinstripe double-breasted suit, white shirt and patterned tie.';
 ---
@@ -27,19 +28,21 @@ const alt =
     </div>
 
     <div class="photo" aria-hidden="false">
-      <Picture
-        src={portrait}
-        alt={alt}
-        formats={['avif', 'webp']}
-        widths={[300, 420, 620, 860, 1240]}
-        sizes="(max-width: 639px) 351px, min(620px, 43vw, 69svh)"
-        quality={84}
-        loading="eager"
-        fetchpriority="high"
-        decoding="async"
-        class="photo-img"
-        data-portrait
-      />
+      <picture>
+        <source type="image/avif" srcset={pic.avif} sizes={pic.sizes} />
+        <source type="image/webp" srcset={pic.webp} sizes={pic.sizes} />
+        <img
+          class="photo-img"
+          data-portrait
+          src={pic.fallback}
+          alt={alt}
+          width="620"
+          height="620"
+          loading="eager"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </picture>
     </div>
 
     <div class="slab glass--slab" data-slab aria-hidden="true"></div>

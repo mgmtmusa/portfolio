@@ -136,6 +136,9 @@ function wireAnalytics() {
   });
 }
 
+/** Tests and the dock wait on this; set once chrome is wired. */
+function signalReady() { document.documentElement.dataset.chrome = 'ready'; }
+
 function markCurrent() {
   const path = location.pathname;
   document.querySelectorAll<HTMLAnchorElement>('.dock-link').forEach((a) => {
@@ -146,6 +149,7 @@ function markCurrent() {
 
 startClock();
 wireCommandMenu();
+signalReady();
 wireAnalytics();
 markCurrent();
 document.addEventListener('astro:page-load', markCurrent);

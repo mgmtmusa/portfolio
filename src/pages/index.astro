@@ -9,6 +9,8 @@ import NextStep from '../components/NextStep.astro';
 import Notes from '../components/Notes.astro';
 import { site } from '../data/site';
 import { notes } from '../data/notes';
+import { portraitSources } from '../lib/portrait';
+const pic = await portraitSources();
 const pageNotes = [
   { n: 1, id: 'fn-1', note: notes.evitechPair },
   { n: 2, id: 'fn-2', note: notes.closed },
@@ -20,7 +22,7 @@ const pageNotes = [
 ];
 ---
 
-<Base title={`${site.name}, ${site.role}`} path="/">
+<Base title={`${site.name}, ${site.role}`} path="/" lcpImage={{ srcset: pic.avif, sizes: pic.sizes, type: 'image/avif' }}>
   <Hero />
   <Path />
   <Approach />
@@ -29,5 +31,7 @@ const pageNotes = [
   <section class="wrap" style="padding-top: 120px" aria-label="Notes"><Notes notes={pageNotes} /></section>
 </Base>
 <script>
-  import '../scripts/hero';
+  ((window as unknown as { __afterPaint: (() => void)[] }).__afterPaint ??= []).push(() => {
+    import('../scripts/hero').then((m) => m.start());
+  });
 </script>

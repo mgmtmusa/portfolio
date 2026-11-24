@@ -323,5 +323,13 @@ function init() {
   };
 }
 
-document.addEventListener('astro:page-load', init);
-document.addEventListener('astro:before-swap', () => { teardown?.(); teardown = null; });
+let wired = false;
+/** Called once when the module loads (after `load`); later navigations re-run init on astro:page-load. */
+export function start() {
+  if (!wired) {
+    wired = true;
+    document.addEventListener('astro:page-load', init);
+    document.addEventListener('astro:before-swap', () => { teardown?.(); teardown = null; });
+  }
+  init();
+}

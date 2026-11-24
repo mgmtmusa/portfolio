@@ -1,7 +1,12 @@
 /* v3 design tokens. Source: brief section 2.6, refined by the creative director in phase 2. */
 @font-face { font-family: 'Host Grotesk'; src: url('/fonts/host-grotesk.woff2') format('woff2'); font-weight: 300 800; font-display: swap; }
-@font-face { font-family: 'Geist'; src: url('/fonts/geist.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
-@font-face { font-family: 'Geist Mono'; src: url('/fonts/geist-mono.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+/* Geist and Geist Mono load just after first paint (public/fonts/late.css, added by Base.astro), so the
+   portrait wins the network. Until then, metric-matched fallbacks keep every line where it will be. */
+@font-face { font-family: 'Host Fallback'; src: local('Arial'), local('ArialMT'); size-adjust: 99.9%; ascent-override: 101.6%; descent-override: 31.5%; line-gap-override: 0%; }
+@font-face { font-family: 'Host Fallback R'; src: local('Roboto'); size-adjust: 99.9%; ascent-override: 101.6%; descent-override: 31.5%; line-gap-override: 0%; }
+@font-face { font-family: 'Geist Fallback'; src: local('Arial'), local('ArialMT'); size-adjust: 102.9%; ascent-override: 97.7%; descent-override: 28.7%; line-gap-override: 0%; }
+@font-face { font-family: 'Geist Fallback R'; src: local('Roboto'); size-adjust: 102.9%; ascent-override: 97.7%; descent-override: 28.7%; line-gap-override: 0%; }
+@font-face { font-family: 'Geist Mono Fallback'; src: local('Menlo'), local('Courier New'), local('Roboto Mono'); size-adjust: 100%; ascent-override: 100.5%; descent-override: 29.5%; line-gap-override: 0%; }
 
 :root {
   /* Colour: near-black and warm, red above blue in every neutral. */
@@ -21,9 +26,9 @@
   --key: 255 212 166;       /* the one warm key light */
 
   /* Type */
-  --display: 'Host Grotesk', ui-sans-serif, system-ui, sans-serif;
-  --ui: 'Geist', ui-sans-serif, system-ui, sans-serif;
-  --mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --display: 'Host Grotesk', 'Host Fallback', 'Host Fallback R', ui-sans-serif, system-ui, sans-serif;
+  --ui: 'Geist', 'Geist Fallback', 'Geist Fallback R', ui-sans-serif, system-ui, sans-serif;
+  --mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, monospace;
   --fs-mast: clamp(76px, 14.8vw, 232px);
   --fs-h1: clamp(44px, 6vw, 80px);
   --fs-fig: clamp(96px, 11vw, 168px);

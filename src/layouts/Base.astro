@@ -21,6 +21,8 @@ interface Props {
   noindex?: boolean;
   /** Canonical override (company links point to /). */
   canonicalPath?: string;
+  /** The LCP image, preloaded ahead of everything else. */
+  lcpImage?: { srcset: string; sizes: string; type: string };
 }
 const {
   title,
@@ -33,6 +35,7 @@ const {
   jsonLd,
   noindex = false,
   canonicalPath,
+  lcpImage,
 } = Astro.props;
 const canonical = new URL(canonicalPath ?? path, site.url).href;
 const ogImage = new URL(og, site.url).href;
@@ -67,12 +70,28 @@ const analytics = Boolean(import.meta.env.VERCEL);
     <meta name="twitter:description" content={ogDescription} />
     <meta name="twitter:image" content={ogImage} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {lcpImage && <link rel="preload" as="image" imagesrcset={lcpImage.srcset} imagesizes={lcpImage.sizes} type={lcpImage.type} fetchpriority="high" />}
     <link rel="preload" href="/fonts/host-grotesk.woff2" as="font" type="font/woff2" crossorigin />
     <script is:inline>
       (function () {
         var root = document.documentElement;
         root.classList.add('js');
         try { if (localStorage.getItem('motion') === 'reduce') root.dataset.motion = 'reduce'; } catch (e) {}
+        // After first paint: the late fonts and the client modules (window.__afterPaint queues them).
+        var q = (window.__afterPaint = window.__afterPaint || []);
+        var fire = function () {
+          var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = '/fonts/late.css'; document.head.appendChild(l);
+          while (q.length) q.shift()();
+          q.push = function (f) { f(); return 0; };
+        };
+        var idle = function () { ('requestIdleCallback' in window) ? requestIdleCallback(fire, { timeout: 900 }) : setTimeout(fire, 200); };
+        // Wait for the browser's first contentful paint (not just `load`, which can come first), then idle.
+        var done = false, once = function () { if (!done) { done = true; idle(); } };
+        try {
+          var po = new PerformanceObserver(function (l) { if (l.getEntriesByName('first-contentful-paint').length) { po.disconnect(); once(); } });
+          po.observe({ type: 'paint', buffered: true });
+        } catch (e) {}
+        addEventListener('load', function () { setTimeout(once, 1500); }, { once: true });
         // Astro's view-transition swap replaces every attribute on <html>; carry the client state across.
         document.addEventListener('astro:before-swap', function (e) {
           var next = e.newDocument.documentElement;
@@ -81,6 +100,7 @@ const analytics = Boolean(import.meta.env.VERCEL);
         });
       })();
     </script>
+    <noscript><link rel="stylesheet" href="/fonts/late.css" /></noscript>
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <ClientRouter fallback="swap" />
   </head>
@@ -107,9 +127,12 @@ const analytics = Boolean(import.meta.env.VERCEL);
     <div class="toasts" data-toasts aria-live="polite" transition:persist="toasts"></div>
     {analytics && <Analytics />}
     <script>
-      import '../scripts/chrome';
-      import '../scripts/motion';
-      import '../scripts/footnotes';
+      // Nothing here is needed for first paint, so it waits until just after it (the portrait is the LCP).
+      ((window as unknown as { __afterPaint: (() => void)[] }).__afterPaint ??= []).push(() => {
+        import('../scripts/chrome');
+        import('../scripts/motion');
+        import('../scripts/footnotes');
+      });
     </script>
   </body>
 </html>
