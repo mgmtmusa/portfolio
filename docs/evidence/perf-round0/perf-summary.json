@@ -1,0 +1,25 @@
+{
+  "inp": {
+    "worstMs": 88,
+    "interactions": 21,
+    "steps": [
+      "⌘K open",
+      "⌘K typing",
+      "⌘K close",
+      "footnote",
+      "footnote close",
+      "slab press and release",
+      "slab drag",
+      "Copy email"
+    ],
+    "pass": true
+  },
+  "bendBuild_desktop_ms": 13.2,
+  "bendBuild_phone_ms": 13.8,
+  "frames": {
+    "frames": 552,
+    "shareUnder16_7": 0.996,
+    "longTasksMs": [],
+    "pass": true
+  }
+}
