@@ -17,3 +17,10 @@ describe('aimToReplyBy: two business days on, Monday to Friday, Melbourne time',
   it('crosses a year boundary', () => expect(formatReplyBy(aimToReplyBy(mel('2026-12-31T10:00:00')))).toBe('Monday 4 January'));
   it('honours a custom number of business days', () => expect(formatReplyBy(aimToReplyBy(mel('2026-11-23T10:00:00'), 5))).toBe('Monday 30 November'));
 });
+
+describe('daylight-saving edges in Melbourne', () => {
+  it('Friday 3 April 2026 23:30 (AEDT ends that weekend) gives Tuesday 7 April', () =>
+    expect(formatReplyBy(aimToReplyBy(new Date('2026-04-03T23:30:00+11:00')))).toBe('Tuesday 7 April'));
+  it('Friday 2 October 2026 (AEDT starts that weekend) gives Tuesday 6 October', () =>
+    expect(formatReplyBy(aimToReplyBy(new Date('2026-10-02T12:00:00+10:00')))).toBe('Tuesday 6 October'));
+});

@@ -3,16 +3,13 @@
 import { track as vercelTrack } from '@vercel/analytics';
 import { commandItems, searchCommands } from '../lib/command';
 import { site } from '../data/site';
+import { safeProps, type EventProps } from '../lib/analytics';
 
 const ITEMS = commandItems();
 
-/** Analytics events carry only these properties, never anything a visitor typed. */
-type EventProps = { slug?: string; from?: string; key?: string };
 function track(name: string, props: EventProps = {}) {
   if (document.documentElement.dataset.analytics !== 'on') return;
-  const safe: EventProps = {};
-  for (const k of ['slug', 'from', 'key'] as const) if (props[k]) safe[k] = String(props[k]).slice(0, 64);
-  vercelTrack(name, safe);
+  vercelTrack(name, safeProps(props));
 }
 
 function startClock() {

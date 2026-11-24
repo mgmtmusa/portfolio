@@ -10,7 +10,7 @@
     "check": "astro check",
     "test:e2e": "playwright test",
     "og": "node scripts/og.mjs",
-    "test:unit": "vitest run",
+    "test:unit": "vitest run && TZ=America/Los_Angeles vitest run tests/unit/reply-by.test.ts",
     "test": "vitest run && playwright test",
     "qa:lh": "node scripts/qa/lighthouse.mjs",
     "qa:capture": "node scripts/qa/capture.mjs",
