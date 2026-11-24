@@ -1,0 +1,35 @@
+---
+// Contact (Task 8): the brief. Title, description and copy: docs/v3/story.md §5 and §6.
+import Base from '../layouts/Base.astro';
+import BriefForm from '../components/BriefForm.astro';
+import { site } from '../data/site';
+---
+
+<Base
+  title={`Send a brief to ${site.name}`}
+  description={`Send ${site.name} a short brief about a marketing, growth or business development role. The form opens your email app with the brief ready to send.`}
+  path="/contact/"
+>
+  <BriefForm>
+    <Fragment slot="head">
+      <h1 class="ct-h">The brief</h1>
+      <p class="ct-intro">Tell me about the role or project, and your email app will open with the brief ready to send.</p>
+    </Fragment>
+    <p class="ct-direct">Or email me directly at <a class="textlink" href={`mailto:${site.email}`}>{site.email}</a></p>
+    <div class="ct-acts">
+      <button class="textlink ct-copy js-only" type="button" data-track="copy_email" data-from="contact">Copy email</button>
+      <a class="textlink" href={site.cv} download data-track="cv_download" data-from="contact">Download CV (PDF)</a>
+      <a class="textlink" href={site.linkedin} target="_blank" rel="noopener noreferrer" data-track="linkedin_click" data-from="contact">LinkedIn<span class="sr"> (opens in a new tab)</span></a>
+    </div>
+  </BriefForm>
+</Base>
+
+<style>
+  .ct-h { font: 540 clamp(52px, 7.4vw, 120px) / .9 var(--display); letter-spacing: -.045em; color: var(--ink-mast); }
+  .ct-intro { margin-top: 24px; max-width: 34ch; font: 480 clamp(22px, 2vw, 28px) / 1.2 var(--display); letter-spacing: -.02em; text-wrap: balance; }
+  .ct-direct { color: var(--text-2); }
+  .ct-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 28px; margin-top: 12px; }
+  .ct-acts .textlink { display: inline-flex; min-height: 44px; align-items: center; }
+  .ct-copy { padding: 0; border: 0; background: none; cursor: pointer; }
+  :global(html:not(.js)) .ct-acts .js-only { display: none; }
+</style>
