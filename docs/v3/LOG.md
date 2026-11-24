@@ -129,3 +129,10 @@ Next steps, in order:
 **Running:** Task 11 helper (a11y, nav, nojs, hygiene specs; port 4363).
 **Open:** iOS docked: strip clock overlaps the Path heading (scroll-margin in Path/global CSS). ios.mjs not re-run since the mask change. Untracked scripts/qa/.*-tmp.mjs are helper scratch: delete.
 **Next:** commit Task 11; fix the Path overlap; re-run ios.mjs; studio review round (HoE r3, CD, CMO, finish, motion; max three at once) with fresh captures.
+
+## RESUME HERE (saved 25 November, 02:58, session "v3-rebuild")
+
+**Done since 02:15:** Task 11 committed (fd5a75c, d4fecc5: a11y 179 passed, nav/nojs/hygiene pass on 4 projects; reduced motion strict 300ms; Path heading clears the strip). Round-3 captures (docs/evidence/round-3). Studio round 1 reports (d8e3a8b): CD, CMO, finish, motion all CHANGES REQUIRED; rulings in round-1-creative-director.md and round-1-cmo.md (Pixel 7: 16px below 640px, 18u above; 320: line 24px below 360 + portrait down 12px; I Heart Uni 18 restored with note except og:title; labels renamed; /for/ 3 CV links OK).
+**Running (uncommitted work may exist):** (A) Opus hero/motion batch, port 4371, owns src/scripts/*, Hero.astro, Dock, Base.astro, global.css, glass.css, bend/moments/hero-states/layout/home specs, ios.mjs. (B) Sonnet pages/copy batch, port 4372, all other src + meta/work/pages/nav specs + docs/plans F14. (C) Sonnet: scripts/qa/motion.mjs filmstrips into docs/evidence/round-4/motion.
+**Next:** verify each batch on the preview build (astro check, unit, build, facts, the specs), commit; round-4 captures incl. motion.mjs; round 2 reviews: HoE r3, CD, CMO, finish, motion (with filmstrips), then principal; repeat to 8 rounds max; gates (lighthouse.mjs, perf.mjs, facts, full matrix); documenter, SUMMARY-v3.md, hand-back.
+**For Musa:** CV PDF still says "CV coming soon" (go-live blocker, needs his real CV).
