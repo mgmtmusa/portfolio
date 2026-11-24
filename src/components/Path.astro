@@ -47,4 +47,6 @@ const rungs = [
     .rung-in { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); padding-left: calc(var(--i) * 14px); }
     .rung-fig { font-size: clamp(44px, 12vw, 72px); }
   }
+  /* Below 360px the widest figure (with its marker) is wider than the stepped column, so let it wrap. */
+  @media (max-width: 359px) { .rung-fig { white-space: normal; } }
 </style>
