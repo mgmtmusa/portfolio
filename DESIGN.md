@@ -19,11 +19,11 @@
 | `--glass-solid` | `#211F1C` | Glass fallback (reduced transparency, high contrast, no `backdrop-filter`). |
 | `--text` | `#F3F1EC` (16.7:1) | Text, the primary CTA fill. |
 | `--ink-mast` | `#E7E2D7` (15.2:1) | The masthead and other name settings. |
-| `--text-2` | `#A3A19B` (7.3:1) | Secondary text, strip labels, dock labels at rest. |
+| `--text-2` | `#A3A19B` (7.3:1) | Secondary text, strip labels, figure labels. |
 | `--text-3` | `#827F7A` (4.7:1) | Tertiary, on `--bg` only. |
 | `--line` | `rgb(243 238 228 / .08)` | Hairlines. |
 | `--accent` | `#D8C69E` (11.2:1) | Champagne: footnote markers and focus rings only; under 1% of any screen. Never a button fill. |
-| `--rim-catch` | `rgb(240 226 196)` | Glass rims only, alpha ≤ .80 on the slab, ≤ .35 elsewhere. |
+| `--rim-catch` | `rgb(240 226 196)` | Glass rims only: at most .80 on the slab at rest, .95 on hover, at most .35 everywhere else. |
 | `--shadow-ink` | `rgb(6 5 4)` | Shadows and outer lines; never pure black. |
 | `--key` | `rgb(255 212 166)` | Every light pool. |
 
@@ -37,21 +37,30 @@ No decorative gradients. The glass recipe and the light field are the only gradi
 | Section display figures | Host Grotesk 500 | `clamp(96px, 11vw, 168px)` / .86 / −0.045em, lining proportional |
 | Hero proof figures | Host Grotesk 500 | 36u desktop, 30px phone / 1 / −0.03em |
 | H2 | Host Grotesk 520 | `clamp(44px, 6vw, 80px)` / .98 / −0.03em, `text-wrap: balance` |
-| The line | Host Grotesk 480 | 40u / 1.06 / −0.022em, hand-broken |
+| The line | Host Grotesk 480 | 40u / 1.06 / −0.022em, hand-broken; phone 26px / 1.08 / −0.018em |
+| Figure labels | Geist 400 | 13 / 18, `--text-2` |
+| ⌘K keycap | Geist Mono 500 | 11px |
 | Body | Geist 400 | 17 / 1.55 |
 | UI | Geist 500 | 14 to 15 |
 | Live metadata, markers | Geist Mono 400 / 500 | 11px, +0.08em, sentence case |
 
-Host from 24px up, Geist below. No Instrument Serif, no Fraunces. No functional text under 11px.
+Host weights by role, one variable file (axis 480 to 540): 480 the line, 500 figures, 520 H2, 540 the masthead. Host from 24px up, Geist below. No Instrument Serif, no Fraunces. No functional text under 11px.
 
 ### Layout
 
-12 columns, 24px gutters, margins `clamp(20px, 4vw, 58px)`. The hero uses its own unit: `u = min(100vw / 1440, 100svh / 900)`, height `100svh` (min 600px), width `min(100%, 1440u)`.
+12 columns, 24px gutters. The hero unit is `u = min(100vw / 1440, 100svh / 900, 1px)` (never above 1px, so the 1254px portrait never renders over 620 CSS px); the hero is `100svh` tall (min 600px), `min(100%, 1440u)` wide, centred. One edge for the whole page: `--edge: max(clamp(20px, 4vw, 58px), calc((100vw - 1440 * var(--u)) / 2 + 58 * var(--u)))`, used by the strip, the hero, every section and the footer.
 
 ### Glass (one recipe)
 
 - Clear first: fill `rgb(255 250 240 / .03 → .01)`, blur 8px (dock 16px), `saturate(160%) brightness(1.08)`, a 1px rim lit top left (`rim-catch` at .35 → .10 → .07 → .16), a 1px outer line `rgb(6 5 4 / .6)`.
 - The slab (hero): no backdrop blur at rest; `radial-gradient(70% 110% at 10% 0%, rgb(255 226 190 / .10), transparent 58%), linear-gradient(180deg, rgb(255 248 236 / .05), rgb(255 248 236 / .015) 60%)`; `box-shadow: inset 0 1px 0 rgb(255 244 224 / .24), inset 1px 0 0 rgb(255 244 224 / .10), inset 0 -12px 24px rgb(6 5 4 / .26), 0 0 0 1px rgb(6 5 4 / .45)`; rim 1.5px with a top-left catch of .80; an inner rim inset 7px; contact shadow `rgb(6 5 4 / .25)`, offset (10u, 16u), blur 28u. The bend is an inline SVG copy of what lies under the slab (glyphs placed one by one from the page's own layout), sampled inward, band 40 / scale 18 desktop, band 20 / scale 9 phone, never folding (scale < 1.2 × band).
+  - Registration: at strength 0 the bent copy matches the page within 1px at 2× in Chromium and WebKit.
+  - Knock-out: the originals are cut out under the slab only while its opacity is above 0.
+  - Edges: no horizontal slab edge within 24u of the cap line or baseline of any glyph under it; no glyph fragment narrower than 18u at either vertical edge.
+  - No text or controls on the slab.
+  - In flight (to and from the dock): bend off, `backdrop-filter: blur(4px)`, body gradient and rim kept.
+  - Hover: rim .95 and contact shadow (14u, 22u) over 160ms; press: scale .985; cursor `grab` / `grabbing`. Touch: the bend switches off while the slab moves and rises over 200ms (ease-out) once it settles.
+  - Under reduced transparency, `prefers-contrast: more` and forced colours: the slab and its shadow are `display: none` and there is no knock-out, so every letter of the name shows.
 - The dock: blur 16, fill `rgb(26 24 22 / .55)` (up to .62 if a label falls under 4.5:1), labels `#F3F1EC` 500, auto width.
 - Budget: at most 4 blurred surfaces visible. Solid `#211F1C` with the same shape and rim under reduced transparency, high contrast, or no `backdrop-filter`.
 - Glass sits over real content or the light field, never over flat black; body text never sits on glass.
@@ -62,16 +71,18 @@ Host from 24px up, Geist below. No Instrument Serif, no Fraunces. No functional 
 - Signature moments are slow and weighty; everything repeated is instant or near-instant.
 - Lenis smooth scroll, off under reduced motion; GSAP ScrollTrigger only where scroll drives a scene; Astro view transitions with the strip, dock and ⌘K persisting.
 - Reduced motion is a complete version: everything present at first paint, no slide, no spring, cross-fades of 160ms at most.
+- The portrait and the masthead are painted at first paint and never hidden (they are the LCP). Home load order: 0–240ms the masthead fades in; 400–1500ms the slab glides in from opacity 0 at −240u; 800–1300ms the top-left block (opacity plus an 8px rise); 950–1450ms the cover lines, 70ms apart; 1100–1500ms the availability block.
 
 ### The portrait
 
-Option 1 everywhere: the whole photo graded, the backdrop darkened toward a warm wall through the matte (never cut), an elliptical dissolve to the page, shirt peaking at `#DDD6CA`, black exactly `#121110`. No AI changes, no colour on his face, whole layers move 8px at most, never cropped at the eyes or chin, no glass over his face, hair or glasses, rendered at most 620 CSS px tall. Recipe: `scripts/portrait/README.md`.
+Option 1 everywhere: the whole photo graded, the backdrop darkened toward a warm wall through the matte (never cut), an elliptical dissolve to the page, the shirt peaking near `#DEDEDB` with highlights eased to neutral and never above `#E2E2DF`, black exactly `#121110`. Acceptance at 200%: all four edges within 1 level of the page; a ±1-level ordered dither wherever the matte is below .05, with no contours in a ×10 stretch of the master or of the 620w and 1240w derivatives (WebP q ≥ 82, AVIF q ≥ 62); no pixel within 4px of the silhouette brighter than the wall by more than 4 levels (real highlights 6px or more inside the hair excepted); R ≥ G ≥ B in shadows below L 40. No AI changes, no colour on his face, whole layers move 8px at most, never cropped at the eyes or chin, no glass over his face, hair or glasses, rendered at most 620 CSS px tall. Recipe: `scripts/portrait/README.md`.
 
 ### The status strip and the dock
 
 - Strip: 32px (28 on phones), no fill at rest, a scroll-edge mask once scrolled (`linear-gradient(#121110 0, rgb(18 17 16 / .86) 32px, transparent 64px)`), Melbourne time with seconds, `site.availability` verbatim on one line or not at all, `site.replyTime` verbatim; below 1180px the availability slot drops; phones show the clock only. Padding aligned with the hero's 58u margin.
-- Dock: one rounded glass object, bottom centre on every screen, never over the masthead at rest. Get in touch is a direct button; Menu (⌘K) opens with Download CV (PDF), LinkedIn and Copy email as its first visible rows. `inert` while hidden.
+- Every strip label measures at least 4.5:1 against the real pixels behind it. On home the availability slot hides while the hero availability block is at least 50% in view.
+- Dock: one rounded glass object, bottom centre on every screen, never over the masthead at rest. Get in touch is a direct button and hides while the hero CTA is at least 50% in view; Menu (⌘K) opens with Download CV (PDF), LinkedIn and Copy email as its first visible rows. `inert` while hidden.
 
 ## Bans (this project)
 
-The human-versus-machine idea, the lens, the robot, "I sell like a human"; kickers and eyebrows above headings; section numbers; same-size icon cards; gradient text; glass as decoration; middle-dot meta strings; arrows appended to buttons; pulsing "available" dots; split-text entrances; scroll-jacking; idle motion; anything lifted from carterogunsola.com or unanim.studio (brief 2.4), including a name bleeding off the edge, a lanyard or strap, gravity or pendulum physics, and 3D tilt.
+The human-versus-machine idea, the lens, the robot, "I sell like a human"; kickers and eyebrows above headings; section numbers; same-size icon cards; gradient text; glass as decoration; middle-dot meta strings; arrows appended to buttons; pulsing "available" dots; split-text entrances; scroll-jacking; idle motion; anything lifted from carterogunsola.com or unanim.studio (brief 2.4), including a name bleeding off the edge, a lanyard or strap, gravity or pendulum physics, and 3D tilt. Also: text or controls on the slab, grain over the portrait or the type, and cut-out portraits.
