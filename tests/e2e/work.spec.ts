@@ -153,18 +153,18 @@ test.describe('case sheet', () => {
 
   test('next and previous cases, with the counter', async ({ page }) => {
     await open(page, '/work/evitech/');
-    await expect(page.locator('[data-sheet-count]')).toHaveText('1 / 3');
+    await expect(page.locator('[data-sheet-count]')).toHaveText('1 of 3');
     await page.locator('.sheet-bar a[rel="next"]').click();
     await expect(page).toHaveURL(/\/work\/i-heart-uni\/$/);
     await ready(page);
-    await expect(page.locator('[data-sheet-count]')).toHaveText('2 / 3');
+    await expect(page.locator('[data-sheet-count]')).toHaveText('2 of 3');
     await page.locator('.sheet-bar a[rel="prev"]').click();
     await expect(page).toHaveURL(/\/work\/evitech\/$/);
     await ready(page);
     await page.locator('.sheet-bar a[rel="prev"]').click();
     await expect(page).toHaveURL(/\/work\/the-lil-project\/$/);
     await ready(page);
-    await expect(page.locator('[data-sheet-count]')).toHaveText('3 / 3');
+    await expect(page.locator('[data-sheet-count]')).toHaveText('3 of 3');
     // Sheet to sheet, Close goes to the index (no /work/ entry behind it).
     await page.locator('[data-sheet-close]').click();
     await expect(page).toHaveURL(/\/work\/#case-the-lil-project$/);
@@ -247,7 +247,10 @@ test.describe('case sheet', () => {
     await page.locator('#case-evitech [data-case-link]').click();
     await expect(page).toHaveURL(/\/work\/evitech\/$/);
     await ready(page);
-    const vt = await page.evaluate(() => (window as unknown as { __vt: { pseudo: string; duration: number; name: string }[] }).__vt);
+    // astro:page-load fires before the transition's pseudo-elements start animating; wait for the fades to appear.
+    const readVt = () => page.evaluate(() => (window as unknown as { __vt: { pseudo: string; duration: number; name: string }[] }).__vt);
+    await expect.poll(async () => (await readVt()).some((v) => /::view-transition-(old|new)/.test(v.pseudo)), { timeout: 2000 }).toBe(true);
+    const vt = await readVt();
     expect(vt.filter((v) => v.pseudo.startsWith('::view-transition-group')), JSON.stringify(vt)).toEqual([]);
     const fades = vt.filter((v) => /::view-transition-(old|new)/.test(v.pseudo));
     expect(fades.length, JSON.stringify(vt)).toBeGreaterThan(0);

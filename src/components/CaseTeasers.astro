@@ -49,6 +49,9 @@ const teasers = [
 </section>
 
 <style>
+  /* One --key light pool high left at the start of the section (the light field, static; DESIGN.md). */
+  .teasers { position: relative; }
+  .teasers::before { content: ''; position: absolute; z-index: -1; left: -300px; top: -140px; width: 1500px; height: 1040px; max-width: 120vw; pointer-events: none; background: radial-gradient(circle 900px at 300px 140px, rgb(var(--key) / .05), transparent); }
   .teasers { padding-top: 160px; }
   .teasers-head { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gutter); align-items: end; }
   .teasers-head .h1 { grid-column: 1 / 7; }

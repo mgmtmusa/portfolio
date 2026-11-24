@@ -12,8 +12,6 @@ html {
   text-size-adjust: 100%;
   scrollbar-color: rgb(243 238 228 / .18) transparent;
   scrollbar-width: thin;
-  /* The dock floats over the bottom 104px: a focused field or anchor never lands under it. */
-  scroll-padding-bottom: 112px;
 }
 body {
   margin: 0;

@@ -44,8 +44,8 @@ describe('yearChip', () => {
 
 describe('caseNav', () => {
   it('counts from one and wraps both ways', () => {
-    expect(caseNav('evitech', slugs)).toEqual({ index: 1, total: 3, counter: '1 / 3', prev: 'the-lil-project', next: 'i-heart-uni' });
-    expect(caseNav('the-lil-project', slugs)).toMatchObject({ counter: '3 / 3', prev: 'i-heart-uni', next: 'evitech' });
+    expect(caseNav('evitech', slugs)).toEqual({ index: 1, total: 3, counter: '1 of 3', prev: 'the-lil-project', next: 'i-heart-uni' });
+    expect(caseNav('the-lil-project', slugs)).toMatchObject({ counter: '3 of 3', prev: 'i-heart-uni', next: 'evitech' });
   });
   it('throws on an unknown slug', () => {
     expect(() => caseNav('nope', slugs)).toThrow();

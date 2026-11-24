@@ -41,6 +41,8 @@ const pageNotes = [
         // The hero chunk failed to load: show the dock so navigation still works.
         const d = document.querySelector<HTMLElement>('[data-dock]');
         if (d) { d.dataset.shown = ''; d.inert = false; }
+        // ...and let the strip show availability, since the hero hand-off will never run.
+        document.querySelector('.strip')?.removeAttribute('data-avail-hidden');
       });
   });
 </script>

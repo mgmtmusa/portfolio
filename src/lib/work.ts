@@ -58,7 +58,7 @@ export function caseNav(slug: string, slugs: string[]): CaseNav {
   return {
     index: i + 1,
     total: n,
-    counter: `${i + 1} / ${n}`,
+    counter: `${i + 1} of ${n}`,
     prev: slugs[(i - 1 + n) % n],
     next: slugs[(i + 1) % n],
   };
