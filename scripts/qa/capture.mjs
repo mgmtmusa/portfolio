@@ -11,7 +11,7 @@ const vps = [
   ['1440', chromium, { viewport: { width: 1440, height: 900 } }],
   ['1024', chromium, { viewport: { width: 1024, height: 768 } }],
   ['390', webkit, { ...devices['iPhone 14'] }],
-  ['375', webkit, { ...devices['iPhone SE'] }],
+  ['375', webkit, { ...devices['iPhone SE (3rd gen)'] }],
 ];
 const report = [];
 for (const [tag, engine, opts] of vps) {

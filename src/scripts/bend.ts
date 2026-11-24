@@ -154,7 +154,9 @@ export function buildBend(
       const hit = visible && hx < t.w && hx + pw > 0 && hy < t.h && hy + ph > 0;
       if (!hit) { st.webkitMaskImage = st.maskImage = ''; continue; }
       const L = clamp(hx, t.w), R = clamp(hx + pw, t.w), T = clamp(hy, t.h), B = clamp(hy + ph, t.h);
-      const px = (n: number) => `${n.toFixed(2)}px`;
+      // Snap to device pixels so band edges never meet mid-pixel (a hairline seam on Android).
+      const dpr = window.devicePixelRatio || 1;
+      const px = (n: number) => `${(Math.round(n * dpr) / dpr).toFixed(3)}px`;
       // left band, right band, top and bottom bands (1px wider each side so no seam shows), four corners
       const size = [`${px(L)} 100%`, `${px(t.w - R)} 100%`, `${px(pw + 2)} ${px(T)}`, `${px(pw + 2)} ${px(t.h - B)}`, ...Array(4).fill(`${px(rr)} ${px(rr)}`)];
       const pos = [`0 0`, `${px(R)} 0`, `${px(hx - 1)} 0`, `${px(hx - 1)} ${px(B)}`,

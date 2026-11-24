@@ -44,7 +44,7 @@ const rungs = [
   .rung-t { font: 500 18px / 1.3 var(--ui); margin-top: 14px; }
   .rung-d { font-size: 15px; max-width: 48ch; }
   @media (max-width: 1023px) {
-    .rung-in { grid-column: 1 / -1; padding-left: calc(var(--i) * 14px); }
+    .rung-in { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); padding-left: calc(var(--i) * 14px); }
     .rung-fig { font-size: clamp(44px, 12vw, 72px); }
   }
 </style>
