@@ -1,111 +1,198 @@
 import { test, expect } from '@playwright/test';
-import { CASES, CV, EMAIL, LINKEDIN, WORK_RIGHTS, watchErrors } from './helpers';
+import { AVAILABILITY, REPLY, LINE, CV, openHome, inViewport, watchErrors } from './helpers';
 
-test.describe('home page', () => {
-  test('first screen states name, role, angle and the route to work', async ({ page }) => {
+test.describe('home hero (direction C)', () => {
+  test('the name is the H1; role, line and actions are on the first screen', async ({ page }) => {
     const errs = watchErrors(page);
-    await page.goto('/');
-    // The thesis line is the headline; the name and role sit directly above it.
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/I sell like a human\.\s*I measure like a machine\./);
-    await expect(page.locator('.hero-name')).toHaveText('Musa Abdullah Walid');
-    await expect(page.locator('.hero-name')).toBeInViewport();
-    await expect(page.getByText('Marketing & Growth Specialist in Melbourne')).toBeInViewport();
-    await expect(page.getByText(/came up through sales/)).toBeVisible();
-    const cta = page.getByRole('link', { name: 'View selected work' });
-    await expect(cta).toBeInViewport();
-    await expect(page.getByRole('link', { name: 'Contact' })).toBeInViewport();
+    await openHome(page);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Musa Abdullah\s*Walid/);
+    await expect(page.locator('.hero .line')).toHaveText(LINE);
+    for (const sel of ['.hero .role', '.hero .line', '[data-hero-cta]', '.hero .acts .textlink']) expect(await inViewport(page, sel), sel).toBe(true);
+    await expect(page.locator('.hero .acts .textlink')).toHaveText('Download CV (PDF)');
+    await expect(page.locator('.hero .acts .textlink')).toHaveAttribute('href', CV);
     errs.assertClean();
   });
 
-  test('"View selected work" lands on the work section', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('link', { name: 'View selected work' }).click();
-    await expect(page).toHaveURL(/#work$/);
-    await expect(page.getByRole('heading', { name: 'Selected work' })).toBeInViewport();
+  test('proof: three footnoted figures, the pair carries its qualifier and spend', async ({ page }) => {
+    await openHome(page);
+    const proof = page.locator('.hero .proof');
+    await expect(proof).toContainText('28%');
+    await expect(proof).toContainText('65%');
+    await expect(proof).toContainText('Two results from the same initiative at Evitech, on paid media of roughly $15K to $30K a month.');
+    await expect(proof).toContainText('$2M+');
+    await expect(proof).toContainText('13,200');
+    await expect(proof.locator('.fn')).toHaveCount(3);
   });
 
-  test('hero cards are labelled links that open case studies, and Back returns', async ({ page }) => {
-    await page.goto('/');
-    const hand = page.getByRole('navigation', { name: 'Case studies' });
-    for (const c of CASES) {
-      await expect(hand.getByRole('link', { name: new RegExp(`^${c.org} ${c.title}`) })).toHaveAttribute('href', `/work/${c.slug}/`);
+  test('a footnote opens its scope note on click and with the keyboard', async ({ page, isMobile }) => {
+    await openHome(page);
+    const fn = page.locator('.hero .proof .fn').nth(1);
+    await fn.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(400);
+    await fn.click();
+    await expect(page.locator('#fn-h-2')).toBeVisible();
+    await expect(page.locator('#fn-h-2')).toContainText('Contracts I closed myself');
+    await page.keyboard.press('Escape');
+    await expect(page.locator('#fn-h-2')).toBeHidden();
+    if (!isMobile) {
+      await fn.focus();
+      await page.keyboard.press('Enter');
+      await expect(page.locator('#fn-h-2')).toBeVisible();
     }
-    await hand.getByRole('link', { name: /^Evitech / }).click();
-    await expect(page).toHaveURL(/\/work\/evitech\/$/);
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(CASES[0].title);
-    await page.goBack();
-    await expect(page).toHaveURL(/\/$/);
-    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    await page.goForward();
-    await expect(page).toHaveURL(/\/work\/evitech\/$/);
   });
 
-  test('contact actions point to the right places', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('link', { name: 'Contact' }).click();
-    await expect(page).toHaveURL(/#contact$/);
-    const email = page.getByRole('link', { name: /Email mgmtmusa@gmail\.com/ });
-    await expect(email).toBeInViewport();
-    await expect(email).toHaveAttribute('href', EMAIL);
-    await expect(page.getByRole('link', { name: /LinkedIn profile/ })).toHaveAttribute('href', LINKEDIN);
+  test('availability and reply time appear verbatim', async ({ page }) => {
+    await openHome(page);
+    await expect(page.locator('[data-hero-avail]')).toContainText(AVAILABILITY);
+    await expect(page.locator('[data-hero-avail]')).toContainText(REPLY);
   });
 
-  test('Download CV buttons serve the PDF from /cv/Musa-Walid-CV.pdf', async ({ page, request }) => {
-    await page.goto('/');
-    const cvs = page.getByRole('link', { name: /Download CV/ });
-    await expect(cvs).toHaveCount(2); // hero and contact footer
-    for (const link of await cvs.all()) await expect(link).toHaveAttribute('href', CV);
-    await expect(cvs.first()).toBeInViewport();
-    const res = await request.get(CV);
-    expect(res.status()).toBe(200);
-    expect(res.headers()['content-type']).toContain('application/pdf');
-    expect((await res.body()).subarray(0, 5).toString()).toBe('%PDF-');
+  test('no sideways scroll', async ({ page }) => {
+    await openHome(page);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   });
 
-  test('work rights use the approved 485 wording', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.locator('#contact')).toContainText(WORK_RIGHTS);
-    await expect(page.locator('body')).not.toContainText(/full Australian working rights/i);
-  });
-
-  test('metrics are plain, stable text (no counting in the accessibility tree)', async ({ page }) => {
-    await page.goto('/#work');
-    const read = () => page.locator('.results dd').allTextContents();
-    const first = await read();
-    expect(first).toContain('28%');
-    expect(first).toContain('65%');
-    await page.waitForTimeout(1200);
-    expect(await read()).toEqual(first);
-  });
-
-  test('direct anchor load to the career section shows the finished staircase', async ({ page }) => {
-    await page.goto('/#career');
-    await expect(page.getByRole('heading', { name: 'From the sales floor to growth' })).toBeInViewport();
-    await expect(page.locator('.career')).toHaveClass(/risen/);
-    await expect(page.getByRole('link', { name: 'Read the Evitech case study' }).last()).toBeVisible();
+  test('the portrait never renders taller than 620px', async ({ page }) => {
+    await openHome(page);
+    const h = (await page.locator('[data-portrait]').boundingBox())!.height;
+    expect(h).toBeLessThanOrEqual(620.5);
   });
 });
 
-test.describe('layout across widths', () => {
-  test.skip(({ browserName, isMobile }) => browserName !== 'chromium' || isMobile, 'width sweep runs once, in desktop Chromium');
-  for (const [w, h] of [[320, 640], [390, 844], [844, 390], [768, 1024], [1024, 768], [1366, 700], [1440, 900], [1920, 1080]]) {
-    test(`no horizontal overflow and headline inside the frame at ${w}×${h}`, async ({ page }) => {
+test.describe('home hero at other sizes', () => {
+  for (const [w, h] of [[1440, 789], [1280, 720], [1024, 768], [1920, 1080], [2560, 1440]]) {
+    test(`fits ${w}×${h}: line, CTA and the Walid baseline inside the first screen; portrait ≤ 620px`, async ({ page, isMobile }) => {
+      test.skip(isMobile, 'desktop sizes');
       await page.setViewportSize({ width: w, height: h });
-      for (const path of ['/', ...CASES.map((c) => `/work/${c.slug}/`)]) {
-        await page.goto(path);
-        const sw = await page.evaluate(() => document.documentElement.scrollWidth);
-        expect(sw, `${path} overflows at ${w}px`).toBeLessThanOrEqual(w);
-      }
-      await page.goto('/');
-      const right = await page.evaluate(() =>
-        Math.max(...[...document.querySelectorAll('.hero-title > span, .hero-name')].map((s) => {
-          const r = document.createRange();
-          r.selectNodeContents(s);
-          return r.getBoundingClientRect().right;
-        })),
-      );
-      expect(right, 'hero headline touches the right edge').toBeLessThanOrEqual(w - 12);
-      await expect(page.getByRole('link', { name: 'Work', exact: true })).toBeInViewport();
+      await openHome(page);
+      for (const sel of ['.hero .line', '[data-hero-cta]', '.hero .mast-l2']) expect(await inViewport(page, sel), `${sel} at ${w}×${h}`).toBe(true);
+      expect((await page.locator('[data-portrait]').boundingBox())!.height).toBeLessThanOrEqual(620.5);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     });
   }
+  for (const w of [375, 390, 412]) {
+    test(`phone ${w}px wide: no sideways scroll, CTA in the first screen`, async ({ page, isMobile }) => {
+      test.skip(!isMobile, 'phone sizes');
+      await page.setViewportSize({ width: w, height: Math.round((664 * w) / 390) });
+      await openHome(page);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+      expect(await inViewport(page, '[data-hero-cta]')).toBe(true);
+    });
+  }
+});
+
+test.describe('scene and dock', () => {
+  test('rest: the dock is hidden and inert; Tab never reaches it', async ({ page, isMobile, browserName }) => {
+    await openHome(page);
+    await expect(page.locator('[data-dock]')).not.toHaveAttribute('data-shown', '');
+    expect(await page.locator('[data-dock]').evaluate((d) => (d as HTMLElement).inert)).toBe(true);
+    if (!isMobile) {
+      const key = browserName === 'webkit' ? 'Alt+Tab' : 'Tab';
+      for (let i = 0; i < 12; i++) {
+        await page.keyboard.press(key);
+        const ok = await page.evaluate(() => { const a = document.activeElement as HTMLElement; return !a.closest('[data-dock]') && getComputedStyle(a).visibility !== 'hidden'; });
+        expect(ok, `tab stop ${i}`).toBe(true);
+      }
+    }
+  });
+
+  test('past 90px the slab settles into the dock; below 60px it comes back', async ({ page }) => {
+    await openHome(page);
+    await page.evaluate(() => scrollTo(0, 200));
+    await page.waitForFunction(() => window.__scene?.state() === 'docked', null, { timeout: 4000 });
+    await expect(page.locator('[data-dock]')).toHaveAttribute('data-shown', '');
+    expect(await page.locator('[data-dock]').evaluate((d) => (d as HTMLElement).inert)).toBe(false);
+    await page.evaluate(() => scrollTo(0, 75));
+    await page.waitForTimeout(800);
+    expect(await page.evaluate(() => window.__scene?.state())).toBe('docked');
+    await page.evaluate(() => scrollTo(0, 0));
+    await page.waitForFunction(() => window.__scene?.state() === 'rest', null, { timeout: 4000 });
+    expect(await page.locator('[data-dock]').evaluate((d) => (d as HTMLElement).inert)).toBe(true);
+  });
+
+  test('the dock’s Get in touch hides while the hero CTA is in view', async ({ page }) => {
+    await openHome(page);
+    await page.evaluate(() => scrollTo(0, 200));
+    await page.waitForFunction(() => window.__scene?.state() === 'docked');
+    await expect(page.locator('[data-dock]')).toHaveAttribute('data-cta-hidden', '');
+    await page.evaluate(() => scrollTo(0, 1400));
+    await expect(page.locator('[data-dock]')).not.toHaveAttribute('data-cta-hidden', '');
+    await expect(page.locator('[data-dock] .dock-cta')).toBeVisible();
+  });
+
+  test('the strip’s availability yields while the hero shows it', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'the strip shows only the clock on phones');
+    await openHome(page);
+    await expect(page.locator('.strip')).toHaveAttribute('data-avail-hidden', '');
+    await page.evaluate(() => scrollTo(0, 1400));
+    await expect(page.locator('.strip')).not.toHaveAttribute('data-avail-hidden', '');
+  });
+
+  test('coming back to home scrolled past 90px shows the dock, not the slab', async ({ page }) => {
+    await openHome(page);
+    await page.evaluate(() => scrollTo(0, 600));
+    await page.waitForFunction(() => window.__scene?.state() === 'docked');
+    await page.locator('a[href="/work/evitech/"]').first().click();
+    await page.waitForURL(/\/work\/evitech\/$/);
+    await page.goBack();
+    await page.waitForURL(/\/$/);
+    await page.waitForFunction(() => window.__scene?.state() === 'docked', null, { timeout: 6000 });
+    await expect(page.locator('[data-dock]')).toHaveAttribute('data-shown', '');
+  });
+});
+
+test.describe('slab drag', () => {
+  test('drags 1:1 and keeps the grab offset; rubber-bands past line 1; lands clear of glyph edges', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'mouse drag on desktop; touch covered below');
+    await openHome(page);
+    const slab = page.locator('[data-slab]');
+    const b0 = (await slab.boundingBox())!;
+    await page.mouse.move(b0.x + 60, b0.y + 60);
+    await page.mouse.down();
+    await page.mouse.move(b0.x + 120, b0.y + 60, { steps: 6 });
+    const b1 = (await slab.boundingBox())!;
+    expect(Math.abs(b1.x - b0.x - 60)).toBeLessThanOrEqual(1.5);
+    await page.mouse.move(b0.x + 2000, b0.y + 60, { steps: 10 });
+    const b2 = (await slab.boundingBox())!;
+    expect(b2.x - b0.x).toBeLessThan(1940);
+    await page.mouse.up();
+    await page.waitForTimeout(1500);
+    const clear = await page.evaluate(() => {
+      const slab = document.querySelector('[data-slab]')!.getBoundingClientRect();
+      const line = document.querySelector('.mast [data-line="1"]')!;
+      const u = slab.width / 360;
+      const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
+      const bad: string[] = [];
+      for (let n = walker.nextNode() as Text | null; n; n = walker.nextNode() as Text | null) {
+        for (let i = 0; i < n.length; i++) {
+          if (n.data[i] === ' ') continue;
+          const r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + 1);
+          const g = r.getBoundingClientRect();
+          for (const e of [slab.left, slab.right]) if (e > g.left && e < g.right && (e - g.left < 18 * u || g.right - e < 18 * u)) bad.push(n.data[i]);
+        }
+      }
+      return bad;
+    });
+    expect(clear).toEqual([]);
+  });
+
+  test('press scales the slab and it returns', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'pointer press');
+    await openHome(page);
+    const slab = page.locator('[data-slab]');
+    const b = (await slab.boundingBox())!;
+    await page.mouse.move(b.x + 40, b.y + 40);
+    await page.mouse.down();
+    await page.waitForTimeout(250);
+    expect(await slab.evaluate((el) => getComputedStyle(el).scale)).toBe('0.985');
+    await page.mouse.up();
+    await page.waitForTimeout(250);
+    expect(['none', '1']).toContain(await slab.evaluate((el) => getComputedStyle(el).scale));
+  });
+
+  test('a vertical swipe that starts on the slab scrolls the page', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'touch');
+    await openHome(page);
+    expect(await page.locator('[data-slab]').evaluate((el) => getComputedStyle(el).touchAction)).toBe('pan-y');
+  });
 });

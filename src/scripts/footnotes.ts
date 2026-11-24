@@ -14,9 +14,11 @@ function wire() {
   document.querySelectorAll<HTMLElement>('.fn-pop').forEach((pop) => {
     if (pop.dataset.wired) return;
     pop.dataset.wired = '1';
-    pop.addEventListener('toggle', (e) => { if ((e as ToggleEvent).newState === 'open') place(pop); });
+    pop.addEventListener('toggle', (e) => { if ((e as ToggleEvent).newState === 'open') { openedAt = scrollY; place(pop); } });
   });
 }
 wire();
 document.addEventListener('astro:page-load', wire);
-addEventListener('scroll', () => document.querySelectorAll<HTMLElement>('.fn-pop:popover-open').forEach((p) => p.hidePopover()), { passive: true });
+// A note closes once the page has really moved on (not on the scroll that brought its marker into view).
+let openedAt = 0;
+addEventListener('scroll', () => { if (Math.abs(scrollY - openedAt) > 48) document.querySelectorAll<HTMLElement>('.fn-pop:popover-open').forEach((p) => p.hidePopover()); }, { passive: true });

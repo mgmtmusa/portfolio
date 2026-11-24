@@ -1,15 +1,30 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site, cases } from '../data/site';
+import { site } from '../data/site';
 ---
 
-<Base title={`Page not found, ${site.name}`} path="/404/" noindex>
-  <section class="notfound" aria-labelledby="nf-h">
-    <h1 class="case-title" id="nf-h">This page doesn’t exist</h1>
-    <p class="case-summary">The link may be out of date. Here’s where to go instead.</p>
-    <ul class="ticks">
-      <li><a class="link" href="/">Home page</a></li>
-      {cases.map((c) => <li><a class="link" href={`/work/${c.slug}/`}>{c.org} case study</a></li>)}
+<Base
+  title={`Page not found, ${site.name}`}
+  description={`There is no page at this address on ${site.name}’s site. This page links to his home page, his work, his CV and the brief form for getting in touch.`}
+  path="/404/"
+  noindex
+>
+  <section class="nf edge" aria-labelledby="nf-h">
+    <h1 class="nf-h" id="nf-h">There’s no page at this address.</h1>
+    <p class="nf-p">Here’s where to go instead.</p>
+    <ul class="nf-links">
+      <li><a class="textlink" href="/">Home</a></li>
+      <li><a class="textlink" href="/work/">Work</a></li>
+      <li><a class="textlink" href="/contact/">The brief</a></li>
+      <li><a class="textlink" href={site.cv} download data-track="cv_download" data-from="404">Download CV (PDF)</a></li>
     </ul>
   </section>
 </Base>
+
+<style>
+  .nf { padding-top: 22vh; min-height: 70vh; }
+  .nf-h { font: 540 clamp(48px, 8vw, 128px) / .92 var(--display); letter-spacing: -.04em; color: var(--ink-mast); max-width: 12ch; text-wrap: balance; }
+  .nf-p { margin-top: 28px; color: var(--text-2); }
+  .nf-links { display: flex; flex-wrap: wrap; gap: 12px 28px; margin-top: 32px; }
+  .nf-links a { display: inline-flex; min-height: 44px; align-items: center; }
+</style>

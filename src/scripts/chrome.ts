@@ -120,7 +120,7 @@ function wireCommandMenu() {
     const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-cmdk-open]');
     if (btn) open(btn);
   });
-  if (!/Mac|iPhone|iPad/.test(navigator.platform)) document.querySelectorAll('.dock-k kbd').forEach((k) => (k.textContent = 'Ctrl K'));
+  if (!/Mac|iPhone|iPad/.test(navigator.platform)) document.querySelectorAll('kbd.dock-k').forEach((k) => (k.textContent = 'Ctrl K'));
 }
 
 function wireAnalytics() {
