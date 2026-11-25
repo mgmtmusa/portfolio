@@ -90,7 +90,7 @@ Full list in `ASSETS_NEEDED.md`. The main items:
 - **Facts:** the period and baseline for 28%, 65% and 70%; the currency for $2M+ and $15K to $30K a month.
 - **About note:** it ships marked as a draft and needs approval.
 - **Production domain.**
-- **Phone portrait AVIF:** it is 48 KB against a 40 KB budget. Adding a 1060w width in `src/lib/portrait.ts` brings it to 38.4 KB; it needs a yes.
+- **Phone portrait AVIF: done.** With Musa's yes, `src/lib/portrait.ts` adds a 1060w width. Phones at DPR 2.625 and 3 now load a 39,329-byte AVIF (was 48,092; budget 40 KB). Lighthouse mobile afterwards: 100 across the board, LCP 1504 ms, CLS 0.
 
 ## Round 4 polish: outcome (round 5)
 
@@ -105,7 +105,4 @@ Pre-existing note for later (motion reviewer): when the slab lands at rest, the 
 
 ## Decisions for Musa
 
-1. Push `redesign/v3-dark` to GitHub?
-2. Merge to `main` and go live?
-
-Nothing is pushed or goes live without his yes.
+Musa said yes on 26 November 2026: `redesign/v3-dark` is pushed and merged to `main`, and the site goes live from `main`.
