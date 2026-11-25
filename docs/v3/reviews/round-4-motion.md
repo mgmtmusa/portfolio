@@ -11,3 +11,9 @@ Doc drift DESIGN.md:81 fixed (matches Hero.astro:192-199).
 Scope note: the drag releases after a pause, so the release spring (hero.ts:420-437) is never shown moving.
 
 Keep: one translate-only light; instant first placement; reduced-motion jumps.
+
+## Re-check on round-6/motion-r2 evidence: **APPROVED** (disposition: ship)
+
+Fix 3 resolved: settled frames webkit-normal-scroll-28499.png, webkit-reduced-scroll-17662.png and crops/webkit-phone-back-settled.png show the page at the top, slab at rest over the name, no dock; index.json scrollY 460 at dock, 0 after return. Fixes 1, 2, drag and DESIGN.md:81 stay resolved.
+Not covered: WebKit hand-off in motion (normal run has a 16.5s gap; probe gives states, not frames); the drag release spring is never shown moving.
+Keep: translate-only key light, instant first placement, reduced-motion jumps, slab and shadow at 0 until the dock fades.
