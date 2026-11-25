@@ -15,7 +15,7 @@ const pad = (n) => String(n).padStart(5, '0');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Run `action` while grabbing frames until it ends and `tail` ms passed, or MAX frames.
-async function record(page, ctx, mode, seq, action, { duration = 2500, interval = 100, max = MAX } = {}) {
+async function record(page, ctx, mode, seq, action, { duration = 2500, interval = 100, max = MAX, settled = 0 } = {}) {
   const prefix = `${ctx}-${mode}-${seq}`;
   const frames = []; const notes = [];
   const t0 = Date.now();
@@ -30,6 +30,9 @@ async function record(page, ctx, mode, seq, action, { duration = 2500, interval 
   }
   await act;
   if (!done) notes.push('action not finished');
+  // WebKit screenshots contend with a scripted scroll, so the last timed frame can predate the action's end. A settled
+  // frame, taken `settled` ms after the action finished, shows where the motion actually came to rest.
+  if (settled) { await sleep(settled); const ts = Date.now() - t0; const file = `${prefix}-${pad(ts)}.png`; await page.screenshot({ path: `${out}/${file}` }).then(() => { frames.push({ ms: ts, file }); notes.push(`settled frame ${file}, ${settled}ms after the action ended at ${ts - settled}ms`); }).catch(() => {}); }
   if (frames.length >= max && Date.now() - t0 < duration) notes.push(`frame cap hit at ${frames[frames.length - 1].ms}ms of ${duration}ms`);
   if (hasFfmpeg && frames.length) {
     for (const f of frames) {
@@ -110,7 +113,7 @@ for (const [ctx, bt, opts, phone] of contexts) {
         if (phone) { await page.evaluate(() => window.scrollTo(0, 0)); } // make sure the slab's return to rest is reached and filmed
         await page.waitForTimeout(phone ? 2200 : 1200);
         e0.back = await scrollY(page);
-      }, { duration: phone ? 12000 : 3400, interval: 140, max: phone ? 85 : MAX });
+      }, { duration: phone ? 12000 : 3400, interval: 140, max: phone ? 85 : MAX, settled: 1500 });
       e.notes.push(`scrollY after return ${e0.back}`);
       e.notes.push(`scrollY at dock ${e0.docked}`);
       console.log(ctx, mode, 'scroll', e.frameCount); await page.close(); }

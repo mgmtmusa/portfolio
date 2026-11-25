@@ -1,0 +1,5350 @@
+{
+  "base": "http://127.0.0.1:4330",
+  "generated": "2026-11-25T06:03:39.868Z",
+  "ffmpeg": true,
+  "sequences": [
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "load",
+      "frameCount": 9,
+      "frames": [
+        {
+          "ms": 102,
+          "file": "chromium-normal-load-00102.png"
+        },
+        {
+          "ms": 440,
+          "file": "chromium-normal-load-00440.png"
+        },
+        {
+          "ms": 761,
+          "file": "chromium-normal-load-00761.png"
+        },
+        {
+          "ms": 1106,
+          "file": "chromium-normal-load-01106.png"
+        },
+        {
+          "ms": 1474,
+          "file": "chromium-normal-load-01474.png"
+        },
+        {
+          "ms": 1829,
+          "file": "chromium-normal-load-01829.png"
+        },
+        {
+          "ms": 2158,
+          "file": "chromium-normal-load-02158.png"
+        },
+        {
+          "ms": 2454,
+          "file": "chromium-normal-load-02454.png"
+        },
+        {
+          "ms": 2735,
+          "file": "chromium-normal-load-02735.png"
+        }
+      ],
+      "sheet": "sheet-chromium-normal-load.png",
+      "notes": [
+        "shot error (before first paint, frames skipped): page.screenshot: Protocol error (Page.captureScreenshot): Unable to capture screenshot",
+        "frame gaps ms: median 338, max 368"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "loadcast",
+      "frameCount": 114,
+      "frames": [
+        {
+          "ms": 66,
+          "file": "chromium-normal-loadcast-00066.jpg"
+        },
+        {
+          "ms": 71,
+          "file": "chromium-normal-loadcast-00071.jpg"
+        },
+        {
+          "ms": 88,
+          "file": "chromium-normal-loadcast-00088.jpg"
+        },
+        {
+          "ms": 115,
+          "file": "chromium-normal-loadcast-00115.jpg"
+        },
+        {
+          "ms": 136,
+          "file": "chromium-normal-loadcast-00136.jpg"
+        },
+        {
+          "ms": 143,
+          "file": "chromium-normal-loadcast-00143.jpg"
+        },
+        {
+          "ms": 155,
+          "file": "chromium-normal-loadcast-00155.jpg"
+        },
+        {
+          "ms": 172,
+          "file": "chromium-normal-loadcast-00172.jpg"
+        },
+        {
+          "ms": 188,
+          "file": "chromium-normal-loadcast-00188.jpg"
+        },
+        {
+          "ms": 204,
+          "file": "chromium-normal-loadcast-00204.jpg"
+        },
+        {
+          "ms": 221,
+          "file": "chromium-normal-loadcast-00221.jpg"
+        },
+        {
+          "ms": 238,
+          "file": "chromium-normal-loadcast-00238.jpg"
+        },
+        {
+          "ms": 255,
+          "file": "chromium-normal-loadcast-00255.jpg"
+        },
+        {
+          "ms": 272,
+          "file": "chromium-normal-loadcast-00272.jpg"
+        },
+        {
+          "ms": 288,
+          "file": "chromium-normal-loadcast-00288.jpg"
+        },
+        {
+          "ms": 305,
+          "file": "chromium-normal-loadcast-00305.jpg"
+        },
+        {
+          "ms": 322,
+          "file": "chromium-normal-loadcast-00322.jpg"
+        },
+        {
+          "ms": 339,
+          "file": "chromium-normal-loadcast-00339.jpg"
+        },
+        {
+          "ms": 355,
+          "file": "chromium-normal-loadcast-00355.jpg"
+        },
+        {
+          "ms": 372,
+          "file": "chromium-normal-loadcast-00372.jpg"
+        },
+        {
+          "ms": 389,
+          "file": "chromium-normal-loadcast-00389.jpg"
+        },
+        {
+          "ms": 405,
+          "file": "chromium-normal-loadcast-00405.jpg"
+        },
+        {
+          "ms": 421,
+          "file": "chromium-normal-loadcast-00421.jpg"
+        },
+        {
+          "ms": 439,
+          "file": "chromium-normal-loadcast-00439.jpg"
+        },
+        {
+          "ms": 456,
+          "file": "chromium-normal-loadcast-00456.jpg"
+        },
+        {
+          "ms": 473,
+          "file": "chromium-normal-loadcast-00473.jpg"
+        },
+        {
+          "ms": 505,
+          "file": "chromium-normal-loadcast-00505.jpg"
+        },
+        {
+          "ms": 523,
+          "file": "chromium-normal-loadcast-00523.jpg"
+        },
+        {
+          "ms": 538,
+          "file": "chromium-normal-loadcast-00538.jpg"
+        },
+        {
+          "ms": 556,
+          "file": "chromium-normal-loadcast-00556.jpg"
+        },
+        {
+          "ms": 572,
+          "file": "chromium-normal-loadcast-00572.jpg"
+        },
+        {
+          "ms": 586,
+          "file": "chromium-normal-loadcast-00586.jpg"
+        },
+        {
+          "ms": 605,
+          "file": "chromium-normal-loadcast-00605.jpg"
+        },
+        {
+          "ms": 620,
+          "file": "chromium-normal-loadcast-00620.jpg"
+        },
+        {
+          "ms": 637,
+          "file": "chromium-normal-loadcast-00637.jpg"
+        },
+        {
+          "ms": 655,
+          "file": "chromium-normal-loadcast-00655.jpg"
+        },
+        {
+          "ms": 672,
+          "file": "chromium-normal-loadcast-00672.jpg"
+        },
+        {
+          "ms": 688,
+          "file": "chromium-normal-loadcast-00688.jpg"
+        },
+        {
+          "ms": 702,
+          "file": "chromium-normal-loadcast-00702.jpg"
+        },
+        {
+          "ms": 721,
+          "file": "chromium-normal-loadcast-00721.jpg"
+        },
+        {
+          "ms": 738,
+          "file": "chromium-normal-loadcast-00738.jpg"
+        },
+        {
+          "ms": 755,
+          "file": "chromium-normal-loadcast-00755.jpg"
+        },
+        {
+          "ms": 771,
+          "file": "chromium-normal-loadcast-00771.jpg"
+        },
+        {
+          "ms": 787,
+          "file": "chromium-normal-loadcast-00787.jpg"
+        },
+        {
+          "ms": 803,
+          "file": "chromium-normal-loadcast-00803.jpg"
+        },
+        {
+          "ms": 818,
+          "file": "chromium-normal-loadcast-00818.jpg"
+        },
+        {
+          "ms": 838,
+          "file": "chromium-normal-loadcast-00838.jpg"
+        },
+        {
+          "ms": 855,
+          "file": "chromium-normal-loadcast-00855.jpg"
+        },
+        {
+          "ms": 871,
+          "file": "chromium-normal-loadcast-00871.jpg"
+        },
+        {
+          "ms": 888,
+          "file": "chromium-normal-loadcast-00888.jpg"
+        },
+        {
+          "ms": 903,
+          "file": "chromium-normal-loadcast-00903.jpg"
+        },
+        {
+          "ms": 921,
+          "file": "chromium-normal-loadcast-00921.jpg"
+        },
+        {
+          "ms": 936,
+          "file": "chromium-normal-loadcast-00936.jpg"
+        },
+        {
+          "ms": 956,
+          "file": "chromium-normal-loadcast-00956.jpg"
+        },
+        {
+          "ms": 975,
+          "file": "chromium-normal-loadcast-00975.jpg"
+        },
+        {
+          "ms": 994,
+          "file": "chromium-normal-loadcast-00994.jpg"
+        },
+        {
+          "ms": 1013,
+          "file": "chromium-normal-loadcast-01013.jpg"
+        },
+        {
+          "ms": 1033,
+          "file": "chromium-normal-loadcast-01033.jpg"
+        },
+        {
+          "ms": 1053,
+          "file": "chromium-normal-loadcast-01053.jpg"
+        },
+        {
+          "ms": 1072,
+          "file": "chromium-normal-loadcast-01072.jpg"
+        },
+        {
+          "ms": 1091,
+          "file": "chromium-normal-loadcast-01091.jpg"
+        },
+        {
+          "ms": 1110,
+          "file": "chromium-normal-loadcast-01110.jpg"
+        },
+        {
+          "ms": 1130,
+          "file": "chromium-normal-loadcast-01130.jpg"
+        },
+        {
+          "ms": 1150,
+          "file": "chromium-normal-loadcast-01150.jpg"
+        },
+        {
+          "ms": 1169,
+          "file": "chromium-normal-loadcast-01169.jpg"
+        },
+        {
+          "ms": 1188,
+          "file": "chromium-normal-loadcast-01188.jpg"
+        },
+        {
+          "ms": 1207,
+          "file": "chromium-normal-loadcast-01207.jpg"
+        },
+        {
+          "ms": 1227,
+          "file": "chromium-normal-loadcast-01227.jpg"
+        },
+        {
+          "ms": 1246,
+          "file": "chromium-normal-loadcast-01246.jpg"
+        },
+        {
+          "ms": 1265,
+          "file": "chromium-normal-loadcast-01265.jpg"
+        },
+        {
+          "ms": 1284,
+          "file": "chromium-normal-loadcast-01284.jpg"
+        },
+        {
+          "ms": 1303,
+          "file": "chromium-normal-loadcast-01303.jpg"
+        },
+        {
+          "ms": 1322,
+          "file": "chromium-normal-loadcast-01322.jpg"
+        },
+        {
+          "ms": 1341,
+          "file": "chromium-normal-loadcast-01341.jpg"
+        },
+        {
+          "ms": 1360,
+          "file": "chromium-normal-loadcast-01360.jpg"
+        },
+        {
+          "ms": 1379,
+          "file": "chromium-normal-loadcast-01379.jpg"
+        },
+        {
+          "ms": 1399,
+          "file": "chromium-normal-loadcast-01399.jpg"
+        },
+        {
+          "ms": 1418,
+          "file": "chromium-normal-loadcast-01418.jpg"
+        },
+        {
+          "ms": 1437,
+          "file": "chromium-normal-loadcast-01437.jpg"
+        },
+        {
+          "ms": 1456,
+          "file": "chromium-normal-loadcast-01456.jpg"
+        },
+        {
+          "ms": 1475,
+          "file": "chromium-normal-loadcast-01475.jpg"
+        },
+        {
+          "ms": 1495,
+          "file": "chromium-normal-loadcast-01495.jpg"
+        },
+        {
+          "ms": 1514,
+          "file": "chromium-normal-loadcast-01514.jpg"
+        },
+        {
+          "ms": 1533,
+          "file": "chromium-normal-loadcast-01533.jpg"
+        },
+        {
+          "ms": 1552,
+          "file": "chromium-normal-loadcast-01552.jpg"
+        },
+        {
+          "ms": 1571,
+          "file": "chromium-normal-loadcast-01571.jpg"
+        },
+        {
+          "ms": 1591,
+          "file": "chromium-normal-loadcast-01591.jpg"
+        },
+        {
+          "ms": 1610,
+          "file": "chromium-normal-loadcast-01610.jpg"
+        },
+        {
+          "ms": 1629,
+          "file": "chromium-normal-loadcast-01629.jpg"
+        },
+        {
+          "ms": 1649,
+          "file": "chromium-normal-loadcast-01649.jpg"
+        },
+        {
+          "ms": 1668,
+          "file": "chromium-normal-loadcast-01668.jpg"
+        },
+        {
+          "ms": 1687,
+          "file": "chromium-normal-loadcast-01687.jpg"
+        },
+        {
+          "ms": 1706,
+          "file": "chromium-normal-loadcast-01706.jpg"
+        },
+        {
+          "ms": 1726,
+          "file": "chromium-normal-loadcast-01726.jpg"
+        },
+        {
+          "ms": 1747,
+          "file": "chromium-normal-loadcast-01747.jpg"
+        },
+        {
+          "ms": 1769,
+          "file": "chromium-normal-loadcast-01769.jpg"
+        },
+        {
+          "ms": 1789,
+          "file": "chromium-normal-loadcast-01789.jpg"
+        },
+        {
+          "ms": 1811,
+          "file": "chromium-normal-loadcast-01811.jpg"
+        },
+        {
+          "ms": 1830,
+          "file": "chromium-normal-loadcast-01830.jpg"
+        },
+        {
+          "ms": 1849,
+          "file": "chromium-normal-loadcast-01849.jpg"
+        },
+        {
+          "ms": 1868,
+          "file": "chromium-normal-loadcast-01868.jpg"
+        },
+        {
+          "ms": 1887,
+          "file": "chromium-normal-loadcast-01887.jpg"
+        },
+        {
+          "ms": 1907,
+          "file": "chromium-normal-loadcast-01907.jpg"
+        },
+        {
+          "ms": 1926,
+          "file": "chromium-normal-loadcast-01926.jpg"
+        },
+        {
+          "ms": 1946,
+          "file": "chromium-normal-loadcast-01946.jpg"
+        },
+        {
+          "ms": 1966,
+          "file": "chromium-normal-loadcast-01966.jpg"
+        },
+        {
+          "ms": 1985,
+          "file": "chromium-normal-loadcast-01985.jpg"
+        },
+        {
+          "ms": 2007,
+          "file": "chromium-normal-loadcast-02007.jpg"
+        },
+        {
+          "ms": 2029,
+          "file": "chromium-normal-loadcast-02029.jpg"
+        },
+        {
+          "ms": 2049,
+          "file": "chromium-normal-loadcast-02049.jpg"
+        },
+        {
+          "ms": 2071,
+          "file": "chromium-normal-loadcast-02071.jpg"
+        },
+        {
+          "ms": 2091,
+          "file": "chromium-normal-loadcast-02091.jpg"
+        },
+        {
+          "ms": 2109,
+          "file": "chromium-normal-loadcast-02109.jpg"
+        },
+        {
+          "ms": 2118,
+          "file": "chromium-normal-loadcast-02118.jpg"
+        }
+      ],
+      "sheet": null,
+      "notes": [
+        "CDP screencast from before navigation; ms is time since screencast start (navigation begins about 0 to 30ms later); frames only exist where the compositor produced one"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "scroll",
+      "frameCount": 2,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-normal-scroll-00000.png"
+        },
+        {
+          "ms": 11611,
+          "file": "chromium-normal-scroll-11611.png"
+        }
+      ],
+      "sheet": "sheet-chromium-normal-scroll.png",
+      "notes": [
+        "shot error (before first paint, frames skipped): page.screenshot: Timeout 3000ms exceeded.",
+        "settled frame chromium-normal-scroll-11611.png, 1500ms after the action ended at 10111ms",
+        "frame gaps ms: median 11611, max 11611",
+        "scrollY after return 0",
+        "scrollY at dock 295"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "drag",
+      "frameCount": 32,
+      "frames": [
+        {
+          "ms": 19,
+          "file": "chromium-normal-drag-00019.jpg"
+        },
+        {
+          "ms": 26,
+          "file": "chromium-normal-drag-00026.jpg"
+        },
+        {
+          "ms": 55,
+          "file": "chromium-normal-drag-00055.jpg"
+        },
+        {
+          "ms": 72,
+          "file": "chromium-normal-drag-00072.jpg"
+        },
+        {
+          "ms": 87,
+          "file": "chromium-normal-drag-00087.jpg"
+        },
+        {
+          "ms": 106,
+          "file": "chromium-normal-drag-00106.jpg"
+        },
+        {
+          "ms": 121,
+          "file": "chromium-normal-drag-00121.jpg"
+        },
+        {
+          "ms": 138,
+          "file": "chromium-normal-drag-00138.jpg"
+        },
+        {
+          "ms": 155,
+          "file": "chromium-normal-drag-00155.jpg"
+        },
+        {
+          "ms": 173,
+          "file": "chromium-normal-drag-00173.jpg"
+        },
+        {
+          "ms": 188,
+          "file": "chromium-normal-drag-00188.jpg"
+        },
+        {
+          "ms": 205,
+          "file": "chromium-normal-drag-00205.jpg"
+        },
+        {
+          "ms": 221,
+          "file": "chromium-normal-drag-00221.jpg"
+        },
+        {
+          "ms": 238,
+          "file": "chromium-normal-drag-00238.jpg"
+        },
+        {
+          "ms": 255,
+          "file": "chromium-normal-drag-00255.jpg"
+        },
+        {
+          "ms": 272,
+          "file": "chromium-normal-drag-00272.jpg"
+        },
+        {
+          "ms": 306,
+          "file": "chromium-normal-drag-00306.jpg"
+        },
+        {
+          "ms": 340,
+          "file": "chromium-normal-drag-00340.jpg"
+        },
+        {
+          "ms": 372,
+          "file": "chromium-normal-drag-00372.jpg"
+        },
+        {
+          "ms": 405,
+          "file": "chromium-normal-drag-00405.jpg"
+        },
+        {
+          "ms": 672,
+          "file": "chromium-normal-drag-00672.jpg"
+        },
+        {
+          "ms": 688,
+          "file": "chromium-normal-drag-00688.jpg"
+        },
+        {
+          "ms": 705,
+          "file": "chromium-normal-drag-00705.jpg"
+        },
+        {
+          "ms": 723,
+          "file": "chromium-normal-drag-00723.jpg"
+        },
+        {
+          "ms": 739,
+          "file": "chromium-normal-drag-00739.jpg"
+        },
+        {
+          "ms": 756,
+          "file": "chromium-normal-drag-00756.jpg"
+        },
+        {
+          "ms": 773,
+          "file": "chromium-normal-drag-00773.jpg"
+        },
+        {
+          "ms": 789,
+          "file": "chromium-normal-drag-00789.jpg"
+        },
+        {
+          "ms": 807,
+          "file": "chromium-normal-drag-00807.jpg"
+        },
+        {
+          "ms": 826,
+          "file": "chromium-normal-drag-00826.jpg"
+        },
+        {
+          "ms": 840,
+          "file": "chromium-normal-drag-00840.jpg"
+        },
+        {
+          "ms": 8100,
+          "file": "chromium-normal-drag-08100.jpg"
+        }
+      ],
+      "sheet": null,
+      "notes": [
+        "frame gaps ms: median 17, max 7260",
+        "CDP screencast: ms is time since screencast start; frames exist only where the compositor produced one"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "pathlight",
+      "frameCount": 235,
+      "frames": [
+        {
+          "ms": 18,
+          "file": "chromium-normal-pathlight-00018.jpg"
+        },
+        {
+          "ms": 39,
+          "file": "chromium-normal-pathlight-00039.jpg"
+        },
+        {
+          "ms": 50,
+          "file": "chromium-normal-pathlight-00050.jpg"
+        },
+        {
+          "ms": 60,
+          "file": "chromium-normal-pathlight-00060.jpg"
+        },
+        {
+          "ms": 78,
+          "file": "chromium-normal-pathlight-00078.jpg"
+        },
+        {
+          "ms": 95,
+          "file": "chromium-normal-pathlight-00095.jpg"
+        },
+        {
+          "ms": 111,
+          "file": "chromium-normal-pathlight-00111.jpg"
+        },
+        {
+          "ms": 129,
+          "file": "chromium-normal-pathlight-00129.jpg"
+        },
+        {
+          "ms": 145,
+          "file": "chromium-normal-pathlight-00145.jpg"
+        },
+        {
+          "ms": 165,
+          "file": "chromium-normal-pathlight-00165.jpg"
+        },
+        {
+          "ms": 183,
+          "file": "chromium-normal-pathlight-00183.jpg"
+        },
+        {
+          "ms": 198,
+          "file": "chromium-normal-pathlight-00198.jpg"
+        },
+        {
+          "ms": 215,
+          "file": "chromium-normal-pathlight-00215.jpg"
+        },
+        {
+          "ms": 230,
+          "file": "chromium-normal-pathlight-00230.jpg"
+        },
+        {
+          "ms": 247,
+          "file": "chromium-normal-pathlight-00247.jpg"
+        },
+        {
+          "ms": 264,
+          "file": "chromium-normal-pathlight-00264.jpg"
+        },
+        {
+          "ms": 281,
+          "file": "chromium-normal-pathlight-00281.jpg"
+        },
+        {
+          "ms": 298,
+          "file": "chromium-normal-pathlight-00298.jpg"
+        },
+        {
+          "ms": 313,
+          "file": "chromium-normal-pathlight-00313.jpg"
+        },
+        {
+          "ms": 328,
+          "file": "chromium-normal-pathlight-00328.jpg"
+        },
+        {
+          "ms": 344,
+          "file": "chromium-normal-pathlight-00344.jpg"
+        },
+        {
+          "ms": 362,
+          "file": "chromium-normal-pathlight-00362.jpg"
+        },
+        {
+          "ms": 377,
+          "file": "chromium-normal-pathlight-00377.jpg"
+        },
+        {
+          "ms": 393,
+          "file": "chromium-normal-pathlight-00393.jpg"
+        },
+        {
+          "ms": 409,
+          "file": "chromium-normal-pathlight-00409.jpg"
+        },
+        {
+          "ms": 426,
+          "file": "chromium-normal-pathlight-00426.jpg"
+        },
+        {
+          "ms": 443,
+          "file": "chromium-normal-pathlight-00443.jpg"
+        },
+        {
+          "ms": 461,
+          "file": "chromium-normal-pathlight-00461.jpg"
+        },
+        {
+          "ms": 479,
+          "file": "chromium-normal-pathlight-00479.jpg"
+        },
+        {
+          "ms": 494,
+          "file": "chromium-normal-pathlight-00494.jpg"
+        },
+        {
+          "ms": 512,
+          "file": "chromium-normal-pathlight-00512.jpg"
+        },
+        {
+          "ms": 527,
+          "file": "chromium-normal-pathlight-00527.jpg"
+        },
+        {
+          "ms": 544,
+          "file": "chromium-normal-pathlight-00544.jpg"
+        },
+        {
+          "ms": 562,
+          "file": "chromium-normal-pathlight-00562.jpg"
+        },
+        {
+          "ms": 577,
+          "file": "chromium-normal-pathlight-00577.jpg"
+        },
+        {
+          "ms": 596,
+          "file": "chromium-normal-pathlight-00596.jpg"
+        },
+        {
+          "ms": 613,
+          "file": "chromium-normal-pathlight-00613.jpg"
+        },
+        {
+          "ms": 628,
+          "file": "chromium-normal-pathlight-00628.jpg"
+        },
+        {
+          "ms": 643,
+          "file": "chromium-normal-pathlight-00643.jpg"
+        },
+        {
+          "ms": 661,
+          "file": "chromium-normal-pathlight-00661.jpg"
+        },
+        {
+          "ms": 678,
+          "file": "chromium-normal-pathlight-00678.jpg"
+        },
+        {
+          "ms": 692,
+          "file": "chromium-normal-pathlight-00692.jpg"
+        },
+        {
+          "ms": 710,
+          "file": "chromium-normal-pathlight-00710.jpg"
+        },
+        {
+          "ms": 726,
+          "file": "chromium-normal-pathlight-00726.jpg"
+        },
+        {
+          "ms": 741,
+          "file": "chromium-normal-pathlight-00741.jpg"
+        },
+        {
+          "ms": 759,
+          "file": "chromium-normal-pathlight-00759.jpg"
+        },
+        {
+          "ms": 776,
+          "file": "chromium-normal-pathlight-00776.jpg"
+        },
+        {
+          "ms": 793,
+          "file": "chromium-normal-pathlight-00793.jpg"
+        },
+        {
+          "ms": 812,
+          "file": "chromium-normal-pathlight-00812.jpg"
+        },
+        {
+          "ms": 826,
+          "file": "chromium-normal-pathlight-00826.jpg"
+        },
+        {
+          "ms": 842,
+          "file": "chromium-normal-pathlight-00842.jpg"
+        },
+        {
+          "ms": 859,
+          "file": "chromium-normal-pathlight-00859.jpg"
+        },
+        {
+          "ms": 875,
+          "file": "chromium-normal-pathlight-00875.jpg"
+        },
+        {
+          "ms": 893,
+          "file": "chromium-normal-pathlight-00893.jpg"
+        },
+        {
+          "ms": 909,
+          "file": "chromium-normal-pathlight-00909.jpg"
+        },
+        {
+          "ms": 925,
+          "file": "chromium-normal-pathlight-00925.jpg"
+        },
+        {
+          "ms": 942,
+          "file": "chromium-normal-pathlight-00942.jpg"
+        },
+        {
+          "ms": 957,
+          "file": "chromium-normal-pathlight-00957.jpg"
+        },
+        {
+          "ms": 975,
+          "file": "chromium-normal-pathlight-00975.jpg"
+        },
+        {
+          "ms": 991,
+          "file": "chromium-normal-pathlight-00991.jpg"
+        },
+        {
+          "ms": 1008,
+          "file": "chromium-normal-pathlight-01008.jpg"
+        },
+        {
+          "ms": 1024,
+          "file": "chromium-normal-pathlight-01024.jpg"
+        },
+        {
+          "ms": 1041,
+          "file": "chromium-normal-pathlight-01041.jpg"
+        },
+        {
+          "ms": 1059,
+          "file": "chromium-normal-pathlight-01059.jpg"
+        },
+        {
+          "ms": 1076,
+          "file": "chromium-normal-pathlight-01076.jpg"
+        },
+        {
+          "ms": 1328,
+          "file": "chromium-normal-pathlight-01328.jpg"
+        },
+        {
+          "ms": 1346,
+          "file": "chromium-normal-pathlight-01346.jpg"
+        },
+        {
+          "ms": 1358,
+          "file": "chromium-normal-pathlight-01358.jpg"
+        },
+        {
+          "ms": 1374,
+          "file": "chromium-normal-pathlight-01374.jpg"
+        },
+        {
+          "ms": 1390,
+          "file": "chromium-normal-pathlight-01390.jpg"
+        },
+        {
+          "ms": 1408,
+          "file": "chromium-normal-pathlight-01408.jpg"
+        },
+        {
+          "ms": 1424,
+          "file": "chromium-normal-pathlight-01424.jpg"
+        },
+        {
+          "ms": 1442,
+          "file": "chromium-normal-pathlight-01442.jpg"
+        },
+        {
+          "ms": 1459,
+          "file": "chromium-normal-pathlight-01459.jpg"
+        },
+        {
+          "ms": 1476,
+          "file": "chromium-normal-pathlight-01476.jpg"
+        },
+        {
+          "ms": 1492,
+          "file": "chromium-normal-pathlight-01492.jpg"
+        },
+        {
+          "ms": 1509,
+          "file": "chromium-normal-pathlight-01509.jpg"
+        },
+        {
+          "ms": 1526,
+          "file": "chromium-normal-pathlight-01526.jpg"
+        },
+        {
+          "ms": 1542,
+          "file": "chromium-normal-pathlight-01542.jpg"
+        },
+        {
+          "ms": 1560,
+          "file": "chromium-normal-pathlight-01560.jpg"
+        },
+        {
+          "ms": 1577,
+          "file": "chromium-normal-pathlight-01577.jpg"
+        },
+        {
+          "ms": 1594,
+          "file": "chromium-normal-pathlight-01594.jpg"
+        },
+        {
+          "ms": 1611,
+          "file": "chromium-normal-pathlight-01611.jpg"
+        },
+        {
+          "ms": 1627,
+          "file": "chromium-normal-pathlight-01627.jpg"
+        },
+        {
+          "ms": 1642,
+          "file": "chromium-normal-pathlight-01642.jpg"
+        },
+        {
+          "ms": 1659,
+          "file": "chromium-normal-pathlight-01659.jpg"
+        },
+        {
+          "ms": 1676,
+          "file": "chromium-normal-pathlight-01676.jpg"
+        },
+        {
+          "ms": 1693,
+          "file": "chromium-normal-pathlight-01693.jpg"
+        },
+        {
+          "ms": 1708,
+          "file": "chromium-normal-pathlight-01708.jpg"
+        },
+        {
+          "ms": 1726,
+          "file": "chromium-normal-pathlight-01726.jpg"
+        },
+        {
+          "ms": 1743,
+          "file": "chromium-normal-pathlight-01743.jpg"
+        },
+        {
+          "ms": 1757,
+          "file": "chromium-normal-pathlight-01757.jpg"
+        },
+        {
+          "ms": 1776,
+          "file": "chromium-normal-pathlight-01776.jpg"
+        },
+        {
+          "ms": 1793,
+          "file": "chromium-normal-pathlight-01793.jpg"
+        },
+        {
+          "ms": 1808,
+          "file": "chromium-normal-pathlight-01808.jpg"
+        },
+        {
+          "ms": 1826,
+          "file": "chromium-normal-pathlight-01826.jpg"
+        },
+        {
+          "ms": 1842,
+          "file": "chromium-normal-pathlight-01842.jpg"
+        },
+        {
+          "ms": 1861,
+          "file": "chromium-normal-pathlight-01861.jpg"
+        },
+        {
+          "ms": 1876,
+          "file": "chromium-normal-pathlight-01876.jpg"
+        },
+        {
+          "ms": 1894,
+          "file": "chromium-normal-pathlight-01894.jpg"
+        },
+        {
+          "ms": 1909,
+          "file": "chromium-normal-pathlight-01909.jpg"
+        },
+        {
+          "ms": 1924,
+          "file": "chromium-normal-pathlight-01924.jpg"
+        },
+        {
+          "ms": 1942,
+          "file": "chromium-normal-pathlight-01942.jpg"
+        },
+        {
+          "ms": 1960,
+          "file": "chromium-normal-pathlight-01960.jpg"
+        },
+        {
+          "ms": 1977,
+          "file": "chromium-normal-pathlight-01977.jpg"
+        },
+        {
+          "ms": 1993,
+          "file": "chromium-normal-pathlight-01993.jpg"
+        },
+        {
+          "ms": 2009,
+          "file": "chromium-normal-pathlight-02009.jpg"
+        },
+        {
+          "ms": 2025,
+          "file": "chromium-normal-pathlight-02025.jpg"
+        },
+        {
+          "ms": 2041,
+          "file": "chromium-normal-pathlight-02041.jpg"
+        },
+        {
+          "ms": 2058,
+          "file": "chromium-normal-pathlight-02058.jpg"
+        },
+        {
+          "ms": 2076,
+          "file": "chromium-normal-pathlight-02076.jpg"
+        },
+        {
+          "ms": 2095,
+          "file": "chromium-normal-pathlight-02095.jpg"
+        },
+        {
+          "ms": 2110,
+          "file": "chromium-normal-pathlight-02110.jpg"
+        },
+        {
+          "ms": 2128,
+          "file": "chromium-normal-pathlight-02128.jpg"
+        },
+        {
+          "ms": 2144,
+          "file": "chromium-normal-pathlight-02144.jpg"
+        },
+        {
+          "ms": 2159,
+          "file": "chromium-normal-pathlight-02159.jpg"
+        },
+        {
+          "ms": 2176,
+          "file": "chromium-normal-pathlight-02176.jpg"
+        },
+        {
+          "ms": 2191,
+          "file": "chromium-normal-pathlight-02191.jpg"
+        },
+        {
+          "ms": 2209,
+          "file": "chromium-normal-pathlight-02209.jpg"
+        },
+        {
+          "ms": 2225,
+          "file": "chromium-normal-pathlight-02225.jpg"
+        },
+        {
+          "ms": 2260,
+          "file": "chromium-normal-pathlight-02260.jpg"
+        },
+        {
+          "ms": 2632,
+          "file": "chromium-normal-pathlight-02632.jpg"
+        },
+        {
+          "ms": 2644,
+          "file": "chromium-normal-pathlight-02644.jpg"
+        },
+        {
+          "ms": 2658,
+          "file": "chromium-normal-pathlight-02658.jpg"
+        },
+        {
+          "ms": 2675,
+          "file": "chromium-normal-pathlight-02675.jpg"
+        },
+        {
+          "ms": 2690,
+          "file": "chromium-normal-pathlight-02690.jpg"
+        },
+        {
+          "ms": 2709,
+          "file": "chromium-normal-pathlight-02709.jpg"
+        },
+        {
+          "ms": 2725,
+          "file": "chromium-normal-pathlight-02725.jpg"
+        },
+        {
+          "ms": 2741,
+          "file": "chromium-normal-pathlight-02741.jpg"
+        },
+        {
+          "ms": 2760,
+          "file": "chromium-normal-pathlight-02760.jpg"
+        },
+        {
+          "ms": 2777,
+          "file": "chromium-normal-pathlight-02777.jpg"
+        },
+        {
+          "ms": 2794,
+          "file": "chromium-normal-pathlight-02794.jpg"
+        },
+        {
+          "ms": 2811,
+          "file": "chromium-normal-pathlight-02811.jpg"
+        },
+        {
+          "ms": 2827,
+          "file": "chromium-normal-pathlight-02827.jpg"
+        },
+        {
+          "ms": 2843,
+          "file": "chromium-normal-pathlight-02843.jpg"
+        },
+        {
+          "ms": 2861,
+          "file": "chromium-normal-pathlight-02861.jpg"
+        },
+        {
+          "ms": 2876,
+          "file": "chromium-normal-pathlight-02876.jpg"
+        },
+        {
+          "ms": 2893,
+          "file": "chromium-normal-pathlight-02893.jpg"
+        },
+        {
+          "ms": 2913,
+          "file": "chromium-normal-pathlight-02913.jpg"
+        },
+        {
+          "ms": 2929,
+          "file": "chromium-normal-pathlight-02929.jpg"
+        },
+        {
+          "ms": 2946,
+          "file": "chromium-normal-pathlight-02946.jpg"
+        },
+        {
+          "ms": 2960,
+          "file": "chromium-normal-pathlight-02960.jpg"
+        },
+        {
+          "ms": 2977,
+          "file": "chromium-normal-pathlight-02977.jpg"
+        },
+        {
+          "ms": 2993,
+          "file": "chromium-normal-pathlight-02993.jpg"
+        },
+        {
+          "ms": 3010,
+          "file": "chromium-normal-pathlight-03010.jpg"
+        },
+        {
+          "ms": 3026,
+          "file": "chromium-normal-pathlight-03026.jpg"
+        },
+        {
+          "ms": 3043,
+          "file": "chromium-normal-pathlight-03043.jpg"
+        },
+        {
+          "ms": 3060,
+          "file": "chromium-normal-pathlight-03060.jpg"
+        },
+        {
+          "ms": 3077,
+          "file": "chromium-normal-pathlight-03077.jpg"
+        },
+        {
+          "ms": 3094,
+          "file": "chromium-normal-pathlight-03094.jpg"
+        },
+        {
+          "ms": 3110,
+          "file": "chromium-normal-pathlight-03110.jpg"
+        },
+        {
+          "ms": 3127,
+          "file": "chromium-normal-pathlight-03127.jpg"
+        },
+        {
+          "ms": 3143,
+          "file": "chromium-normal-pathlight-03143.jpg"
+        },
+        {
+          "ms": 3159,
+          "file": "chromium-normal-pathlight-03159.jpg"
+        },
+        {
+          "ms": 3179,
+          "file": "chromium-normal-pathlight-03179.jpg"
+        },
+        {
+          "ms": 3196,
+          "file": "chromium-normal-pathlight-03196.jpg"
+        },
+        {
+          "ms": 3210,
+          "file": "chromium-normal-pathlight-03210.jpg"
+        },
+        {
+          "ms": 3227,
+          "file": "chromium-normal-pathlight-03227.jpg"
+        },
+        {
+          "ms": 3243,
+          "file": "chromium-normal-pathlight-03243.jpg"
+        },
+        {
+          "ms": 3259,
+          "file": "chromium-normal-pathlight-03259.jpg"
+        },
+        {
+          "ms": 3277,
+          "file": "chromium-normal-pathlight-03277.jpg"
+        },
+        {
+          "ms": 3295,
+          "file": "chromium-normal-pathlight-03295.jpg"
+        },
+        {
+          "ms": 3311,
+          "file": "chromium-normal-pathlight-03311.jpg"
+        },
+        {
+          "ms": 3326,
+          "file": "chromium-normal-pathlight-03326.jpg"
+        },
+        {
+          "ms": 3345,
+          "file": "chromium-normal-pathlight-03345.jpg"
+        },
+        {
+          "ms": 3361,
+          "file": "chromium-normal-pathlight-03361.jpg"
+        },
+        {
+          "ms": 3377,
+          "file": "chromium-normal-pathlight-03377.jpg"
+        },
+        {
+          "ms": 3392,
+          "file": "chromium-normal-pathlight-03392.jpg"
+        },
+        {
+          "ms": 3410,
+          "file": "chromium-normal-pathlight-03410.jpg"
+        },
+        {
+          "ms": 3425,
+          "file": "chromium-normal-pathlight-03425.jpg"
+        },
+        {
+          "ms": 3442,
+          "file": "chromium-normal-pathlight-03442.jpg"
+        },
+        {
+          "ms": 3461,
+          "file": "chromium-normal-pathlight-03461.jpg"
+        },
+        {
+          "ms": 3479,
+          "file": "chromium-normal-pathlight-03479.jpg"
+        },
+        {
+          "ms": 3496,
+          "file": "chromium-normal-pathlight-03496.jpg"
+        },
+        {
+          "ms": 3509,
+          "file": "chromium-normal-pathlight-03509.jpg"
+        },
+        {
+          "ms": 3527,
+          "file": "chromium-normal-pathlight-03527.jpg"
+        },
+        {
+          "ms": 3558,
+          "file": "chromium-normal-pathlight-03558.jpg"
+        },
+        {
+          "ms": 3865,
+          "file": "chromium-normal-pathlight-03865.jpg"
+        },
+        {
+          "ms": 3942,
+          "file": "chromium-normal-pathlight-03942.jpg"
+        },
+        {
+          "ms": 3959,
+          "file": "chromium-normal-pathlight-03959.jpg"
+        },
+        {
+          "ms": 3976,
+          "file": "chromium-normal-pathlight-03976.jpg"
+        },
+        {
+          "ms": 3994,
+          "file": "chromium-normal-pathlight-03994.jpg"
+        },
+        {
+          "ms": 4009,
+          "file": "chromium-normal-pathlight-04009.jpg"
+        },
+        {
+          "ms": 4026,
+          "file": "chromium-normal-pathlight-04026.jpg"
+        },
+        {
+          "ms": 4041,
+          "file": "chromium-normal-pathlight-04041.jpg"
+        },
+        {
+          "ms": 4058,
+          "file": "chromium-normal-pathlight-04058.jpg"
+        },
+        {
+          "ms": 4074,
+          "file": "chromium-normal-pathlight-04074.jpg"
+        },
+        {
+          "ms": 4093,
+          "file": "chromium-normal-pathlight-04093.jpg"
+        },
+        {
+          "ms": 4110,
+          "file": "chromium-normal-pathlight-04110.jpg"
+        },
+        {
+          "ms": 4127,
+          "file": "chromium-normal-pathlight-04127.jpg"
+        },
+        {
+          "ms": 4143,
+          "file": "chromium-normal-pathlight-04143.jpg"
+        },
+        {
+          "ms": 4162,
+          "file": "chromium-normal-pathlight-04162.jpg"
+        },
+        {
+          "ms": 4178,
+          "file": "chromium-normal-pathlight-04178.jpg"
+        },
+        {
+          "ms": 4194,
+          "file": "chromium-normal-pathlight-04194.jpg"
+        },
+        {
+          "ms": 4210,
+          "file": "chromium-normal-pathlight-04210.jpg"
+        },
+        {
+          "ms": 4226,
+          "file": "chromium-normal-pathlight-04226.jpg"
+        },
+        {
+          "ms": 4242,
+          "file": "chromium-normal-pathlight-04242.jpg"
+        },
+        {
+          "ms": 4260,
+          "file": "chromium-normal-pathlight-04260.jpg"
+        },
+        {
+          "ms": 4277,
+          "file": "chromium-normal-pathlight-04277.jpg"
+        },
+        {
+          "ms": 4292,
+          "file": "chromium-normal-pathlight-04292.jpg"
+        },
+        {
+          "ms": 4310,
+          "file": "chromium-normal-pathlight-04310.jpg"
+        },
+        {
+          "ms": 4326,
+          "file": "chromium-normal-pathlight-04326.jpg"
+        },
+        {
+          "ms": 4343,
+          "file": "chromium-normal-pathlight-04343.jpg"
+        },
+        {
+          "ms": 4360,
+          "file": "chromium-normal-pathlight-04360.jpg"
+        },
+        {
+          "ms": 4376,
+          "file": "chromium-normal-pathlight-04376.jpg"
+        },
+        {
+          "ms": 4393,
+          "file": "chromium-normal-pathlight-04393.jpg"
+        },
+        {
+          "ms": 4411,
+          "file": "chromium-normal-pathlight-04411.jpg"
+        },
+        {
+          "ms": 4426,
+          "file": "chromium-normal-pathlight-04426.jpg"
+        },
+        {
+          "ms": 4443,
+          "file": "chromium-normal-pathlight-04443.jpg"
+        },
+        {
+          "ms": 4459,
+          "file": "chromium-normal-pathlight-04459.jpg"
+        },
+        {
+          "ms": 4476,
+          "file": "chromium-normal-pathlight-04476.jpg"
+        },
+        {
+          "ms": 4494,
+          "file": "chromium-normal-pathlight-04494.jpg"
+        },
+        {
+          "ms": 4512,
+          "file": "chromium-normal-pathlight-04512.jpg"
+        },
+        {
+          "ms": 4528,
+          "file": "chromium-normal-pathlight-04528.jpg"
+        },
+        {
+          "ms": 4545,
+          "file": "chromium-normal-pathlight-04545.jpg"
+        },
+        {
+          "ms": 4560,
+          "file": "chromium-normal-pathlight-04560.jpg"
+        },
+        {
+          "ms": 4577,
+          "file": "chromium-normal-pathlight-04577.jpg"
+        },
+        {
+          "ms": 4593,
+          "file": "chromium-normal-pathlight-04593.jpg"
+        },
+        {
+          "ms": 4610,
+          "file": "chromium-normal-pathlight-04610.jpg"
+        },
+        {
+          "ms": 4627,
+          "file": "chromium-normal-pathlight-04627.jpg"
+        },
+        {
+          "ms": 4643,
+          "file": "chromium-normal-pathlight-04643.jpg"
+        },
+        {
+          "ms": 4661,
+          "file": "chromium-normal-pathlight-04661.jpg"
+        },
+        {
+          "ms": 4678,
+          "file": "chromium-normal-pathlight-04678.jpg"
+        },
+        {
+          "ms": 4694,
+          "file": "chromium-normal-pathlight-04694.jpg"
+        },
+        {
+          "ms": 4710,
+          "file": "chromium-normal-pathlight-04710.jpg"
+        },
+        {
+          "ms": 4727,
+          "file": "chromium-normal-pathlight-04727.jpg"
+        },
+        {
+          "ms": 4742,
+          "file": "chromium-normal-pathlight-04742.jpg"
+        },
+        {
+          "ms": 4758,
+          "file": "chromium-normal-pathlight-04758.jpg"
+        },
+        {
+          "ms": 4777,
+          "file": "chromium-normal-pathlight-04777.jpg"
+        },
+        {
+          "ms": 4794,
+          "file": "chromium-normal-pathlight-04794.jpg"
+        },
+        {
+          "ms": 4812,
+          "file": "chromium-normal-pathlight-04812.jpg"
+        },
+        {
+          "ms": 4828,
+          "file": "chromium-normal-pathlight-04828.jpg"
+        },
+        {
+          "ms": 4844,
+          "file": "chromium-normal-pathlight-04844.jpg"
+        },
+        {
+          "ms": 4862,
+          "file": "chromium-normal-pathlight-04862.jpg"
+        },
+        {
+          "ms": 4878,
+          "file": "chromium-normal-pathlight-04878.jpg"
+        }
+      ],
+      "sheet": null,
+      "notes": [
+        "frame gaps ms: median 17, max 372",
+        "CDP screencast: ms is time since screencast start; frames exist only where the compositor produced one",
+        "rungs 0-3: 159 translate changes over 326 rAF samples; first 1343ms, last 4826ms; rungs seen 0,1,2,3"
+      ],
+      "lightSamples": [
+        [
+          0,
+          "0px -1.6px",
+          "0"
+        ],
+        [
+          1343,
+          "25.0682px 30.7645px",
+          "1"
+        ],
+        [
+          1360,
+          "48.2367px 60.6763px",
+          "1"
+        ],
+        [
+          1376,
+          "69.1787px 87.7135px",
+          "1"
+        ],
+        [
+          1394,
+          "88.1091px 112.154px",
+          "1"
+        ],
+        [
+          1409,
+          "104.946px 133.89px",
+          "1"
+        ],
+        [
+          1427,
+          "119.722px 152.968px",
+          "1"
+        ],
+        [
+          1444,
+          "132.779px 169.825px",
+          "1"
+        ],
+        [
+          1461,
+          "144.202px 184.573px",
+          "1"
+        ],
+        [
+          1477,
+          "154.179px 197.454px",
+          "1"
+        ],
+        [
+          1493,
+          "162.839px 208.634px",
+          "1"
+        ],
+        [
+          1510,
+          "170.449px 218.459px",
+          "1"
+        ],
+        [
+          1526,
+          "177.061px 226.996px",
+          "1"
+        ],
+        [
+          1544,
+          "182.884px 234.513px",
+          "1"
+        ],
+        [
+          1561,
+          "187.985px 241.099px",
+          "1"
+        ],
+        [
+          1577,
+          "192.46px 246.877px",
+          "1"
+        ],
+        [
+          1594,
+          "196.371px 251.926px",
+          "1"
+        ],
+        [
+          1610,
+          "199.834px 256.396px",
+          "1"
+        ],
+        [
+          1626,
+          "202.867px 260.312px",
+          "1"
+        ],
+        [
+          1643,
+          "205.558px 263.787px",
+          "1"
+        ],
+        [
+          1661,
+          "207.934px 266.854px",
+          "1"
+        ],
+        [
+          1677,
+          "210.032px 269.562px",
+          "1"
+        ],
+        [
+          1693,
+          "211.874px 271.942px",
+          "1"
+        ],
+        [
+          1711,
+          "213.513px 274.057px",
+          "1"
+        ],
+        [
+          1727,
+          "214.953px 275.917px",
+          "1"
+        ],
+        [
+          1742,
+          "216.234px 277.57px",
+          "1"
+        ],
+        [
+          1761,
+          "217.364px 279.029px",
+          "1"
+        ],
+        [
+          1777,
+          "218.362px 280.317px",
+          "1"
+        ],
+        [
+          1792,
+          "219.236px 281.445px",
+          "1"
+        ],
+        [
+          1810,
+          "220.01px 282.445px",
+          "1"
+        ],
+        [
+          1826,
+          "220.687px 283.319px",
+          "1"
+        ],
+        [
+          1844,
+          "221.284px 284.09px",
+          "1"
+        ],
+        [
+          1860,
+          "221.804px 284.761px",
+          "1"
+        ],
+        [
+          1877,
+          "222.263px 285.353px",
+          "1"
+        ],
+        [
+          1894,
+          "222.657px 285.863px",
+          "1"
+        ],
+        [
+          1909,
+          "222.999px 286.304px",
+          "1"
+        ],
+        [
+          1926,
+          "223.296px 286.688px",
+          "1"
+        ],
+        [
+          1943,
+          "223.552px 287.018px",
+          "1"
+        ],
+        [
+          1961,
+          "223.769px 287.298px",
+          "1"
+        ],
+        [
+          1977,
+          "223.954px 287.537px",
+          "1"
+        ],
+        [
+          1994,
+          "224.11px 287.738px",
+          "1"
+        ],
+        [
+          2009,
+          "224.24px 287.906px",
+          "1"
+        ],
+        [
+          2026,
+          "224.347px 288.045px",
+          "1"
+        ],
+        [
+          2042,
+          "224.435px 288.158px",
+          "1"
+        ],
+        [
+          2059,
+          "224.506px 288.249px",
+          "1"
+        ],
+        [
+          2077,
+          "224.562px 288.322px",
+          "1"
+        ],
+        [
+          2093,
+          "224.605px 288.378px",
+          "1"
+        ],
+        [
+          2111,
+          "224.638px 288.42px",
+          "1"
+        ],
+        [
+          2126,
+          "224.662px 288.451px",
+          "1"
+        ],
+        [
+          2143,
+          "224.678px 288.472px",
+          "1"
+        ],
+        [
+          2161,
+          "224.689px 288.486px",
+          "1"
+        ],
+        [
+          2176,
+          "224.696px 288.494px",
+          "1"
+        ],
+        [
+          2194,
+          "224.699px 288.498px",
+          "1"
+        ],
+        [
+          2210,
+          "224.7px 288.5px",
+          "1"
+        ],
+        [
+          2643,
+          "249.832px 323.58px",
+          "2"
+        ],
+        [
+          2661,
+          "272.852px 355.711px",
+          "2"
+        ],
+        [
+          2675,
+          "293.91px 385.105px",
+          "2"
+        ],
+        [
+          2694,
+          "312.826px 411.507px",
+          "2"
+        ],
+        [
+          2710,
+          "329.648px 434.988px",
+          "2"
+        ],
+        [
+          2726,
+          "344.412px 455.596px",
+          "2"
+        ],
+        [
+          2744,
+          "357.458px 473.805px",
+          "2"
+        ],
+        [
+          2761,
+          "368.807px 489.647px",
+          "2"
+        ],
+        [
+          2777,
+          "378.728px 503.495px",
+          "2"
+        ],
+        [
+          2794,
+          "387.443px 515.659px",
+          "2"
+        ],
+        [
+          2811,
+          "395.095px 526.34px",
+          "2"
+        ],
+        [
+          2827,
+          "401.702px 535.562px",
+          "2"
+        ],
+        [
+          2843,
+          "407.519px 543.682px",
+          "2"
+        ],
+        [
+          2859,
+          "412.587px 550.756px",
+          "2"
+        ],
+        [
+          2875,
+          "417.063px 557.003px",
+          "2"
+        ],
+        [
+          2894,
+          "420.995px 562.492px",
+          "2"
+        ],
+        [
+          2911,
+          "424.435px 567.294px",
+          "2"
+        ],
+        [
+          2927,
+          "427.485px 571.551px",
+          "2"
+        ],
+        [
+          2943,
+          "430.175px 575.305px",
+          "2"
+        ],
+        [
+          2960,
+          "432.535px 578.599px",
+          "2"
+        ],
+        [
+          2977,
+          "434.632px 581.527px",
+          "2"
+        ],
+        [
+          2993,
+          "436.486px 584.113px",
+          "2"
+        ],
+        [
+          3010,
+          "438.114px 586.386px",
+          "2"
+        ],
+        [
+          3026,
+          "439.562px 588.408px",
+          "2"
+        ],
+        [
+          3043,
+          "440.841px 590.193px",
+          "2"
+        ],
+        [
+          3061,
+          "441.964px 591.761px",
+          "2"
+        ],
+        [
+          3077,
+          "442.962px 593.153px",
+          "2"
+        ],
+        [
+          3094,
+          "443.836px 594.373px",
+          "2"
+        ],
+        [
+          3110,
+          "444.61px 595.454px",
+          "2"
+        ],
+        [
+          3126,
+          "445.291px 596.404px",
+          "2"
+        ],
+        [
+          3142,
+          "445.887px 597.237px",
+          "2"
+        ],
+        [
+          3161,
+          "446.406px 597.961px",
+          "2"
+        ],
+        [
+          3177,
+          "446.862px 598.598px",
+          "2"
+        ],
+        [
+          3192,
+          "447.259px 599.151px",
+          "2"
+        ],
+        [
+          3211,
+          "447.601px 599.629px",
+          "2"
+        ],
+        [
+          3227,
+          "447.896px 600.041px",
+          "2"
+        ],
+        [
+          3243,
+          "448.152px 600.397px",
+          "2"
+        ],
+        [
+          3260,
+          "448.37px 600.701px",
+          "2"
+        ],
+        [
+          3277,
+          "448.554px 600.958px",
+          "2"
+        ],
+        [
+          3294,
+          "448.711px 601.177px",
+          "2"
+        ],
+        [
+          3309,
+          "448.84px 601.358px",
+          "2"
+        ],
+        [
+          3327,
+          "448.948px 601.508px",
+          "2"
+        ],
+        [
+          3344,
+          "449.035px 601.63px",
+          "2"
+        ],
+        [
+          3361,
+          "449.106px 601.729px",
+          "2"
+        ],
+        [
+          3375,
+          "449.162px 601.807px",
+          "2"
+        ],
+        [
+          3394,
+          "449.205px 601.868px",
+          "2"
+        ],
+        [
+          3409,
+          "449.238px 601.914px",
+          "2"
+        ],
+        [
+          3426,
+          "449.262px 601.947px",
+          "2"
+        ],
+        [
+          3444,
+          "449.278px 601.97px",
+          "2"
+        ],
+        [
+          3461,
+          "449.289px 601.985px",
+          "2"
+        ],
+        [
+          3477,
+          "449.296px 601.994px",
+          "2"
+        ],
+        [
+          3492,
+          "449.299px 601.998px",
+          "2"
+        ],
+        [
+          3510,
+          "449.3px 602px",
+          "2"
+        ],
+        [
+          3961,
+          "474.423px 637.041px",
+          "3"
+        ],
+        [
+          3977,
+          "497.455px 669.164px",
+          "3"
+        ],
+        [
+          3994,
+          "518.524px 698.55px",
+          "3"
+        ],
+        [
+          4010,
+          "537.45px 724.947px",
+          "3"
+        ],
+        [
+          4025,
+          "554.282px 748.423px",
+          "3"
+        ],
+        [
+          4043,
+          "569.054px 769.027px",
+          "3"
+        ],
+        [
+          4059,
+          "582.106px 787.232px",
+          "3"
+        ],
+        [
+          4076,
+          "593.527px 803.16px",
+          "3"
+        ],
+        [
+          4094,
+          "603.445px 816.993px",
+          "3"
+        ],
+        [
+          4111,
+          "612.158px 829.145px",
+          "3"
+        ],
+        [
+          4126,
+          "619.722px 839.696px",
+          "3"
+        ],
+        [
+          4144,
+          "626.375px 848.975px",
+          "3"
+        ],
+        [
+          4161,
+          "632.196px 857.094px",
+          "3"
+        ],
+        [
+          4177,
+          "637.267px 864.167px",
+          "3"
+        ],
+        [
+          4193,
+          "641.745px 870.412px",
+          "3"
+        ],
+        [
+          4210,
+          "645.679px 875.9px",
+          "3"
+        ],
+        [
+          4225,
+          "649.141px 880.728px",
+          "3"
+        ],
+        [
+          4243,
+          "652.173px 884.957px",
+          "3"
+        ],
+        [
+          4261,
+          "654.864px 888.71px",
+          "3"
+        ],
+        [
+          4276,
+          "657.226px 892.004px",
+          "3"
+        ],
+        [
+          4294,
+          "659.324px 894.931px",
+          "3"
+        ],
+        [
+          4310,
+          "661.178px 897.517px",
+          "3"
+        ],
+        [
+          4327,
+          "662.808px 899.79px",
+          "3"
+        ],
+        [
+          4344,
+          "664.257px 901.81px",
+          "3"
+        ],
+        [
+          4361,
+          "665.529px 903.586px",
+          "3"
+        ],
+        [
+          4377,
+          "666.667px 905.172px",
+          "3"
+        ],
+        [
+          4394,
+          "667.658px 906.555px",
+          "3"
+        ],
+        [
+          4410,
+          "668.538px 907.781px",
+          "3"
+        ],
+        [
+          4426,
+          "669.312px 908.861px",
+          "3"
+        ],
+        [
+          4442,
+          "669.988px 909.805px",
+          "3"
+        ],
+        [
+          4459,
+          "670.585px 910.637px",
+          "3"
+        ],
+        [
+          4477,
+          "671.105px 911.362px",
+          "3"
+        ],
+        [
+          4494,
+          "671.561px 911.998px",
+          "3"
+        ],
+        [
+          4510,
+          "671.958px 912.552px",
+          "3"
+        ],
+        [
+          4527,
+          "672.3px 913.029px",
+          "3"
+        ],
+        [
+          4543,
+          "672.597px 913.443px",
+          "3"
+        ],
+        [
+          4561,
+          "672.851px 913.797px",
+          "3"
+        ],
+        [
+          4576,
+          "673.07px 914.103px",
+          "3"
+        ],
+        [
+          4593,
+          "673.254px 914.36px",
+          "3"
+        ],
+        [
+          4610,
+          "673.409px 914.576px",
+          "3"
+        ],
+        [
+          4625,
+          "673.54px 914.758px",
+          "3"
+        ],
+        [
+          4644,
+          "673.648px 914.908px",
+          "3"
+        ],
+        [
+          4661,
+          "673.736px 915.031px",
+          "3"
+        ],
+        [
+          4677,
+          "673.806px 915.129px",
+          "3"
+        ],
+        [
+          4693,
+          "673.862px 915.208px",
+          "3"
+        ],
+        [
+          4710,
+          "673.906px 915.268px",
+          "3"
+        ],
+        [
+          4726,
+          "673.938px 915.314px",
+          "3"
+        ],
+        [
+          4742,
+          "673.962px 915.347px",
+          "3"
+        ],
+        [
+          4761,
+          "673.978px 915.37px",
+          "3"
+        ],
+        [
+          4776,
+          "673.989px 915.385px",
+          "3"
+        ],
+        [
+          4794,
+          "673.996px 915.394px",
+          "3"
+        ],
+        [
+          4810,
+          "673.999px 915.398px",
+          "3"
+        ],
+        [
+          4826,
+          "674px 915.4px",
+          "3"
+        ]
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "pathlight-fast",
+      "frameCount": 78,
+      "frames": [
+        {
+          "ms": 15,
+          "file": "chromium-normal-pathlight-fast-00015.jpg"
+        },
+        {
+          "ms": 25,
+          "file": "chromium-normal-pathlight-fast-00025.jpg"
+        },
+        {
+          "ms": 41,
+          "file": "chromium-normal-pathlight-fast-00041.jpg"
+        },
+        {
+          "ms": 55,
+          "file": "chromium-normal-pathlight-fast-00055.jpg"
+        },
+        {
+          "ms": 74,
+          "file": "chromium-normal-pathlight-fast-00074.jpg"
+        },
+        {
+          "ms": 91,
+          "file": "chromium-normal-pathlight-fast-00091.jpg"
+        },
+        {
+          "ms": 106,
+          "file": "chromium-normal-pathlight-fast-00106.jpg"
+        },
+        {
+          "ms": 123,
+          "file": "chromium-normal-pathlight-fast-00123.jpg"
+        },
+        {
+          "ms": 141,
+          "file": "chromium-normal-pathlight-fast-00141.jpg"
+        },
+        {
+          "ms": 157,
+          "file": "chromium-normal-pathlight-fast-00157.jpg"
+        },
+        {
+          "ms": 174,
+          "file": "chromium-normal-pathlight-fast-00174.jpg"
+        },
+        {
+          "ms": 190,
+          "file": "chromium-normal-pathlight-fast-00190.jpg"
+        },
+        {
+          "ms": 206,
+          "file": "chromium-normal-pathlight-fast-00206.jpg"
+        },
+        {
+          "ms": 224,
+          "file": "chromium-normal-pathlight-fast-00224.jpg"
+        },
+        {
+          "ms": 241,
+          "file": "chromium-normal-pathlight-fast-00241.jpg"
+        },
+        {
+          "ms": 258,
+          "file": "chromium-normal-pathlight-fast-00258.jpg"
+        },
+        {
+          "ms": 5530,
+          "file": "chromium-normal-pathlight-fast-05530.jpg"
+        },
+        {
+          "ms": 5695,
+          "file": "chromium-normal-pathlight-fast-05695.jpg"
+        },
+        {
+          "ms": 5695,
+          "file": "chromium-normal-pathlight-fast-05695.jpg"
+        },
+        {
+          "ms": 5709,
+          "file": "chromium-normal-pathlight-fast-05709.jpg"
+        },
+        {
+          "ms": 5729,
+          "file": "chromium-normal-pathlight-fast-05729.jpg"
+        },
+        {
+          "ms": 5742,
+          "file": "chromium-normal-pathlight-fast-05742.jpg"
+        },
+        {
+          "ms": 5757,
+          "file": "chromium-normal-pathlight-fast-05757.jpg"
+        },
+        {
+          "ms": 5772,
+          "file": "chromium-normal-pathlight-fast-05772.jpg"
+        },
+        {
+          "ms": 5804,
+          "file": "chromium-normal-pathlight-fast-05804.jpg"
+        },
+        {
+          "ms": 5821,
+          "file": "chromium-normal-pathlight-fast-05821.jpg"
+        },
+        {
+          "ms": 5837,
+          "file": "chromium-normal-pathlight-fast-05837.jpg"
+        },
+        {
+          "ms": 5853,
+          "file": "chromium-normal-pathlight-fast-05853.jpg"
+        },
+        {
+          "ms": 5872,
+          "file": "chromium-normal-pathlight-fast-05872.jpg"
+        },
+        {
+          "ms": 5889,
+          "file": "chromium-normal-pathlight-fast-05889.jpg"
+        },
+        {
+          "ms": 5904,
+          "file": "chromium-normal-pathlight-fast-05904.jpg"
+        },
+        {
+          "ms": 5922,
+          "file": "chromium-normal-pathlight-fast-05922.jpg"
+        },
+        {
+          "ms": 5939,
+          "file": "chromium-normal-pathlight-fast-05939.jpg"
+        },
+        {
+          "ms": 5955,
+          "file": "chromium-normal-pathlight-fast-05955.jpg"
+        },
+        {
+          "ms": 5974,
+          "file": "chromium-normal-pathlight-fast-05974.jpg"
+        },
+        {
+          "ms": 5991,
+          "file": "chromium-normal-pathlight-fast-05991.jpg"
+        },
+        {
+          "ms": 6005,
+          "file": "chromium-normal-pathlight-fast-06005.jpg"
+        },
+        {
+          "ms": 6025,
+          "file": "chromium-normal-pathlight-fast-06025.jpg"
+        },
+        {
+          "ms": 6041,
+          "file": "chromium-normal-pathlight-fast-06041.jpg"
+        },
+        {
+          "ms": 6057,
+          "file": "chromium-normal-pathlight-fast-06057.jpg"
+        },
+        {
+          "ms": 6072,
+          "file": "chromium-normal-pathlight-fast-06072.jpg"
+        },
+        {
+          "ms": 6090,
+          "file": "chromium-normal-pathlight-fast-06090.jpg"
+        },
+        {
+          "ms": 6105,
+          "file": "chromium-normal-pathlight-fast-06105.jpg"
+        },
+        {
+          "ms": 6123,
+          "file": "chromium-normal-pathlight-fast-06123.jpg"
+        },
+        {
+          "ms": 6140,
+          "file": "chromium-normal-pathlight-fast-06140.jpg"
+        },
+        {
+          "ms": 6156,
+          "file": "chromium-normal-pathlight-fast-06156.jpg"
+        },
+        {
+          "ms": 6173,
+          "file": "chromium-normal-pathlight-fast-06173.jpg"
+        },
+        {
+          "ms": 6189,
+          "file": "chromium-normal-pathlight-fast-06189.jpg"
+        },
+        {
+          "ms": 6208,
+          "file": "chromium-normal-pathlight-fast-06208.jpg"
+        },
+        {
+          "ms": 6224,
+          "file": "chromium-normal-pathlight-fast-06224.jpg"
+        },
+        {
+          "ms": 6241,
+          "file": "chromium-normal-pathlight-fast-06241.jpg"
+        },
+        {
+          "ms": 6256,
+          "file": "chromium-normal-pathlight-fast-06256.jpg"
+        },
+        {
+          "ms": 6273,
+          "file": "chromium-normal-pathlight-fast-06273.jpg"
+        },
+        {
+          "ms": 6290,
+          "file": "chromium-normal-pathlight-fast-06290.jpg"
+        },
+        {
+          "ms": 6306,
+          "file": "chromium-normal-pathlight-fast-06306.jpg"
+        },
+        {
+          "ms": 6324,
+          "file": "chromium-normal-pathlight-fast-06324.jpg"
+        },
+        {
+          "ms": 6341,
+          "file": "chromium-normal-pathlight-fast-06341.jpg"
+        },
+        {
+          "ms": 6357,
+          "file": "chromium-normal-pathlight-fast-06357.jpg"
+        },
+        {
+          "ms": 6376,
+          "file": "chromium-normal-pathlight-fast-06376.jpg"
+        },
+        {
+          "ms": 6392,
+          "file": "chromium-normal-pathlight-fast-06392.jpg"
+        },
+        {
+          "ms": 6409,
+          "file": "chromium-normal-pathlight-fast-06409.jpg"
+        },
+        {
+          "ms": 6425,
+          "file": "chromium-normal-pathlight-fast-06425.jpg"
+        },
+        {
+          "ms": 6443,
+          "file": "chromium-normal-pathlight-fast-06443.jpg"
+        },
+        {
+          "ms": 6456,
+          "file": "chromium-normal-pathlight-fast-06456.jpg"
+        },
+        {
+          "ms": 6472,
+          "file": "chromium-normal-pathlight-fast-06472.jpg"
+        },
+        {
+          "ms": 6491,
+          "file": "chromium-normal-pathlight-fast-06491.jpg"
+        },
+        {
+          "ms": 6507,
+          "file": "chromium-normal-pathlight-fast-06507.jpg"
+        },
+        {
+          "ms": 6524,
+          "file": "chromium-normal-pathlight-fast-06524.jpg"
+        },
+        {
+          "ms": 6539,
+          "file": "chromium-normal-pathlight-fast-06539.jpg"
+        },
+        {
+          "ms": 6558,
+          "file": "chromium-normal-pathlight-fast-06558.jpg"
+        },
+        {
+          "ms": 6574,
+          "file": "chromium-normal-pathlight-fast-06574.jpg"
+        },
+        {
+          "ms": 6591,
+          "file": "chromium-normal-pathlight-fast-06591.jpg"
+        },
+        {
+          "ms": 6607,
+          "file": "chromium-normal-pathlight-fast-06607.jpg"
+        },
+        {
+          "ms": 6625,
+          "file": "chromium-normal-pathlight-fast-06625.jpg"
+        },
+        {
+          "ms": 6641,
+          "file": "chromium-normal-pathlight-fast-06641.jpg"
+        },
+        {
+          "ms": 6656,
+          "file": "chromium-normal-pathlight-fast-06656.jpg"
+        },
+        {
+          "ms": 6674,
+          "file": "chromium-normal-pathlight-fast-06674.jpg"
+        },
+        {
+          "ms": 6706,
+          "file": "chromium-normal-pathlight-fast-06706.jpg"
+        }
+      ],
+      "sheet": null,
+      "notes": [
+        "frame gaps ms: median 17, max 5272",
+        "CDP screencast: ms is time since screencast start; frames exist only where the compositor produced one",
+        "fast scroll skipping rungs: 59 translate changes over 103 rAF samples; first 16ms, last 981ms; rungs seen 0,1,2,3"
+      ],
+      "lightSamples": [
+        [
+          0,
+          "10.2432px 12.3362px",
+          "0"
+        ],
+        [
+          16,
+          "8.68479px 10.216px",
+          "0"
+        ],
+        [
+          31,
+          "7.31617px 8.3539px",
+          "1"
+        ],
+        [
+          49,
+          "31.6355px 39.6946px",
+          "1"
+        ],
+        [
+          65,
+          "54.0439px 68.5726px",
+          "2"
+        ],
+        [
+          81,
+          "98.0074px 127.905px",
+          "3"
+        ],
+        [
+          98,
+          "162.074px 215.496px",
+          "3"
+        ],
+        [
+          115,
+          "221.48px 296.716px",
+          "3"
+        ],
+        [
+          131,
+          "275.486px 370.553px",
+          "3"
+        ],
+        [
+          147,
+          "323.722px 436.501px",
+          "3"
+        ],
+        [
+          165,
+          "366.897px 495.53px",
+          "3"
+        ],
+        [
+          182,
+          "405.005px 547.63px",
+          "3"
+        ],
+        [
+          197,
+          "438.46px 593.371px",
+          "3"
+        ],
+        [
+          214,
+          "467.568px 633.167px",
+          "3"
+        ],
+        [
+          231,
+          "493.154px 668.148px",
+          "3"
+        ],
+        [
+          247,
+          "515.487px 698.681px",
+          "3"
+        ],
+        [
+          265,
+          "534.876px 725.19px",
+          "3"
+        ],
+        [
+          282,
+          "551.929px 748.505px",
+          "3"
+        ],
+        [
+          297,
+          "566.848px 768.903px",
+          "3"
+        ],
+        [
+          314,
+          "579.846px 786.674px",
+          "3"
+        ],
+        [
+          332,
+          "591.324px 802.366px",
+          "3"
+        ],
+        [
+          348,
+          "601.409px 816.154px",
+          "3"
+        ],
+        [
+          364,
+          "610.282px 828.285px",
+          "3"
+        ],
+        [
+          382,
+          "618.054px 838.911px",
+          "3"
+        ],
+        [
+          397,
+          "624.912px 848.288px",
+          "3"
+        ],
+        [
+          414,
+          "631.038px 856.663px",
+          "3"
+        ],
+        [
+          431,
+          "636.383px 863.971px",
+          "3"
+        ],
+        [
+          447,
+          "641.136px 870.469px",
+          "3"
+        ],
+        [
+          464,
+          "645.312px 876.178px",
+          "3"
+        ],
+        [
+          481,
+          "649.026px 881.256px",
+          "3"
+        ],
+        [
+          499,
+          "652.288px 885.716px",
+          "3"
+        ],
+        [
+          515,
+          "655.187px 889.679px",
+          "3"
+        ],
+        [
+          532,
+          "657.745px 893.176px",
+          "3"
+        ],
+        [
+          547,
+          "659.987px 896.241px",
+          "3"
+        ],
+        [
+          564,
+          "661.972px 898.956px",
+          "3"
+        ],
+        [
+          581,
+          "663.708px 901.328px",
+          "3"
+        ],
+        [
+          597,
+          "665.239px 903.422px",
+          "3"
+        ],
+        [
+          614,
+          "666.579px 905.254px",
+          "3"
+        ],
+        [
+          630,
+          "667.749px 906.853px",
+          "3"
+        ],
+        [
+          647,
+          "668.76px 908.236px",
+          "3"
+        ],
+        [
+          665,
+          "669.643px 909.443px",
+          "3"
+        ],
+        [
+          681,
+          "670.404px 910.484px",
+          "3"
+        ],
+        [
+          698,
+          "671.055px 911.373px",
+          "3"
+        ],
+        [
+          714,
+          "671.614px 912.138px",
+          "3"
+        ],
+        [
+          732,
+          "672.086px 912.783px",
+          "3"
+        ],
+        [
+          747,
+          "672.486px 913.33px",
+          "3"
+        ],
+        [
+          764,
+          "672.82px 913.787px",
+          "3"
+        ],
+        [
+          782,
+          "673.097px 914.165px",
+          "3"
+        ],
+        [
+          799,
+          "673.322px 914.473px",
+          "3"
+        ],
+        [
+          815,
+          "673.503px 914.72px",
+          "3"
+        ],
+        [
+          830,
+          "673.647px 914.917px",
+          "3"
+        ],
+        [
+          849,
+          "673.757px 915.068px",
+          "3"
+        ],
+        [
+          864,
+          "673.841px 915.183px",
+          "3"
+        ],
+        [
+          882,
+          "673.902px 915.266px",
+          "3"
+        ],
+        [
+          899,
+          "673.945px 915.324px",
+          "3"
+        ],
+        [
+          915,
+          "673.972px 915.362px",
+          "3"
+        ],
+        [
+          932,
+          "673.989px 915.384px",
+          "3"
+        ],
+        [
+          947,
+          "673.997px 915.396px",
+          "3"
+        ],
+        [
+          964,
+          "674px 915.399px",
+          "3"
+        ],
+        [
+          981,
+          "674px 915.4px",
+          "3"
+        ]
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "vt",
+      "frameCount": 14,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-normal-vt-00000.png"
+        },
+        {
+          "ms": 348,
+          "file": "chromium-normal-vt-00348.png"
+        },
+        {
+          "ms": 646,
+          "file": "chromium-normal-vt-00646.png"
+        },
+        {
+          "ms": 936,
+          "file": "chromium-normal-vt-00936.png"
+        },
+        {
+          "ms": 1204,
+          "file": "chromium-normal-vt-01204.png"
+        },
+        {
+          "ms": 1475,
+          "file": "chromium-normal-vt-01475.png"
+        },
+        {
+          "ms": 1753,
+          "file": "chromium-normal-vt-01753.png"
+        },
+        {
+          "ms": 2067,
+          "file": "chromium-normal-vt-02067.png"
+        },
+        {
+          "ms": 2362,
+          "file": "chromium-normal-vt-02362.png"
+        },
+        {
+          "ms": 2661,
+          "file": "chromium-normal-vt-02661.png"
+        },
+        {
+          "ms": 2946,
+          "file": "chromium-normal-vt-02946.png"
+        },
+        {
+          "ms": 3240,
+          "file": "chromium-normal-vt-03240.png"
+        },
+        {
+          "ms": 3530,
+          "file": "chromium-normal-vt-03530.png"
+        },
+        {
+          "ms": 3826,
+          "file": "chromium-normal-vt-03826.png"
+        }
+      ],
+      "sheet": "sheet-chromium-normal-vt.png",
+      "notes": [
+        "shot error (before first paint, frames skipped): page.screenshot: Timeout 3000ms exceeded.",
+        "frame gaps ms: median 294, max 348"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "normal",
+      "sequence": "cmdk",
+      "frameCount": 4,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-normal-cmdk-00000.png"
+        },
+        {
+          "ms": 297,
+          "file": "chromium-normal-cmdk-00297.png"
+        },
+        {
+          "ms": 649,
+          "file": "chromium-normal-cmdk-00649.png"
+        },
+        {
+          "ms": 966,
+          "file": "chromium-normal-cmdk-00966.png"
+        }
+      ],
+      "sheet": "sheet-chromium-normal-cmdk.png",
+      "notes": [
+        "shot error (before first paint, frames skipped): page.screenshot: Timeout 3000ms exceeded.",
+        "frame gaps ms: median 317, max 352",
+        "dialog open=true closedAfterEscape=true"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "load",
+      "frameCount": 10,
+      "frames": [
+        {
+          "ms": 101,
+          "file": "chromium-reduced-load-00101.png"
+        },
+        {
+          "ms": 435,
+          "file": "chromium-reduced-load-00435.png"
+        },
+        {
+          "ms": 720,
+          "file": "chromium-reduced-load-00720.png"
+        },
+        {
+          "ms": 999,
+          "file": "chromium-reduced-load-00999.png"
+        },
+        {
+          "ms": 1283,
+          "file": "chromium-reduced-load-01283.png"
+        },
+        {
+          "ms": 1568,
+          "file": "chromium-reduced-load-01568.png"
+        },
+        {
+          "ms": 1849,
+          "file": "chromium-reduced-load-01849.png"
+        },
+        {
+          "ms": 2135,
+          "file": "chromium-reduced-load-02135.png"
+        },
+        {
+          "ms": 2433,
+          "file": "chromium-reduced-load-02433.png"
+        },
+        {
+          "ms": 2739,
+          "file": "chromium-reduced-load-02739.png"
+        }
+      ],
+      "sheet": "sheet-chromium-reduced-load.png",
+      "notes": [
+        "shot error (before first paint, frames skipped): page.screenshot: Protocol error (Page.captureScreenshot): Unable to capture screenshot",
+        "frame gaps ms: median 285, max 334"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "loadcast",
+      "frameCount": 6,
+      "frames": [
+        {
+          "ms": 66,
+          "file": "chromium-reduced-loadcast-00066.jpg"
+        },
+        {
+          "ms": 103,
+          "file": "chromium-reduced-loadcast-00103.jpg"
+        },
+        {
+          "ms": 128,
+          "file": "chromium-reduced-loadcast-00128.jpg"
+        },
+        {
+          "ms": 138,
+          "file": "chromium-reduced-loadcast-00138.jpg"
+        },
+        {
+          "ms": 1096,
+          "file": "chromium-reduced-loadcast-01096.jpg"
+        },
+        {
+          "ms": 10940,
+          "file": "chromium-reduced-loadcast-10940.jpg"
+        }
+      ],
+      "sheet": null,
+      "notes": [
+        "CDP screencast from before navigation; ms is time since screencast start (navigation begins about 0 to 30ms later); frames only exist where the compositor produced one"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "scroll",
+      "frameCount": 14,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-reduced-scroll-00000.png"
+        },
+        {
+          "ms": 324,
+          "file": "chromium-reduced-scroll-00324.png"
+        },
+        {
+          "ms": 605,
+          "file": "chromium-reduced-scroll-00605.png"
+        },
+        {
+          "ms": 882,
+          "file": "chromium-reduced-scroll-00882.png"
+        },
+        {
+          "ms": 1171,
+          "file": "chromium-reduced-scroll-01171.png"
+        },
+        {
+          "ms": 1448,
+          "file": "chromium-reduced-scroll-01448.png"
+        },
+        {
+          "ms": 1707,
+          "file": "chromium-reduced-scroll-01707.png"
+        },
+        {
+          "ms": 1981,
+          "file": "chromium-reduced-scroll-01981.png"
+        },
+        {
+          "ms": 2241,
+          "file": "chromium-reduced-scroll-02241.png"
+        },
+        {
+          "ms": 2532,
+          "file": "chromium-reduced-scroll-02532.png"
+        },
+        {
+          "ms": 2828,
+          "file": "chromium-reduced-scroll-02828.png"
+        },
+        {
+          "ms": 3110,
+          "file": "chromium-reduced-scroll-03110.png"
+        },
+        {
+          "ms": 3394,
+          "file": "chromium-reduced-scroll-03394.png"
+        },
+        {
+          "ms": 5178,
+          "file": "chromium-reduced-scroll-05178.png"
+        }
+      ],
+      "sheet": "sheet-chromium-reduced-scroll.png",
+      "notes": [
+        "settled frame chromium-reduced-scroll-05178.png, 1500ms after the action ended at 3678ms",
+        "frame gaps ms: median 282, max 1784",
+        "scrollY after return 0",
+        "scrollY at dock 295"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "drag",
+      "frameCount": 19,
+      "frames": [
+        {
+          "ms": 14,
+          "file": "chromium-reduced-drag-00014.jpg"
+        },
+        {
+          "ms": 45,
+          "file": "chromium-reduced-drag-00045.jpg"
+        },
+        {
+          "ms": 66,
+          "file": "chromium-reduced-drag-00066.jpg"
+        },
+        {
+          "ms": 113,
+          "file": "chromium-reduced-drag-00113.jpg"
+        },
+        {
+          "ms": 134,
+          "file": "chromium-reduced-drag-00134.jpg"
+        },
+        {
+          "ms": 145,
+          "file": "chromium-reduced-drag-00145.jpg"
+        },
+        {
+          "ms": 165,
+          "file": "chromium-reduced-drag-00165.jpg"
+        },
+        {
+          "ms": 181,
+          "file": "chromium-reduced-drag-00181.jpg"
+        },
+        {
+          "ms": 196,
+          "file": "chromium-reduced-drag-00196.jpg"
+        },
+        {
+          "ms": 218,
+          "file": "chromium-reduced-drag-00218.jpg"
+        },
+        {
+          "ms": 232,
+          "file": "chromium-reduced-drag-00232.jpg"
+        },
+        {
+          "ms": 247,
+          "file": "chromium-reduced-drag-00247.jpg"
+        },
+        {
+          "ms": 278,
+          "file": "chromium-reduced-drag-00278.jpg"
+        },
+        {
+          "ms": 299,
+          "file": "chromium-reduced-drag-00299.jpg"
+        },
+        {
+          "ms": 325,
+          "file": "chromium-reduced-drag-00325.jpg"
+        },
+        {
+          "ms": 345,
+          "file": "chromium-reduced-drag-00345.jpg"
+        },
+        {
+          "ms": 375,
+          "file": "chromium-reduced-drag-00375.jpg"
+        },
+        {
+          "ms": 658,
+          "file": "chromium-reduced-drag-00658.jpg"
+        },
+        {
+          "ms": 1336,
+          "file": "chromium-reduced-drag-01336.jpg"
+        }
+      ],
+      "sheet": null,
+      "notes": [
+        "frame gaps ms: median 21, max 678",
+        "CDP screencast: ms is time since screencast start; frames exist only where the compositor produced one"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "pathlight",
+      "frameCount": 24,
+      "frames": [
+        {
+          "ms": 19,
+          "file": "chromium-reduced-pathlight-00019.jpg"
+        },
+        {
+          "ms": 32,
+          "file": "chromium-reduced-pathlight-00032.jpg"
+        },
+        {
+          "ms": 41,
+          "file": "chromium-reduced-pathlight-00041.jpg"
+        },
+        {
+          "ms": 60,
+          "file": "chromium-reduced-pathlight-00060.jpg"
+        },
+        {
+          "ms": 76,
+          "file": "chromium-reduced-pathlight-00076.jpg"
+        },
+        {
+          "ms": 94,
+          "file": "chromium-reduced-pathlight-00094.jpg"
+        },
+        {
+          "ms": 109,
+          "file": "chromium-reduced-pathlight-00109.jpg"
+        },
+        {
+          "ms": 124,
+          "file": "chromium-reduced-pathlight-00124.jpg"
+        },
+        {
+          "ms": 143,
+          "file": "chromium-reduced-pathlight-00143.jpg"
+        },
+        {
+          "ms": 159,
+          "file": "chromium-reduced-pathlight-00159.jpg"
+        },
+        {
+          "ms": 176,
+          "file": "chromium-reduced-pathlight-00176.jpg"
+        },
+        {
+          "ms": 192,
+          "file": "chromium-reduced-pathlight-00192.jpg"
+        },
+        {
+          "ms": 814,
+          "file": "chromium-reduced-pathlight-00814.jpg"
+        },
+        {
+          "ms": 865,
+          "file": "chromium-reduced-pathlight-00865.jpg"
+        },
+        {
+          "ms": 1335,
+          "file": "chromium-reduced-pathlight-01335.jpg"
+        },
+        {
+          "ms": 1347,
+          "file": "chromium-reduced-pathlight-01347.jpg"
+        },
+        {
+          "ms": 10174,
+          "file": "chromium-reduced-pathlight-10174.jpg"
+        },
+        {
+          "ms": 10360,
+          "file": "chromium-reduced-pathlight-10360.jpg"
+        },
+        {
+          "ms": 10379,
+          "file": "chromium-reduced-pathlight-10379.jpg"
+        },
+        {
+          "ms": 11078,
+          "file": "chromium-reduced-pathlight-11078.jpg"
+        },
+        {
+          "ms": 11666,
+          "file": "chromium-reduced-pathlight-11666.jpg"
+        },
+        {
+          "ms": 11678,
+          "file": "chromium-reduced-pathlight-11678.jpg"
+        },
+        {
+          "ms": 12084,
+          "file": "chromium-reduced-pathlight-12084.jpg"
+        },
+        {
+          "ms": 13082,
+          "file": "chromium-reduced-pathlight-13082.jpg"
+        }
+      ],
+      "sheet": null,
+      "notes": [
+        "frame gaps ms: median 19, max 8827",
+        "CDP screencast: ms is time since screencast start; frames exist only where the compositor produced one",
+        "rungs 0-3: 3 translate changes over 291 rAF samples; first 1328ms, last 3428ms; rungs seen 0,1,2,3"
+      ],
+      "lightSamples": [
+        [
+          0,
+          "0px -1.6px",
+          "0"
+        ],
+        [
+          1328,
+          "224.7px 288.5px",
+          "1"
+        ],
+        [
+          2129,
+          "449.3px 602px",
+          "2"
+        ],
+        [
+          3428,
+          "674px 915.4px",
+          "3"
+        ]
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "pathlight-fast",
+      "frameCount": 11,
+      "frames": [
+        {
+          "ms": 17,
+          "file": "chromium-reduced-pathlight-fast-00017.jpg"
+        },
+        {
+          "ms": 26,
+          "file": "chromium-reduced-pathlight-fast-00026.jpg"
+        },
+        {
+          "ms": 38,
+          "file": "chromium-reduced-pathlight-fast-00038.jpg"
+        },
+        {
+          "ms": 929,
+          "file": "chromium-reduced-pathlight-fast-00929.jpg"
+        },
+        {
+          "ms": 1348,
+          "file": "chromium-reduced-pathlight-fast-01348.jpg"
+        },
+        {
+          "ms": 1360,
+          "file": "chromium-reduced-pathlight-fast-01360.jpg"
+        },
+        {
+          "ms": 1371,
+          "file": "chromium-reduced-pathlight-fast-01371.jpg"
+        },
+        {
+          "ms": 1388,
+          "file": "chromium-reduced-pathlight-fast-01388.jpg"
+        },
+        {
+          "ms": 1403,
+          "file": "chromium-reduced-pathlight-fast-01403.jpg"
+        },
+        {
+          "ms": 1947,
+          "file": "chromium-reduced-pathlight-fast-01947.jpg"
+        },
+        {
+          "ms": 2931,
+          "file": "chromium-reduced-pathlight-fast-02931.jpg"
+        }
+      ],
+      "sheet": null,
+      "notes": [
+        "frame gaps ms: median 17, max 984",
+        "CDP screencast: ms is time since screencast start; frames exist only where the compositor produced one",
+        "fast scroll skipping rungs: 3 translate changes over 104 rAF samples; first 36ms, last 85ms; rungs seen 0,1,2,3"
+      ],
+      "lightSamples": [
+        [
+          0,
+          "0px -1.6px",
+          "0"
+        ],
+        [
+          36,
+          "224.7px 288.5px",
+          "1"
+        ],
+        [
+          69,
+          "449.3px 602px",
+          "2"
+        ],
+        [
+          85,
+          "674px 915.4px",
+          "3"
+        ]
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "vt",
+      "frameCount": 15,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-reduced-vt-00000.png"
+        },
+        {
+          "ms": 284,
+          "file": "chromium-reduced-vt-00284.png"
+        },
+        {
+          "ms": 559,
+          "file": "chromium-reduced-vt-00559.png"
+        },
+        {
+          "ms": 827,
+          "file": "chromium-reduced-vt-00827.png"
+        },
+        {
+          "ms": 1091,
+          "file": "chromium-reduced-vt-01091.png"
+        },
+        {
+          "ms": 1367,
+          "file": "chromium-reduced-vt-01367.png"
+        },
+        {
+          "ms": 1627,
+          "file": "chromium-reduced-vt-01627.png"
+        },
+        {
+          "ms": 1983,
+          "file": "chromium-reduced-vt-01983.png"
+        },
+        {
+          "ms": 2281,
+          "file": "chromium-reduced-vt-02281.png"
+        },
+        {
+          "ms": 2564,
+          "file": "chromium-reduced-vt-02564.png"
+        },
+        {
+          "ms": 2850,
+          "file": "chromium-reduced-vt-02850.png"
+        },
+        {
+          "ms": 3131,
+          "file": "chromium-reduced-vt-03131.png"
+        },
+        {
+          "ms": 3418,
+          "file": "chromium-reduced-vt-03418.png"
+        },
+        {
+          "ms": 3698,
+          "file": "chromium-reduced-vt-03698.png"
+        },
+        {
+          "ms": 3988,
+          "file": "chromium-reduced-vt-03988.png"
+        }
+      ],
+      "sheet": "sheet-chromium-reduced-vt.png",
+      "notes": [
+        "frame gaps ms: median 283, max 356"
+      ]
+    },
+    {
+      "context": "chromium",
+      "mode": "reduced",
+      "sequence": "cmdk",
+      "frameCount": 7,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "chromium-reduced-cmdk-00000.png"
+        },
+        {
+          "ms": 281,
+          "file": "chromium-reduced-cmdk-00281.png"
+        },
+        {
+          "ms": 616,
+          "file": "chromium-reduced-cmdk-00616.png"
+        },
+        {
+          "ms": 932,
+          "file": "chromium-reduced-cmdk-00932.png"
+        },
+        {
+          "ms": 1234,
+          "file": "chromium-reduced-cmdk-01234.png"
+        },
+        {
+          "ms": 1541,
+          "file": "chromium-reduced-cmdk-01541.png"
+        },
+        {
+          "ms": 1826,
+          "file": "chromium-reduced-cmdk-01826.png"
+        }
+      ],
+      "sheet": "sheet-chromium-reduced-cmdk.png",
+      "notes": [
+        "frame gaps ms: median 307, max 335",
+        "dialog open=true closedAfterEscape=true"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "normal",
+      "sequence": "load",
+      "frameCount": 0,
+      "frames": [],
+      "sheet": "sheet-webkit-normal-load.png",
+      "notes": [
+        "shot error (before first paint, frames skipped): page.screenshot: Timeout 3000ms exceeded."
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "normal",
+      "sequence": "scroll",
+      "frameCount": 25,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-normal-scroll-00000.png"
+        },
+        {
+          "ms": 243,
+          "file": "webkit-normal-scroll-00243.png"
+        },
+        {
+          "ms": 446,
+          "file": "webkit-normal-scroll-00446.png"
+        },
+        {
+          "ms": 644,
+          "file": "webkit-normal-scroll-00644.png"
+        },
+        {
+          "ms": 840,
+          "file": "webkit-normal-scroll-00840.png"
+        },
+        {
+          "ms": 1036,
+          "file": "webkit-normal-scroll-01036.png"
+        },
+        {
+          "ms": 8704,
+          "file": "webkit-normal-scroll-08704.png"
+        },
+        {
+          "ms": 9005,
+          "file": "webkit-normal-scroll-09005.png"
+        },
+        {
+          "ms": 9245,
+          "file": "webkit-normal-scroll-09245.png"
+        },
+        {
+          "ms": 9442,
+          "file": "webkit-normal-scroll-09442.png"
+        },
+        {
+          "ms": 9636,
+          "file": "webkit-normal-scroll-09636.png"
+        },
+        {
+          "ms": 9829,
+          "file": "webkit-normal-scroll-09829.png"
+        },
+        {
+          "ms": 10025,
+          "file": "webkit-normal-scroll-10025.png"
+        },
+        {
+          "ms": 10243,
+          "file": "webkit-normal-scroll-10243.png"
+        },
+        {
+          "ms": 10437,
+          "file": "webkit-normal-scroll-10437.png"
+        },
+        {
+          "ms": 10619,
+          "file": "webkit-normal-scroll-10619.png"
+        },
+        {
+          "ms": 10801,
+          "file": "webkit-normal-scroll-10801.png"
+        },
+        {
+          "ms": 10977,
+          "file": "webkit-normal-scroll-10977.png"
+        },
+        {
+          "ms": 11139,
+          "file": "webkit-normal-scroll-11139.png"
+        },
+        {
+          "ms": 11303,
+          "file": "webkit-normal-scroll-11303.png"
+        },
+        {
+          "ms": 11471,
+          "file": "webkit-normal-scroll-11471.png"
+        },
+        {
+          "ms": 11633,
+          "file": "webkit-normal-scroll-11633.png"
+        },
+        {
+          "ms": 11793,
+          "file": "webkit-normal-scroll-11793.png"
+        },
+        {
+          "ms": 11951,
+          "file": "webkit-normal-scroll-11951.png"
+        },
+        {
+          "ms": 28499,
+          "file": "webkit-normal-scroll-28499.png"
+        }
+      ],
+      "sheet": "sheet-webkit-normal-scroll.png",
+      "notes": [
+        "shot error (before first paint, frames skipped): page.screenshot: Timeout 3000ms exceeded.",
+        "settled frame webkit-normal-scroll-28499.png, 1500ms after the action ended at 26999ms",
+        "frame gaps ms: median 196, max 16548",
+        "scrollY after return 0",
+        "scrollY at dock 460"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "normal",
+      "sequence": "drag",
+      "frameCount": 10,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-normal-drag-00000.png"
+        },
+        {
+          "ms": 302,
+          "file": "webkit-normal-drag-00302.png"
+        },
+        {
+          "ms": 508,
+          "file": "webkit-normal-drag-00508.png"
+        },
+        {
+          "ms": 726,
+          "file": "webkit-normal-drag-00726.png"
+        },
+        {
+          "ms": 928,
+          "file": "webkit-normal-drag-00928.png"
+        },
+        {
+          "ms": 1126,
+          "file": "webkit-normal-drag-01126.png"
+        },
+        {
+          "ms": 1330,
+          "file": "webkit-normal-drag-01330.png"
+        },
+        {
+          "ms": 1545,
+          "file": "webkit-normal-drag-01545.png"
+        },
+        {
+          "ms": 1747,
+          "file": "webkit-normal-drag-01747.png"
+        },
+        {
+          "ms": 1951,
+          "file": "webkit-normal-drag-01951.png"
+        }
+      ],
+      "sheet": "sheet-webkit-normal-drag.png",
+      "notes": [
+        "frame gaps ms: median 204, max 302",
+        "mouse events used on webkit phone (no CDP touch)"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "normal",
+      "sequence": "pathlight",
+      "frameCount": 31,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-normal-pathlight-00000.png"
+        },
+        {
+          "ms": 268,
+          "file": "webkit-normal-pathlight-00268.png"
+        },
+        {
+          "ms": 502,
+          "file": "webkit-normal-pathlight-00502.png"
+        },
+        {
+          "ms": 768,
+          "file": "webkit-normal-pathlight-00768.png"
+        },
+        {
+          "ms": 990,
+          "file": "webkit-normal-pathlight-00990.png"
+        },
+        {
+          "ms": 1205,
+          "file": "webkit-normal-pathlight-01205.png"
+        },
+        {
+          "ms": 1408,
+          "file": "webkit-normal-pathlight-01408.png"
+        },
+        {
+          "ms": 1591,
+          "file": "webkit-normal-pathlight-01591.png"
+        },
+        {
+          "ms": 1792,
+          "file": "webkit-normal-pathlight-01792.png"
+        },
+        {
+          "ms": 1996,
+          "file": "webkit-normal-pathlight-01996.png"
+        },
+        {
+          "ms": 2197,
+          "file": "webkit-normal-pathlight-02197.png"
+        },
+        {
+          "ms": 2394,
+          "file": "webkit-normal-pathlight-02394.png"
+        },
+        {
+          "ms": 2587,
+          "file": "webkit-normal-pathlight-02587.png"
+        },
+        {
+          "ms": 2788,
+          "file": "webkit-normal-pathlight-02788.png"
+        },
+        {
+          "ms": 2976,
+          "file": "webkit-normal-pathlight-02976.png"
+        },
+        {
+          "ms": 3168,
+          "file": "webkit-normal-pathlight-03168.png"
+        },
+        {
+          "ms": 3360,
+          "file": "webkit-normal-pathlight-03360.png"
+        },
+        {
+          "ms": 3553,
+          "file": "webkit-normal-pathlight-03553.png"
+        },
+        {
+          "ms": 3759,
+          "file": "webkit-normal-pathlight-03759.png"
+        },
+        {
+          "ms": 3973,
+          "file": "webkit-normal-pathlight-03973.png"
+        },
+        {
+          "ms": 4170,
+          "file": "webkit-normal-pathlight-04170.png"
+        },
+        {
+          "ms": 4364,
+          "file": "webkit-normal-pathlight-04364.png"
+        },
+        {
+          "ms": 4559,
+          "file": "webkit-normal-pathlight-04559.png"
+        },
+        {
+          "ms": 4751,
+          "file": "webkit-normal-pathlight-04751.png"
+        },
+        {
+          "ms": 4951,
+          "file": "webkit-normal-pathlight-04951.png"
+        },
+        {
+          "ms": 5154,
+          "file": "webkit-normal-pathlight-05154.png"
+        },
+        {
+          "ms": 5357,
+          "file": "webkit-normal-pathlight-05357.png"
+        },
+        {
+          "ms": 5552,
+          "file": "webkit-normal-pathlight-05552.png"
+        },
+        {
+          "ms": 5786,
+          "file": "webkit-normal-pathlight-05786.png"
+        },
+        {
+          "ms": 5991,
+          "file": "webkit-normal-pathlight-05991.png"
+        },
+        {
+          "ms": 6183,
+          "file": "webkit-normal-pathlight-06183.png"
+        }
+      ],
+      "sheet": "sheet-webkit-normal-pathlight.png",
+      "notes": [
+        "frame gaps ms: median 201, max 268",
+        "rungs 0-3: 40 translate changes over 473 rAF samples; first 1397ms, last 5126ms; rungs seen 0,1,2,3"
+      ],
+      "lightSamples": [
+        [
+          0,
+          "0px -1.6px",
+          "0"
+        ],
+        [
+          1397,
+          "0px 25.198189px",
+          "1"
+        ],
+        [
+          1568,
+          "0px 215.240509px",
+          "1"
+        ],
+        [
+          1583,
+          "0px 222.211441px",
+          "1"
+        ],
+        [
+          1588,
+          "0px 224.517395px",
+          "1"
+        ],
+        [
+          1767,
+          "0px 268.452057px",
+          "1"
+        ],
+        [
+          1782,
+          "0px 269.982849px",
+          "1"
+        ],
+        [
+          1788,
+          "0px 270.591797px",
+          "1"
+        ],
+        [
+          1968,
+          "0px 280.292419px",
+          "1"
+        ],
+        [
+          1984,
+          "0px 280.647858px",
+          "1"
+        ],
+        [
+          1988,
+          "0px 280.728943px",
+          "1"
+        ],
+        [
+          2172,
+          "0px 282.335144px",
+          "1"
+        ],
+        [
+          2188,
+          "0px 282.35907px",
+          "1"
+        ],
+        [
+          2189,
+          "0px 282.360413px",
+          "1"
+        ],
+        [
+          2370,
+          "0px 282.399994px",
+          "1"
+        ],
+        [
+          2779,
+          "0px 309.198181px",
+          "2"
+        ],
+        [
+          2803,
+          "0px 351.047363px",
+          "2"
+        ],
+        [
+          2955,
+          "0px 501.312897px",
+          "2"
+        ],
+        [
+          2968,
+          "0px 507.606049px",
+          "2"
+        ],
+        [
+          3143,
+          "0px 551.745789px",
+          "2"
+        ],
+        [
+          3157,
+          "0px 553.237305px",
+          "2"
+        ],
+        [
+          3338,
+          "0px 563.990784px",
+          "2"
+        ],
+        [
+          3351,
+          "0px 564.316162px",
+          "2"
+        ],
+        [
+          3355,
+          "0px 564.409058px",
+          "2"
+        ],
+        [
+          3529,
+          "0px 566.272766px",
+          "2"
+        ],
+        [
+          3543,
+          "0px 566.309998px",
+          "2"
+        ],
+        [
+          3569,
+          "0px 566.357727px",
+          "2"
+        ],
+        [
+          3735,
+          "0px 566.400024px",
+          "2"
+        ],
+        [
+          4159,
+          "0px 595.431946px",
+          "3"
+        ],
+        [
+          4338,
+          "0px 822.410461px",
+          "3"
+        ],
+        [
+          4353,
+          "0px 830.663879px",
+          "3"
+        ],
+        [
+          4355,
+          "0px 831.691467px",
+          "3"
+        ],
+        [
+          4535,
+          "0px 881.291565px",
+          "3"
+        ],
+        [
+          4549,
+          "0px 883.021484px",
+          "3"
+        ],
+        [
+          4555,
+          "0px 883.709595px",
+          "3"
+        ],
+        [
+          4729,
+          "0px 894.518738px",
+          "3"
+        ],
+        [
+          4743,
+          "0px 894.862427px",
+          "3"
+        ],
+        [
+          4765,
+          "0px 895.358887px",
+          "3"
+        ],
+        [
+          4926,
+          "0px 896.900574px",
+          "3"
+        ],
+        [
+          4940,
+          "0px 896.9328px",
+          "3"
+        ],
+        [
+          5126,
+          "0px 897px",
+          "3"
+        ]
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "normal",
+      "sequence": "pathlight-fast",
+      "frameCount": 17,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-normal-pathlight-fast-00000.png"
+        },
+        {
+          "ms": 180,
+          "file": "webkit-normal-pathlight-fast-00180.png"
+        },
+        {
+          "ms": 372,
+          "file": "webkit-normal-pathlight-fast-00372.png"
+        },
+        {
+          "ms": 574,
+          "file": "webkit-normal-pathlight-fast-00574.png"
+        },
+        {
+          "ms": 767,
+          "file": "webkit-normal-pathlight-fast-00767.png"
+        },
+        {
+          "ms": 964,
+          "file": "webkit-normal-pathlight-fast-00964.png"
+        },
+        {
+          "ms": 1157,
+          "file": "webkit-normal-pathlight-fast-01157.png"
+        },
+        {
+          "ms": 1348,
+          "file": "webkit-normal-pathlight-fast-01348.png"
+        },
+        {
+          "ms": 1525,
+          "file": "webkit-normal-pathlight-fast-01525.png"
+        },
+        {
+          "ms": 1691,
+          "file": "webkit-normal-pathlight-fast-01691.png"
+        },
+        {
+          "ms": 1863,
+          "file": "webkit-normal-pathlight-fast-01863.png"
+        },
+        {
+          "ms": 2051,
+          "file": "webkit-normal-pathlight-fast-02051.png"
+        },
+        {
+          "ms": 2241,
+          "file": "webkit-normal-pathlight-fast-02241.png"
+        },
+        {
+          "ms": 2431,
+          "file": "webkit-normal-pathlight-fast-02431.png"
+        },
+        {
+          "ms": 2624,
+          "file": "webkit-normal-pathlight-fast-02624.png"
+        },
+        {
+          "ms": 2823,
+          "file": "webkit-normal-pathlight-fast-02823.png"
+        },
+        {
+          "ms": 3012,
+          "file": "webkit-normal-pathlight-fast-03012.png"
+        }
+      ],
+      "sheet": "sheet-webkit-normal-pathlight-fast.png",
+      "notes": [
+        "frame gaps ms: median 191, max 202",
+        "fast scroll skipping rungs: 14 translate changes over 235 rAF samples; first 180ms, last 1276ms; rungs seen 0,1,2,3"
+      ],
+      "lightSamples": [
+        [
+          0,
+          "0px -1.6px",
+          "0"
+        ],
+        [
+          180,
+          "0px 186.646271px",
+          "1"
+        ],
+        [
+          192,
+          "0px 219.994659px",
+          "2"
+        ],
+        [
+          345,
+          "0px 461.313812px",
+          "2"
+        ],
+        [
+          361,
+          "0px 505.262634px",
+          "3"
+        ],
+        [
+          516,
+          "0px 781.997864px",
+          "3"
+        ],
+        [
+          529,
+          "0px 792.341736px",
+          "3"
+        ],
+        [
+          703,
+          "0px 870.539063px",
+          "3"
+        ],
+        [
+          717,
+          "0px 873.192444px",
+          "3"
+        ],
+        [
+          723,
+          "0px 874.333557px",
+          "3"
+        ],
+        [
+          894,
+          "0px 892.271484px",
+          "3"
+        ],
+        [
+          908,
+          "0px 892.8797px",
+          "3"
+        ],
+        [
+          1084,
+          "0px 896.664063px",
+          "3"
+        ],
+        [
+          1098,
+          "0px 896.749512px",
+          "3"
+        ],
+        [
+          1276,
+          "0px 897px",
+          "3"
+        ]
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "normal",
+      "sequence": "vt",
+      "frameCount": 18,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-normal-vt-00000.png"
+        },
+        {
+          "ms": 321,
+          "file": "webkit-normal-vt-00321.png"
+        },
+        {
+          "ms": 581,
+          "file": "webkit-normal-vt-00581.png"
+        },
+        {
+          "ms": 757,
+          "file": "webkit-normal-vt-00757.png"
+        },
+        {
+          "ms": 933,
+          "file": "webkit-normal-vt-00933.png"
+        },
+        {
+          "ms": 1112,
+          "file": "webkit-normal-vt-01112.png"
+        },
+        {
+          "ms": 1287,
+          "file": "webkit-normal-vt-01287.png"
+        },
+        {
+          "ms": 1463,
+          "file": "webkit-normal-vt-01463.png"
+        },
+        {
+          "ms": 1643,
+          "file": "webkit-normal-vt-01643.png"
+        },
+        {
+          "ms": 1981,
+          "file": "webkit-normal-vt-01981.png"
+        },
+        {
+          "ms": 2240,
+          "file": "webkit-normal-vt-02240.png"
+        },
+        {
+          "ms": 2467,
+          "file": "webkit-normal-vt-02467.png"
+        },
+        {
+          "ms": 2746,
+          "file": "webkit-normal-vt-02746.png"
+        },
+        {
+          "ms": 3004,
+          "file": "webkit-normal-vt-03004.png"
+        },
+        {
+          "ms": 3246,
+          "file": "webkit-normal-vt-03246.png"
+        },
+        {
+          "ms": 3498,
+          "file": "webkit-normal-vt-03498.png"
+        },
+        {
+          "ms": 3733,
+          "file": "webkit-normal-vt-03733.png"
+        },
+        {
+          "ms": 3985,
+          "file": "webkit-normal-vt-03985.png"
+        }
+      ],
+      "sheet": "sheet-webkit-normal-vt.png",
+      "notes": [
+        "frame gaps ms: median 242, max 338"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "normal",
+      "sequence": "cmdk",
+      "frameCount": 7,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-normal-cmdk-00000.png"
+        },
+        {
+          "ms": 272,
+          "file": "webkit-normal-cmdk-00272.png"
+        },
+        {
+          "ms": 537,
+          "file": "webkit-normal-cmdk-00537.png"
+        },
+        {
+          "ms": 785,
+          "file": "webkit-normal-cmdk-00785.png"
+        },
+        {
+          "ms": 1134,
+          "file": "webkit-normal-cmdk-01134.png"
+        },
+        {
+          "ms": 1483,
+          "file": "webkit-normal-cmdk-01483.png"
+        },
+        {
+          "ms": 1772,
+          "file": "webkit-normal-cmdk-01772.png"
+        }
+      ],
+      "sheet": "sheet-webkit-normal-cmdk.png",
+      "notes": [
+        "frame gaps ms: median 289, max 349",
+        "dialog open=true closedAfterEscape=true"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "reduced",
+      "sequence": "load",
+      "frameCount": 13,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-reduced-load-00000.png"
+        },
+        {
+          "ms": 100,
+          "file": "webkit-reduced-load-00100.png"
+        },
+        {
+          "ms": 330,
+          "file": "webkit-reduced-load-00330.png"
+        },
+        {
+          "ms": 575,
+          "file": "webkit-reduced-load-00575.png"
+        },
+        {
+          "ms": 791,
+          "file": "webkit-reduced-load-00791.png"
+        },
+        {
+          "ms": 1081,
+          "file": "webkit-reduced-load-01081.png"
+        },
+        {
+          "ms": 1318,
+          "file": "webkit-reduced-load-01318.png"
+        },
+        {
+          "ms": 1550,
+          "file": "webkit-reduced-load-01550.png"
+        },
+        {
+          "ms": 1805,
+          "file": "webkit-reduced-load-01805.png"
+        },
+        {
+          "ms": 2044,
+          "file": "webkit-reduced-load-02044.png"
+        },
+        {
+          "ms": 2273,
+          "file": "webkit-reduced-load-02273.png"
+        },
+        {
+          "ms": 2535,
+          "file": "webkit-reduced-load-02535.png"
+        },
+        {
+          "ms": 2768,
+          "file": "webkit-reduced-load-02768.png"
+        }
+      ],
+      "sheet": "sheet-webkit-reduced-load.png",
+      "notes": [
+        "frame gaps ms: median 237, max 290"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "reduced",
+      "sequence": "scroll",
+      "frameCount": 68,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-reduced-scroll-00000.png"
+        },
+        {
+          "ms": 269,
+          "file": "webkit-reduced-scroll-00269.png"
+        },
+        {
+          "ms": 485,
+          "file": "webkit-reduced-scroll-00485.png"
+        },
+        {
+          "ms": 697,
+          "file": "webkit-reduced-scroll-00697.png"
+        },
+        {
+          "ms": 917,
+          "file": "webkit-reduced-scroll-00917.png"
+        },
+        {
+          "ms": 1137,
+          "file": "webkit-reduced-scroll-01137.png"
+        },
+        {
+          "ms": 1366,
+          "file": "webkit-reduced-scroll-01366.png"
+        },
+        {
+          "ms": 1578,
+          "file": "webkit-reduced-scroll-01578.png"
+        },
+        {
+          "ms": 1785,
+          "file": "webkit-reduced-scroll-01785.png"
+        },
+        {
+          "ms": 2043,
+          "file": "webkit-reduced-scroll-02043.png"
+        },
+        {
+          "ms": 2251,
+          "file": "webkit-reduced-scroll-02251.png"
+        },
+        {
+          "ms": 2463,
+          "file": "webkit-reduced-scroll-02463.png"
+        },
+        {
+          "ms": 2671,
+          "file": "webkit-reduced-scroll-02671.png"
+        },
+        {
+          "ms": 2877,
+          "file": "webkit-reduced-scroll-02877.png"
+        },
+        {
+          "ms": 3082,
+          "file": "webkit-reduced-scroll-03082.png"
+        },
+        {
+          "ms": 3260,
+          "file": "webkit-reduced-scroll-03260.png"
+        },
+        {
+          "ms": 3434,
+          "file": "webkit-reduced-scroll-03434.png"
+        },
+        {
+          "ms": 3607,
+          "file": "webkit-reduced-scroll-03607.png"
+        },
+        {
+          "ms": 3779,
+          "file": "webkit-reduced-scroll-03779.png"
+        },
+        {
+          "ms": 3952,
+          "file": "webkit-reduced-scroll-03952.png"
+        },
+        {
+          "ms": 4125,
+          "file": "webkit-reduced-scroll-04125.png"
+        },
+        {
+          "ms": 4309,
+          "file": "webkit-reduced-scroll-04309.png"
+        },
+        {
+          "ms": 4482,
+          "file": "webkit-reduced-scroll-04482.png"
+        },
+        {
+          "ms": 4652,
+          "file": "webkit-reduced-scroll-04652.png"
+        },
+        {
+          "ms": 4820,
+          "file": "webkit-reduced-scroll-04820.png"
+        },
+        {
+          "ms": 4988,
+          "file": "webkit-reduced-scroll-04988.png"
+        },
+        {
+          "ms": 5157,
+          "file": "webkit-reduced-scroll-05157.png"
+        },
+        {
+          "ms": 5324,
+          "file": "webkit-reduced-scroll-05324.png"
+        },
+        {
+          "ms": 5492,
+          "file": "webkit-reduced-scroll-05492.png"
+        },
+        {
+          "ms": 5659,
+          "file": "webkit-reduced-scroll-05659.png"
+        },
+        {
+          "ms": 5828,
+          "file": "webkit-reduced-scroll-05828.png"
+        },
+        {
+          "ms": 6007,
+          "file": "webkit-reduced-scroll-06007.png"
+        },
+        {
+          "ms": 6179,
+          "file": "webkit-reduced-scroll-06179.png"
+        },
+        {
+          "ms": 6347,
+          "file": "webkit-reduced-scroll-06347.png"
+        },
+        {
+          "ms": 6513,
+          "file": "webkit-reduced-scroll-06513.png"
+        },
+        {
+          "ms": 6676,
+          "file": "webkit-reduced-scroll-06676.png"
+        },
+        {
+          "ms": 6836,
+          "file": "webkit-reduced-scroll-06836.png"
+        },
+        {
+          "ms": 7007,
+          "file": "webkit-reduced-scroll-07007.png"
+        },
+        {
+          "ms": 7163,
+          "file": "webkit-reduced-scroll-07163.png"
+        },
+        {
+          "ms": 7321,
+          "file": "webkit-reduced-scroll-07321.png"
+        },
+        {
+          "ms": 7480,
+          "file": "webkit-reduced-scroll-07480.png"
+        },
+        {
+          "ms": 7639,
+          "file": "webkit-reduced-scroll-07639.png"
+        },
+        {
+          "ms": 7799,
+          "file": "webkit-reduced-scroll-07799.png"
+        },
+        {
+          "ms": 7960,
+          "file": "webkit-reduced-scroll-07960.png"
+        },
+        {
+          "ms": 8135,
+          "file": "webkit-reduced-scroll-08135.png"
+        },
+        {
+          "ms": 8306,
+          "file": "webkit-reduced-scroll-08306.png"
+        },
+        {
+          "ms": 8483,
+          "file": "webkit-reduced-scroll-08483.png"
+        },
+        {
+          "ms": 8644,
+          "file": "webkit-reduced-scroll-08644.png"
+        },
+        {
+          "ms": 8805,
+          "file": "webkit-reduced-scroll-08805.png"
+        },
+        {
+          "ms": 8969,
+          "file": "webkit-reduced-scroll-08969.png"
+        },
+        {
+          "ms": 9130,
+          "file": "webkit-reduced-scroll-09130.png"
+        },
+        {
+          "ms": 9308,
+          "file": "webkit-reduced-scroll-09308.png"
+        },
+        {
+          "ms": 9486,
+          "file": "webkit-reduced-scroll-09486.png"
+        },
+        {
+          "ms": 9659,
+          "file": "webkit-reduced-scroll-09659.png"
+        },
+        {
+          "ms": 9839,
+          "file": "webkit-reduced-scroll-09839.png"
+        },
+        {
+          "ms": 10008,
+          "file": "webkit-reduced-scroll-10008.png"
+        },
+        {
+          "ms": 10168,
+          "file": "webkit-reduced-scroll-10168.png"
+        },
+        {
+          "ms": 10330,
+          "file": "webkit-reduced-scroll-10330.png"
+        },
+        {
+          "ms": 10488,
+          "file": "webkit-reduced-scroll-10488.png"
+        },
+        {
+          "ms": 10660,
+          "file": "webkit-reduced-scroll-10660.png"
+        },
+        {
+          "ms": 10833,
+          "file": "webkit-reduced-scroll-10833.png"
+        },
+        {
+          "ms": 10994,
+          "file": "webkit-reduced-scroll-10994.png"
+        },
+        {
+          "ms": 11169,
+          "file": "webkit-reduced-scroll-11169.png"
+        },
+        {
+          "ms": 11336,
+          "file": "webkit-reduced-scroll-11336.png"
+        },
+        {
+          "ms": 11501,
+          "file": "webkit-reduced-scroll-11501.png"
+        },
+        {
+          "ms": 11669,
+          "file": "webkit-reduced-scroll-11669.png"
+        },
+        {
+          "ms": 11843,
+          "file": "webkit-reduced-scroll-11843.png"
+        },
+        {
+          "ms": 17662,
+          "file": "webkit-reduced-scroll-17662.png"
+        }
+      ],
+      "sheet": "sheet-webkit-reduced-scroll.png",
+      "notes": [
+        "settled frame webkit-reduced-scroll-17662.png, 1500ms after the action ended at 16162ms",
+        "frame gaps ms: median 172, max 5819",
+        "scrollY after return 0",
+        "scrollY at dock 460"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "reduced",
+      "sequence": "drag",
+      "frameCount": 10,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-reduced-drag-00000.png"
+        },
+        {
+          "ms": 296,
+          "file": "webkit-reduced-drag-00296.png"
+        },
+        {
+          "ms": 499,
+          "file": "webkit-reduced-drag-00499.png"
+        },
+        {
+          "ms": 703,
+          "file": "webkit-reduced-drag-00703.png"
+        },
+        {
+          "ms": 921,
+          "file": "webkit-reduced-drag-00921.png"
+        },
+        {
+          "ms": 1134,
+          "file": "webkit-reduced-drag-01134.png"
+        },
+        {
+          "ms": 1343,
+          "file": "webkit-reduced-drag-01343.png"
+        },
+        {
+          "ms": 1550,
+          "file": "webkit-reduced-drag-01550.png"
+        },
+        {
+          "ms": 1755,
+          "file": "webkit-reduced-drag-01755.png"
+        },
+        {
+          "ms": 1959,
+          "file": "webkit-reduced-drag-01959.png"
+        }
+      ],
+      "sheet": "sheet-webkit-reduced-drag.png",
+      "notes": [
+        "frame gaps ms: median 207, max 296",
+        "mouse events used on webkit phone (no CDP touch)"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "reduced",
+      "sequence": "pathlight",
+      "frameCount": 32,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-reduced-pathlight-00000.png"
+        },
+        {
+          "ms": 227,
+          "file": "webkit-reduced-pathlight-00227.png"
+        },
+        {
+          "ms": 426,
+          "file": "webkit-reduced-pathlight-00426.png"
+        },
+        {
+          "ms": 629,
+          "file": "webkit-reduced-pathlight-00629.png"
+        },
+        {
+          "ms": 826,
+          "file": "webkit-reduced-pathlight-00826.png"
+        },
+        {
+          "ms": 1037,
+          "file": "webkit-reduced-pathlight-01037.png"
+        },
+        {
+          "ms": 1231,
+          "file": "webkit-reduced-pathlight-01231.png"
+        },
+        {
+          "ms": 1428,
+          "file": "webkit-reduced-pathlight-01428.png"
+        },
+        {
+          "ms": 1623,
+          "file": "webkit-reduced-pathlight-01623.png"
+        },
+        {
+          "ms": 1832,
+          "file": "webkit-reduced-pathlight-01832.png"
+        },
+        {
+          "ms": 2034,
+          "file": "webkit-reduced-pathlight-02034.png"
+        },
+        {
+          "ms": 2234,
+          "file": "webkit-reduced-pathlight-02234.png"
+        },
+        {
+          "ms": 2433,
+          "file": "webkit-reduced-pathlight-02433.png"
+        },
+        {
+          "ms": 2630,
+          "file": "webkit-reduced-pathlight-02630.png"
+        },
+        {
+          "ms": 2824,
+          "file": "webkit-reduced-pathlight-02824.png"
+        },
+        {
+          "ms": 3021,
+          "file": "webkit-reduced-pathlight-03021.png"
+        },
+        {
+          "ms": 3229,
+          "file": "webkit-reduced-pathlight-03229.png"
+        },
+        {
+          "ms": 3428,
+          "file": "webkit-reduced-pathlight-03428.png"
+        },
+        {
+          "ms": 3626,
+          "file": "webkit-reduced-pathlight-03626.png"
+        },
+        {
+          "ms": 3824,
+          "file": "webkit-reduced-pathlight-03824.png"
+        },
+        {
+          "ms": 4028,
+          "file": "webkit-reduced-pathlight-04028.png"
+        },
+        {
+          "ms": 4236,
+          "file": "webkit-reduced-pathlight-04236.png"
+        },
+        {
+          "ms": 4430,
+          "file": "webkit-reduced-pathlight-04430.png"
+        },
+        {
+          "ms": 4623,
+          "file": "webkit-reduced-pathlight-04623.png"
+        },
+        {
+          "ms": 4826,
+          "file": "webkit-reduced-pathlight-04826.png"
+        },
+        {
+          "ms": 5029,
+          "file": "webkit-reduced-pathlight-05029.png"
+        },
+        {
+          "ms": 5223,
+          "file": "webkit-reduced-pathlight-05223.png"
+        },
+        {
+          "ms": 5427,
+          "file": "webkit-reduced-pathlight-05427.png"
+        },
+        {
+          "ms": 5620,
+          "file": "webkit-reduced-pathlight-05620.png"
+        },
+        {
+          "ms": 5812,
+          "file": "webkit-reduced-pathlight-05812.png"
+        },
+        {
+          "ms": 6006,
+          "file": "webkit-reduced-pathlight-06006.png"
+        },
+        {
+          "ms": 6198,
+          "file": "webkit-reduced-pathlight-06198.png"
+        }
+      ],
+      "sheet": "sheet-webkit-reduced-pathlight.png",
+      "notes": [
+        "frame gaps ms: median 198, max 227",
+        "rungs 0-3: 3 translate changes over 472 rAF samples; first 1418ms, last 4227ms; rungs seen 0,1,2,3"
+      ],
+      "lightSamples": [
+        [
+          0,
+          "0px -1.6px",
+          "0"
+        ],
+        [
+          1418,
+          "0px 282.399994px",
+          "1"
+        ],
+        [
+          2816,
+          "0px 566.400024px",
+          "2"
+        ],
+        [
+          4227,
+          "0px 897px",
+          "3"
+        ]
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "reduced",
+      "sequence": "pathlight-fast",
+      "frameCount": 16,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-reduced-pathlight-fast-00000.png"
+        },
+        {
+          "ms": 214,
+          "file": "webkit-reduced-pathlight-fast-00214.png"
+        },
+        {
+          "ms": 431,
+          "file": "webkit-reduced-pathlight-fast-00431.png"
+        },
+        {
+          "ms": 629,
+          "file": "webkit-reduced-pathlight-fast-00629.png"
+        },
+        {
+          "ms": 836,
+          "file": "webkit-reduced-pathlight-fast-00836.png"
+        },
+        {
+          "ms": 1053,
+          "file": "webkit-reduced-pathlight-fast-01053.png"
+        },
+        {
+          "ms": 1270,
+          "file": "webkit-reduced-pathlight-fast-01270.png"
+        },
+        {
+          "ms": 1467,
+          "file": "webkit-reduced-pathlight-fast-01467.png"
+        },
+        {
+          "ms": 1668,
+          "file": "webkit-reduced-pathlight-fast-01668.png"
+        },
+        {
+          "ms": 1865,
+          "file": "webkit-reduced-pathlight-fast-01865.png"
+        },
+        {
+          "ms": 2066,
+          "file": "webkit-reduced-pathlight-fast-02066.png"
+        },
+        {
+          "ms": 2262,
+          "file": "webkit-reduced-pathlight-fast-02262.png"
+        },
+        {
+          "ms": 2466,
+          "file": "webkit-reduced-pathlight-fast-02466.png"
+        },
+        {
+          "ms": 2669,
+          "file": "webkit-reduced-pathlight-fast-02669.png"
+        },
+        {
+          "ms": 2877,
+          "file": "webkit-reduced-pathlight-fast-02877.png"
+        },
+        {
+          "ms": 3071,
+          "file": "webkit-reduced-pathlight-fast-03071.png"
+        }
+      ],
+      "sheet": "sheet-webkit-reduced-pathlight-fast.png",
+      "notes": [
+        "frame gaps ms: median 203, max 217",
+        "fast scroll skipping rungs: 3 translate changes over 224 rAF samples; first 202ms, last 397ms; rungs seen 0,1,2,3"
+      ],
+      "lightSamples": [
+        [
+          0,
+          "0px -1.6px",
+          "0"
+        ],
+        [
+          202,
+          "0px 282.399994px",
+          "1"
+        ],
+        [
+          216,
+          "0px 566.400024px",
+          "2"
+        ],
+        [
+          397,
+          "0px 897px",
+          "3"
+        ]
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "reduced",
+      "sequence": "vt",
+      "frameCount": 18,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-reduced-vt-00000.png"
+        },
+        {
+          "ms": 307,
+          "file": "webkit-reduced-vt-00307.png"
+        },
+        {
+          "ms": 603,
+          "file": "webkit-reduced-vt-00603.png"
+        },
+        {
+          "ms": 779,
+          "file": "webkit-reduced-vt-00779.png"
+        },
+        {
+          "ms": 955,
+          "file": "webkit-reduced-vt-00955.png"
+        },
+        {
+          "ms": 1130,
+          "file": "webkit-reduced-vt-01130.png"
+        },
+        {
+          "ms": 1306,
+          "file": "webkit-reduced-vt-01306.png"
+        },
+        {
+          "ms": 1482,
+          "file": "webkit-reduced-vt-01482.png"
+        },
+        {
+          "ms": 1669,
+          "file": "webkit-reduced-vt-01669.png"
+        },
+        {
+          "ms": 1940,
+          "file": "webkit-reduced-vt-01940.png"
+        },
+        {
+          "ms": 2176,
+          "file": "webkit-reduced-vt-02176.png"
+        },
+        {
+          "ms": 2415,
+          "file": "webkit-reduced-vt-02415.png"
+        },
+        {
+          "ms": 2695,
+          "file": "webkit-reduced-vt-02695.png"
+        },
+        {
+          "ms": 2961,
+          "file": "webkit-reduced-vt-02961.png"
+        },
+        {
+          "ms": 3227,
+          "file": "webkit-reduced-vt-03227.png"
+        },
+        {
+          "ms": 3461,
+          "file": "webkit-reduced-vt-03461.png"
+        },
+        {
+          "ms": 3693,
+          "file": "webkit-reduced-vt-03693.png"
+        },
+        {
+          "ms": 3968,
+          "file": "webkit-reduced-vt-03968.png"
+        }
+      ],
+      "sheet": "sheet-webkit-reduced-vt.png",
+      "notes": [
+        "frame gaps ms: median 236, max 307"
+      ]
+    },
+    {
+      "context": "webkit",
+      "mode": "reduced",
+      "sequence": "cmdk",
+      "frameCount": 8,
+      "frames": [
+        {
+          "ms": 0,
+          "file": "webkit-reduced-cmdk-00000.png"
+        },
+        {
+          "ms": 253,
+          "file": "webkit-reduced-cmdk-00253.png"
+        },
+        {
+          "ms": 488,
+          "file": "webkit-reduced-cmdk-00488.png"
+        },
+        {
+          "ms": 810,
+          "file": "webkit-reduced-cmdk-00810.png"
+        },
+        {
+          "ms": 1163,
+          "file": "webkit-reduced-cmdk-01163.png"
+        },
+        {
+          "ms": 1489,
+          "file": "webkit-reduced-cmdk-01489.png"
+        },
+        {
+          "ms": 1725,
+          "file": "webkit-reduced-cmdk-01725.png"
+        },
+        {
+          "ms": 1962,
+          "file": "webkit-reduced-cmdk-01962.png"
+        }
+      ],
+      "sheet": "sheet-webkit-reduced-cmdk.png",
+      "notes": [
+        "frame gaps ms: median 253, max 353",
+        "dialog open=true closedAfterEscape=true"
+      ]
+    }
+  ],
+  "runSeconds": 420.7,
+  "totalFrames": 867
+}
