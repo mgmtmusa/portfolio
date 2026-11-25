@@ -122,6 +122,27 @@ test.describe('hero states (HoE finding 1)', () => {
     expectAtRest(await snap(page), rest);
   });
 
+  test('1d: landing at rest runs no backdrop-filter transition (WebKit paints it black)', async ({ page }) => {
+    await page.addInitScript(() => { (window as unknown as { __v3test: boolean }).__v3test = true; });
+    await page.goto('/#work-h');
+    await waitState(page, 'docked');
+    const seen = await page.evaluate(() => new Promise<string[]>((resolve) => {
+      const slab = document.querySelector<HTMLElement>('[data-slab]')!;
+      const bad = new Set<string>();
+      const t0 = performance.now();
+      window.scrollTo(0, 0);
+      const tick = () => {
+        for (const a of slab.getAnimations()) {
+          const p = (a as CSSTransition).transitionProperty ?? '';
+          if (/backdrop-filter/.test(p) && slab.dataset.moving === undefined) bad.add(p);
+        }
+        if (performance.now() - t0 < 2000) requestAnimationFrame(tick); else resolve([...bad]);
+      };
+      requestAnimationFrame(tick);
+    }));
+    expect(seen, 'backdrop-filter transition running after the blur dropped').toEqual([]);
+  });
+
   test('1b: a resize while docked leaves no stale bend or mask hole', async ({ page }) => {
     await openHome(page);
     await page.evaluate(() => scrollTo(0, 600));

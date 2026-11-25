@@ -250,7 +250,9 @@ function init() {
     // Never a shadow without its glass (the returning slab waits at opacity 0 for the dock to fade).
     shadow.style.opacity = String(Math.min(1 - t, +getComputedStyle(slab).opacity));
   }
+  let fadeMs = FADE;
   const fadeSlab = (to: '0' | '1', ms: number) => {
+    fadeMs = ms;
     // Keeps the blur's own 120ms ease (Hero.astro) alongside the opacity.
     slab.style.transition = `opacity ${ms}ms ease-out, -webkit-backdrop-filter ${FALL}ms ease-out, backdrop-filter ${FALL}ms ease-out`;
     slab.style.opacity = to;
@@ -325,6 +327,8 @@ function init() {
     stopFlight = null;
     if (revealing) { revealing = false; if (target === 0) fadeSlab('1', REVEAL); }
     holding = false;
+    // WebKit paints a transitioning backdrop-filter black: at rest the blur drops with no transition (opacity only).
+    if (target === 0) slab.style.transition = `opacity ${fadeMs}ms ease-out`;
     delete slab.dataset.moving;
     if (target === 1) {
       mode = 'docked';
