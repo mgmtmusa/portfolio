@@ -4,7 +4,7 @@ Branch `redesign/v3-dark`. Not pushed, not merged, not live. Preview only.
 
 ## Preview
 
-https://portfolio-68qs8xcwz-musa-c771.vercel.app
+https://portfolio-kp3i7gtj0-musa-c771.vercel.app (round 5; the round 4 preview was portfolio-68qs8xcwz-musa-c771.vercel.app)
 
 It is behind Vercel Authentication (it returns a 302 to the Vercel login). Open it while logged in to the `musa-c771` Vercel account, or turn on a shareable link in the dashboard under Project, Settings, Deployment Protection.
 
@@ -28,13 +28,15 @@ A dark, single-light rebuild of the portfolio, in Astro 5 with GSAP and Lenis. I
 | Motion (Impeccable) | APPROVED after re-check | `docs/v3/reviews/round-4-motion.md` |
 | Principal | APPROVED, no slop found | `docs/v3/reviews/round-4-principal.md` |
 
-## Gates (measured at round 4)
+Round 5 (the four round 4 polish items) was re-checked only by the reviewers who raised them: finish APPROVED (item 1), head of engineering NO CHANGE (item 2), motion APPROVED (item 4, including the WebKit landing fix). Record: `docs/v3/reviews/round-5-polish.md`.
+
+## Gates (measured at round 4; round 5 re-ran the rows it touches)
 
 | Gate | Target | Measured |
 |---|---|---|
-| Build, types | 0 errors | Build OK; `astro check` 0 errors, 0 warnings |
-| Unit tests | pass | 99 of 99 |
-| Playwright, 4 projects | 0 failures | 938 passed, 0 failed, 110 skipped (project-scoped) |
+| Build, types | 0 errors | Build OK; `astro check` 0 errors, 0 warnings (round 5 again) |
+| Unit tests | pass | 99 of 99 (round 5 again) |
+| Playwright, 4 projects | 0 failures | Round 4: 938 passed, 0 failed, 110 skipped (project-scoped). Round 5, the 8 affected specs (work, pages, layout, hero-states, home, bend, moments, glass): 455 passed, 0 failed, 109 skipped |
 | Lighthouse mobile, median of 5 | Perf ≥ 90, A11y 100, BP ≥ 96, SEO 100 | 100, 100, 100, 100; LCP 1503 ms; CLS 0 |
 | Lighthouse desktop, median of 5 | Perf ≥ 95, rest same | 100 across the board; LCP 363 ms |
 | INP, 4x CPU | ≤ 200 ms | 80 ms worst |
@@ -43,7 +45,7 @@ A dark, single-light rebuild of the portfolio, in Astro 5 with GSAP and Lenis. I
 | Glass | ≤ 4 visible blurred surfaces, fallbacks | 2 at most; solid fallbacks ship |
 | Accessibility | axe 0, keyboard, reduced motion, no-JS | axe 0 (Playwright); no-JS content complete on all pages |
 | Hygiene | no console errors, em dashes, phone or address | 0 |
-| Facts | every figure traced with scope | `facts.mjs` PASS |
+| Facts | every figure traced with scope | `facts.mjs` PASS (round 5 again) |
 
 ## Screenshots
 
@@ -52,7 +54,8 @@ Desktop (1440) and phone (375, 390) captures of every page are in `docs/evidence
 The signature moments as frame strips:
 - Slab bend and hand-off: `docs/evidence/round-6/hero/` (rest, slide, docked, back, dragged, in Chromium and WebKit) and `docs/evidence/round-6/motion/sheet-*-scroll.png`, `sheet-*-drag.png`.
 - Path key light: `docs/evidence/round-6/motion/sheet-*-pathlight*.png`.
-- On the iPhone Simulator: `docs/evidence/round-5/ios/`.
+- On the iPhone Simulator: `docs/evidence/round-5/ios/`, and round 5's `docs/evidence/polish-r5/ios/`.
+- Round 5: the slab hand-off filmed in motion on WebKit and the drag release spring (`docs/evidence/polish-r5/motion/`, `motion-fix/`), the separated work figures and the phone slab crops (`docs/evidence/polish-r5/crops/`).
 
 ## Direction
 
@@ -89,12 +92,16 @@ Full list in `ASSETS_NEEDED.md`. The main items:
 - **Production domain.**
 - **Phone portrait AVIF:** it is 48 KB against a 40 KB budget. Adding a 1060w width in `src/lib/portrait.ts` brings it to 38.4 KB; it needs a yes.
 
-## Open, non-blocking polish (from round 4)
+## Round 4 polish: outcome (round 5)
 
-1. The work page sets "28%" and "65%" side by side at display size, so they read as one run with a single marker. A visible gap or a marker on each would fix it.
-2. On phones the slab clips letterforms of "Musa" and "Walid". This is the intended bend, but it is worth a look on a real device.
-3. `/contact/` shows no navigation at rest on desktop, because the dock waits for 160px of scroll at every width. Limiting that rule to phones would restore it.
-4. The motion evidence has not filmed the WebKit hand-off in motion (only the settled states), and has not shown the drag release spring moving.
+Details and evidence in `docs/v3/reviews/round-5-polish.md`.
+
+1. **Work page figures: fixed.** "28%" and "65%" now sit apart, with a wider gap and a thin hairline between them, on `/work/` and the Evitech case sheet. The facts, the single footnote (its note covers both) and the "Two results from the same initiative" line are unchanged.
+2. **Phone slab over "Musa" and "Walid": checked, no change.** On the iOS Simulator (iPhone 17, iOS gate PASS) and in WebKit at 375 and 390, the bend shifts parts of "u", "s", "W" and "a", but every letter reads as itself, with nothing split, doubled or missing. The head of engineering ruled no change.
+3. **Contact page dock on desktop: won't fix.** At rest the dock would cover a form field at every width from 640px up: at 1440x900 it sits on the role textarea's right edge and resize handle (x 558 to 596, y 820 to 872), and the same holds at 1024, 1280, 1366, 1920 and on a 768 tablet. The creative director's round 3 fix 3 ruled exactly that overlap a defect, so the dock still waits for 160px of scroll on `/contact/` at every width. A possible later change: narrow the contact form column on wide screens so it ends before the dock (a layout change that needs a creative director re-check).
+4. **Motion evidence: filmed.** The WebKit hand-off is now filmed in motion both ways, and the drag release spring is filmed moving (no overshoot). The film caught a real WebKit defect: landing back at rest, the slab flashed solid black for about 120ms. It is fixed in `hero.ts`, covered by a new test, and re-filmed clean.
+
+Pre-existing note for later (motion reviewer): when the slab lands at rest, the bent copy switches on in one frame, so the glass goes from blurred to crisp at once. A short cross-fade (about 80 to 120ms) would soften it.
 
 ## Decisions for Musa
 
