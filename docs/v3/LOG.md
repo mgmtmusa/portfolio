@@ -167,3 +167,7 @@ Next steps, in order:
 **In progress:** round 4 reviews, scoped: HoE full gates (`round-4-hoe.md`), finish (contact dock), then motion (Path light, drag, webkit return), then principal. CD and CMO approved in round 3; skip unless a fix touches their areas. Cap: 2 more rounds after round 4, then list open items.
 **Next:** fixes, impeccable-documenter on DESIGN.md, SUMMARY-v3.md, `npx vercel@66.6.0 deploy -y` (preview only), section 10 hand-back.
 **For Musa:** unchanged from the previous entry. No crons in this session.
+
+## RESUME HERE (25 November, finished)
+
+Round 4: HoE, finish, motion (after re-check) and principal APPROVED; CD and CMO approved in round 3, untouched since. No fixes required. DESIGN.md updated by impeccable-documenter. SUMMARY-v3.md written. Preview: https://portfolio-68qs8xcwz-musa-c771.vercel.app (Vercel Authentication). Direction screenshots in docs/evidence/round-6/directions/. Waiting on Musa: push, merge/go live, and the "For Musa" items (now in SUMMARY-v3.md).
