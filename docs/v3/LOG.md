@@ -160,3 +160,10 @@ Next steps, in order:
 **Next:** finish + verify WIP (astro check, unit, build, facts, `npx playwright test --workers=2`; machine is memory-starved, rerun failures serially); round-6 evidence (capture full, hero-states, ios then `xcrun simctl shutdown all`, motion.mjs); round 4 reviews: HoE (all section 9 gates), finish, motion (CD and CMO re-confirm briefly); then the **principal** with every report and the screenshots; repeat to 8 rounds max until HoE, CD, CMO and principal approve in one round; then impeccable-documenter updates DESIGN.md, write SUMMARY-v3.md, preview deploy `npx vercel@66.6.0 deploy -y` (never --prod), hand-back.
 **For Musa:** CV PDF (954-byte placeholder); About "Draft" approval; the 65% period; /for placeholder copy; currency; production domain; phone portrait AVIF 47 KB vs 40 KB (add a 1060w width in src/lib/portrait.ts gives 38.4 KB: helper's write was denied, needs his OK); push/merge.
 **Note:** session crons (usage watch, resumes) die with the session; recreate them on restart.
+
+## RESUME HERE (25 November, lean restart session)
+
+**Done:** round 3 WIP verified and committed (941288e: astro check 0, unit 99/99, build, facts PASS, Playwright 938 passed 0 failed on 4 projects). Round 6 evidence (7e017fe): `docs/evidence/round-6/` motion (Path light normal/reduced/fast, dense drag screencast, webkit scroll-back), capture, hero states, `crops/` (contact 375 rest/scrolled/focused, hero 960px).
+**In progress:** round 4 reviews, scoped: HoE full gates (`round-4-hoe.md`), finish (contact dock), then motion (Path light, drag, webkit return), then principal. CD and CMO approved in round 3; skip unless a fix touches their areas. Cap: 2 more rounds after round 4, then list open items.
+**Next:** fixes, impeccable-documenter on DESIGN.md, SUMMARY-v3.md, `npx vercel@66.6.0 deploy -y` (preview only), section 10 hand-back.
+**For Musa:** unchanged from the previous entry. No crons in this session.
