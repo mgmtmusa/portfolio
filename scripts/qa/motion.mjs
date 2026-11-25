@@ -46,6 +46,23 @@ async function record(page, ctx, mode, seq, action, { duration = 2500, interval 
 }
 function skip(ctx, mode, seq, why) { index.sequences.push({ context: ctx, mode, sequence: seq, frameCount: 0, frames: [], skipped: why, notes: [why] }); console.log(`  skip ${ctx}-${mode}-${seq}: ${why}`); }
 
+// Chromium only: dense frames from a CDP screencast (every compositor frame, jpeg) while `action` runs plus `tail` ms.
+async function cast(page, ctx, mode, seq, action, { tail = 600 } = {}) {
+  const cdp = await page.context().newCDPSession(page);
+  const frames = []; const notes = []; const t0 = Date.now();
+  cdp.on('Page.screencastFrame', (f) => { const ms = Date.now() - t0; const file = `${ctx}-${mode}-${seq}-${pad(ms)}.jpg`; writeFileSync(`${out}/${file}`, Buffer.from(f.data, 'base64')); frames.push({ ms, file }); cdp.send('Page.screencastFrameAck', { sessionId: f.sessionId }).catch(() => {}); });
+  await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 70, everyNthFrame: 1 });
+  try { await action(); } catch (e) { notes.push('action error: ' + e.message.split('\n')[0]); }
+  await sleep(tail);
+  await cdp.send('Page.stopScreencast').catch(() => {});
+  const gaps = frames.slice(1).map((f, i) => f.ms - frames[i].ms);
+  if (gaps.length) notes.push(`frame gaps ms: median ${[...gaps].sort((a, b) => a - b)[gaps.length >> 1]}, max ${Math.max(...gaps)}`);
+  notes.push('CDP screencast: ms is time since screencast start; frames exist only where the compositor produced one');
+  const entry = { context: ctx, mode, sequence: seq, frameCount: frames.length, frames, sheet: null, notes };
+  index.sequences.push(entry);
+  return entry;
+}
+
 const contexts = [
   ['chromium', chromium, { viewport: { width: 1440, height: 900 } }, false],
   ['webkit', webkit, { ...devices['iPhone 14'] }, true],
@@ -89,8 +106,12 @@ for (const [ctx, bt, opts, phone] of contexts) {
         // Phone: scripted scrollBy in ~12px steps (a swipe, slower than the desktop wheel), long enough to reach the dock and return.
         await wheel(page, 45); await page.waitForTimeout(300); await wheel(page, phone ? 420 : 250); await page.waitForTimeout(phone ? 1400 : 900);
         e0.docked = await scrollY(page);
-        await wheel(page, phone ? -900 : -700); await page.waitForTimeout(1200);
-      }, { duration: phone ? 7000 : 3400, interval: 140, max: phone ? 50 : MAX });
+        await wheel(page, phone ? -900 : -700);
+        if (phone) { await page.evaluate(() => window.scrollTo(0, 0)); } // make sure the slab's return to rest is reached and filmed
+        await page.waitForTimeout(phone ? 2200 : 1200);
+        e0.back = await scrollY(page);
+      }, { duration: phone ? 12000 : 3400, interval: 140, max: phone ? 85 : MAX });
+      e.notes.push(`scrollY after return ${e0.back}`);
       e.notes.push(`scrollY at dock ${e0.docked}`);
       console.log(ctx, mode, 'scroll', e.frameCount); await page.close(); }
 
@@ -99,14 +120,40 @@ for (const [ctx, bt, opts, phone] of contexts) {
       const box = await page.locator('[data-slab]').boundingBox().catch(() => null);
       if (!box || box.width < 5) skip(ctx, mode, 'drag', 'slab not visible in this context/mode');
       else {
-        const e = await record(page, ctx, mode, 'drag', async () => {
+        const dragAction = async () => {
           const x = box.x + box.width / 2, y = box.y + box.height / 2;
           await page.mouse.move(x, y); await page.mouse.down();
           for (let i = 1; i <= 10; i++) { await page.mouse.move(x + i * 20, y); await page.waitForTimeout(16); }
           await page.waitForTimeout(250); await page.mouse.up(); await page.waitForTimeout(1100);
-        }, { duration: 1900, interval: 40, max: 55 }); // dense (about 40ms) through the drag and the release
+        };
+        // Chromium: every compositor frame from the screencast. WebKit has no screencast: back-to-back screenshots (interval 0), the densest feasible.
+        const e = ctx === 'chromium' ? await cast(page, ctx, mode, 'drag', dragAction, { tail: 300 })
+          : await record(page, ctx, mode, 'drag', dragAction, { duration: 2100, interval: 0, max: 70 });
         if (phone) e.notes.push('mouse events used on webkit phone (no CDP touch)');
         console.log(ctx, mode, 'drag', e.frameCount);
+      }
+      await page.close(); }
+
+    // 3b Path key light: all four rungs in one slow scroll, then a fast scroll that skips rungs.
+    // The light's computed translate is sampled every animation frame (notes), so the glide is on record even where screenshots are sparse.
+    { const page = await fresh(); await settle(page);
+      const has = await page.evaluate(() => !!document.querySelector('.path-light') && document.querySelectorAll('.path .rung').length);
+      if (!has) skip(ctx, mode, 'pathlight', 'no .path-light on the page');
+      else {
+        const sample = () => page.evaluate(() => { window.__lt = []; const l = document.querySelector('.path-light'); const t0 = performance.now(); const tick = () => { window.__lt.push([Math.round(performance.now() - t0), getComputedStyle(l).translate, l.dataset.rung]); window.__ltR = requestAnimationFrame(tick); }; tick(); });
+        const collect = async (e, label) => { const s = await page.evaluate(() => { cancelAnimationFrame(window.__ltR); return window.__lt; }); const moves = s.filter((r, i) => i && r[1] !== s[i - 1][1]); e.notes.push(`${label}: ${moves.length} translate changes over ${s.length} rAF samples; first ${moves[0]?.[0] ?? '-'}ms, last ${moves.at(-1)?.[0] ?? '-'}ms; rungs seen ${[...new Set(s.map((r) => r[2]))].join(',')}`); e.lightSamples = s.filter((r, i) => !i || r[1] !== s[i - 1][1]); };
+        const toRung = (i, instant = true) => page.evaluate(([n, inst]) => { const r = document.querySelectorAll('.path .rung')[n]; const y = r.getBoundingClientRect().top + scrollY - innerHeight * 0.4 + 6; window.scrollTo({ top: y, behavior: inst ? 'instant' : 'auto' }); }, [i, instant]);
+        const slow = async () => { await sample(); for (const i of [0, 1, 2, 3]) { await toRung(i); await sleep(1300); } };
+        const fast = async () => { await toRung(0); await sleep(1300); await sample(); await page.evaluate(() => { const rs = document.querySelectorAll('.path .rung'); const a = scrollY, b = rs[3].getBoundingClientRect().top + scrollY - innerHeight * 0.4 + 6; let n = 0; const step = () => { n++; window.scrollTo(0, a + (b - a) * Math.min(1, n / 5)); if (n < 5) requestAnimationFrame(step); }; step(); }); await sleep(1500); };
+        if (ctx === 'chromium') {
+          const e = await cast(page, ctx, mode, 'pathlight', slow, { tail: 200 }); await collect(e, 'rungs 0-3');
+          const e2 = await cast(page, ctx, mode, 'pathlight-fast', fast, { tail: 200 }); await collect(e2, 'fast scroll skipping rungs');
+        } else {
+          // WebKit: back-to-back screenshots through each 900ms move (frames at or under 100ms where the engine allows; the gaps are in the notes).
+          const e = await record(page, ctx, mode, 'pathlight', slow, { duration: 6200, interval: 0, max: 90 }); await collect(e, 'rungs 0-3');
+          const e2 = await record(page, ctx, mode, 'pathlight-fast', fast, { duration: 3200, interval: 0, max: 40 }); await collect(e2, 'fast scroll skipping rungs');
+        }
+        console.log(ctx, mode, 'pathlight');
       }
       await page.close(); }
 

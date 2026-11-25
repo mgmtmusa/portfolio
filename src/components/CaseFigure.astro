@@ -36,7 +36,10 @@ const fact = figs.join('|');
   /* Figure → sheet: the figure travels 520ms on expo-out; its text snapshot is never stretched (plan F6). */
   ::view-transition-group(fig-evitech),
   ::view-transition-group(fig-i-heart-uni),
-  ::view-transition-group(fig-the-lil-project) { animation-duration: var(--dur-sheet); animation-timing-function: var(--ease-out); }
+  ::view-transition-group(fig-the-lil-project),
+  ::view-transition-group(lbl-evitech),
+  ::view-transition-group(lbl-i-heart-uni),
+  ::view-transition-group(lbl-the-lil-project) { animation-duration: var(--dur-sheet); animation-timing-function: var(--ease-out); }
   ::view-transition-old(fig-evitech), ::view-transition-new(fig-evitech),
   ::view-transition-old(fig-i-heart-uni), ::view-transition-new(fig-i-heart-uni),
   ::view-transition-old(fig-the-lil-project), ::view-transition-new(fig-the-lil-project) { height: 100%; object-fit: none; object-position: left top; }
@@ -51,7 +54,10 @@ const fact = figs.join('|');
   html[data-astro-transition='back']::view-transition-old(sheet):not(:only-child) { animation-name: vt-slide-out-back; }
   html[data-astro-transition='back']::view-transition-new(sheet):not(:only-child) { animation-name: vt-slide-in-back; }
   /* During a sheet-to-sheet swap the figures ride inside the sliding sheet. */
-  html.vt-sheet-swap [data-fig] { view-transition-name: none !important; }
+  html.vt-sheet-swap [data-fig], html.vt-sheet-swap .cover-label { view-transition-name: none !important; }
+  /* A label with no twin (sheet) fades out in place, so it never sits under the figure's travelling snapshot. */
+  ::view-transition-old(lbl-evitech):only-child, ::view-transition-old(lbl-i-heart-uni):only-child, ::view-transition-old(lbl-the-lil-project):only-child { animation: vt-fade-out 160ms ease-out both; }
+  ::view-transition-new(lbl-evitech):only-child, ::view-transition-new(lbl-i-heart-uni):only-child, ::view-transition-new(lbl-the-lil-project):only-child { animation: vt-fade-in 200ms ease-out 200ms both; }
 
   @keyframes vt-sheet-in { from { opacity: 0; transform: translateY(56px); } }
   @keyframes vt-sheet-out { to { opacity: 0; transform: translateY(40px); } }

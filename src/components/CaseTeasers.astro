@@ -28,7 +28,7 @@ const teasers = [
               ))}
             </p>
             <div class="case-body">
-              <p class="case-label">
+              <p class="case-label" transition:name={`lbl-${t.slug}`}>
                 {t.label}
                 {t.scope && <span class="case-scope label">{t.scope}</span>}
               </p>

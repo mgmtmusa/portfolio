@@ -52,6 +52,8 @@ test.describe('persistent chrome', () => {
     const html = page.locator('html');
     await expect(html).toHaveClass(/\bjs\b/);
     await expect(html).toHaveAttribute('data-motion', 'reduce');
+    // On /contact/ the dock stays off the brief at rest; it is there once the page scrolls.
+    await page.evaluate(() => window.scrollTo({ top: 400, behavior: 'instant' }));
     await expect(page.locator('.dock-menu')).toBeVisible();
     await page.reload();
     await expect(html).toHaveClass(/\bjs\b/);

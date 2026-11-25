@@ -10,7 +10,9 @@ const [cpa, leads] = cases.find((c) => c.slug === 'evitech')!.results;
 const closed = growthWork.flatMap((g) => g.results).find((r) => r.v === '$2M+')!;
 const audience = growthWork.flatMap((g) => g.results).find((r) => r.v === '400 → 13,200')!.v.split(' → ')[1];
 
-// One picture, built by hand so each format gets its own quality.
+// One picture, built by hand so each format gets its own quality. The LCP: Base.astro preloads the same srcset and sizes
+// (character for character, so WebKit reuses the preload), and decoding="sync" paints it in the masthead's first frame
+// (creative director r3, fix 1: with "async" WebKit painted it a frame or two after the name).
 const pic = await portraitSources();
 const alt =
   'Studio portrait of Musa Abdullah Walid: a bearded man with swept-back black hair and gold wire-framed glasses, in a navy pinstripe double-breasted suit, white shirt and patterned tie.';
@@ -45,7 +47,7 @@ const alt =
           height="620"
           loading="eager"
           fetchpriority="high"
-          decoding="async"
+          decoding="sync"
         />
       </picture>
     </div>

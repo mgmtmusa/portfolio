@@ -50,6 +50,8 @@ const rungs = [
     background: radial-gradient(closest-side, rgb(var(--key) / .05), transparent);
     transition: translate 900ms cubic-bezier(.16, 1, .3, 1);
   }
+  /* Creative director r3, fix 2: brighter from 768px so the moment survives a screen recording; phones keep .05. */
+  @media (min-width: 768px) { .path-light { background: radial-gradient(closest-side, rgb(var(--key) / .07), transparent); } }
   @media (prefers-reduced-motion: reduce) { .path-light { transition: none; } }
   :global(html[data-motion='reduce']) .path-light { transition: none; }
   .path { padding-top: 160px; }
@@ -66,7 +68,10 @@ const rungs = [
     .rung-in { grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); padding-left: calc(var(--i) * 14px); }
     .rung-fig { font-size: clamp(44px, 12vw, 72px); }
   }
-  /* Below 360px the widest figure (with its marker) is wider than the stepped column, so let it wrap. */
+  /* Creative director r3, fix 7: on phones a 14px step reads as misalignment, so every rung sits on the edge and the
+     light moves vertically only. The staircase holds from 640px up. */
+  @media (max-width: 639px) { .rung-in { padding-left: 0; } }
+  /* Below 360px the widest figure (with its marker) is wider than the column, so let it wrap. */
   @media (max-width: 359px) { .rung-fig { white-space: normal; } }
 </style>
 
@@ -92,12 +97,27 @@ const rungs = [
       light.style.translate = `${x.toFixed(1)}px ${y.toFixed(1)}px`;
       light.dataset.rung = String(i);
     };
-    // First placement is exact and instant (the CSS rest point is only an estimate of the first figure).
+    // First placement is exact and instant (the CSS rest point is only an estimate of the first figure). It waits for
+    // the observer's first callback (motion r3, fix 2): a restored scroll or a view-transition return to mid-Path
+    // finds the light already on the rung being read, never sweeping in from rung 0 like a replayed entrance.
+    // The rung being read is the last one whose top has passed the bottom of the band (45% down the viewport).
+    const reading = () => {
+      const edge = innerHeight * 0.45;
+      let i = 0;
+      rungs.forEach((r, k) => { if (r.getBoundingClientRect().top <= edge) i = k; });
+      return i;
+    };
     light.style.transition = 'none';
-    go(0);
-    void light.offsetWidth;
-    light.style.transition = '';
+    go(reading());
+    let first = true;
     const io = new IntersectionObserver((entries) => {
+      if (first) {
+        first = false;
+        go(reading());
+        void light.offsetWidth;
+        light.style.transition = '';
+        return;
+      }
       for (const e of entries) if (e.isIntersecting) go(rungs.indexOf(e.target as HTMLElement));
     }, { rootMargin: '-35% 0px -55% 0px' });
     rungs.forEach((r) => io.observe(r));

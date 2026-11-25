@@ -1,6 +1,8 @@
 ---
 // The floating glass dock: bottom centre on every screen (creative director, phase 2).
 // On phones it holds Menu and Get in touch; without JavaScript the page links show instead of Menu.
+// On /contact/ it keeps clear of the brief (finish r3 1, creative director r3 3): out at rest and, on phones, while
+// focus is inside the form.
 ---
 
 <div class="dock glass xfade" transition:persist="dock" data-dock>
@@ -23,9 +25,14 @@
     display: flex; align-items: center; gap: 4px;
     background: rgb(26 24 22 / .62);
     font: 500 14px / 1 var(--ui); white-space: nowrap;
-    transition: opacity var(--dur-ui) ease-out;
+    transition: opacity var(--dur-ui) ease-out, visibility 0s;
   }
   :global(html.js[data-page='home']) .dock:not([data-shown]) { opacity: 0; pointer-events: none; }
+  /* Contact: hidden (and out of the tab order) until the script says the form is clear of it. */
+  :global(html.js[data-route='contact']) .dock:not([data-up]) {
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity var(--dur-ui) ease-out, visibility 0s var(--dur-ui);
+  }
   .dock-nav { display: flex; align-items: center; gap: 4px; }
   .dock-link, .dock-menu {
     display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 12px; border-radius: 22px;
@@ -55,9 +62,46 @@
   :global(html[data-route='contact']) .dock-cta-clip { max-width: 0; padding-left: 0; padding-right: 0; }
   :global(html:not(.js)) .js-only { display: none !important; }
   @media (max-width: 639px) {
-    .dock { left: 20px; right: 20px; transform: none; justify-content: space-between; bottom: calc(12px + env(safe-area-inset-bottom)); }
+    /* A content-width pill, centred: it never spans the column, so it covers as little of the page as it can. */
+    .dock { max-width: calc(100vw - 32px); bottom: calc(12px + env(safe-area-inset-bottom)); }
     :global(html.js) .dock-link { display: none; }
     .dock-k { display: none; }
     :global(html:not(.js)) .dock-link { padding: 0 9px; }
   }
 </style>
+
+<script>
+  // Contact: the dock stays off the brief. It shows only past 160px of scroll, and on phones (where the pill sits over
+  // the field being typed in, above the keyboard) it leaves while focus is inside the form.
+  const REST = 160;
+  let stop: (() => void) | null = null;
+  function arm() {
+    stop?.();
+    stop = null;
+    const dock = document.querySelector<HTMLElement>('[data-dock]');
+    const form = document.documentElement.dataset.route === 'contact' ? document.querySelector<HTMLElement>('[data-brief]') : null;
+    if (!dock || !form) return;
+    const phone = matchMedia('(max-width: 639px)');
+    const update = (focus: Element | null = document.activeElement) => {
+      const up = scrollY > REST && !(phone.matches && focus && form.contains(focus));
+      if (up) dock.dataset.up = ''; else delete dock.dataset.up;
+    };
+    const onScroll = () => update();
+    const onIn = (e: FocusEvent) => update(e.target as Element);
+    const onOut = (e: FocusEvent) => update(e.relatedTarget as Element | null);
+    update();
+    addEventListener('scroll', onScroll, { passive: true });
+    phone.addEventListener('change', onScroll);
+    form.addEventListener('focusin', onIn);
+    form.addEventListener('focusout', onOut);
+    stop = () => {
+      removeEventListener('scroll', onScroll);
+      phone.removeEventListener('change', onScroll);
+      form.removeEventListener('focusin', onIn);
+      form.removeEventListener('focusout', onOut);
+      delete dock.dataset.up;
+    };
+  }
+  document.addEventListener('astro:page-load', arm);
+  document.addEventListener('astro:before-swap', () => { stop?.(); stop = null; });
+</script>

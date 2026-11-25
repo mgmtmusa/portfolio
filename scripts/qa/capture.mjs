@@ -36,6 +36,9 @@ for (const [tag, engine, opts] of vps) {
       return { sw: document.documentElement.scrollWidth, vw, over };
     });
     const name = path === '/' ? 'home' : path.replaceAll('/', '_').replace(/^_|_$/g, '');
+    // Full-page shots freeze position:fixed layers at the first viewport (a false seam where the field and grain end).
+    // For the shot only, stretch the body::before field to the document height.
+    if (full) await p.addStyleTag({ content: `body::before { position: absolute !important; top: 0 !important; bottom: auto !important; height: ${await p.evaluate(() => document.documentElement.scrollHeight)}px !important; }` });
     await p.screenshot({ path: `${out}/${name}-${tag}.jpg`, type: 'jpeg', quality: 70, fullPage: !!full });
     report.push({ page: path, vp: tag, overflowX: m.sw > m.vw, over: m.over, errs });
     await p.close();

@@ -78,7 +78,7 @@ Below 1440px wide the cover lines start at 88u instead of 128u, and below 1180px
 - Lenis smooth scroll, off under reduced motion; GSAP ScrollTrigger only where scroll drives a scene; Astro view transitions with the strip, dock and ⌘K persisting.
 - The third signature moment is the Path key light: one `--key` pool (.05) that moves rung to rung to the one being read (the rung crossing 35% to 45% down the viewport), translate only, 900ms expo-out, no idle drift. With no JS it rests at the first rung's figure; under reduced motion it jumps with no transition.
 - Reduced motion is a complete version: everything present at first paint, no slide, no spring, cross-fades of 160ms at most.
-- The portrait and the masthead are painted at first paint and never hidden (they are the LCP). Home load order: the masthead and the portrait are simply there; 400–1500ms the slab glides in from opacity 0 at −240u; 800–1300ms the top-left block (opacity plus an 8px rise); 950–1450ms the cover lines, 70ms apart; 1100–1500ms the availability block.
+- The portrait and the masthead are painted at first paint and never hidden (they are the LCP). Home load order: the masthead and the portrait are simply there; 400–1500ms the slab glides in from opacity 0 at −240u; from first paint the top-left block rises 8px (transform only, 500ms, no opacity hold, full loads only); 950–1450ms the cover lines, 70ms apart; 1100–1500ms the availability block.
 
 ### The portrait
 

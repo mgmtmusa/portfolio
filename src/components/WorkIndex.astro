@@ -79,10 +79,17 @@ const filterCss = tags
         <li class="cover" id={inert ? undefined : `case-${slug}`} data-cover={slug} data-tags={t.join(' ')}>
           <div class="cover-a">
             <CaseFigure slug={slug} figs={cover.figs} note={mark} named={!inert} />
-            <p class="cover-label">
-              {cover.label}
-              {'scope' in cover && <span class="cover-scope label">{cover.scope}</span>}
-            </p>
+            {inert ? (
+              <p class="cover-label">
+                {cover.label}
+                {'scope' in cover && <span class="cover-scope label">{cover.scope}</span>}
+              </p>
+            ) : (
+              <p class="cover-label" transition:name={`lbl-${slug}`}>
+                {cover.label}
+                {'scope' in cover && <span class="cover-scope label">{cover.scope}</span>}
+              </p>
+            )}
             {'caption' in cover && <p class="cover-cap">{cover.caption}</p>}
           </div>
           <div class="cover-b">

@@ -20,7 +20,7 @@ export function commandItems(): CommandItem[] {
     { id: 'contact', group: 'Pages', label: 'Contact', href: '/contact/', keywords: ['brief', 'email', 'hire', 'get in touch'] },
     { id: 'cv-page', group: 'Pages', label: 'CV page', href: '/cv/', keywords: ['resume', 'recruiter'] },
     ...cases.map((c): CommandItem => ({ id: `case-${c.slug}`, group: 'Cases', label: `${c.org}: ${c.title}`, href: `/work/${c.slug}/`, keywords: [c.org.toLowerCase(), c.slug] })),
-    { id: 'download-cv', group: 'Actions', label: 'Download CV', href: site.cv, keywords: ['cv', 'resume', 'pdf'] },
+    { id: 'download-cv', group: 'Actions', label: 'Download CV (PDF)', href: site.cv, keywords: ['cv', 'resume', 'pdf'] },
     { id: 'copy-email', group: 'Actions', label: 'Copy email', action: 'copy-email', keywords: ['email', 'mail', 'address'] },
     { id: 'linkedin', group: 'Actions', label: 'LinkedIn', href: site.linkedin, keywords: ['profile', 'social'] },
     { id: 'reduce-motion', group: 'Actions', label: 'Reduce motion', action: 'reduce-motion', keywords: ['animation', 'accessibility', 'motion'] },

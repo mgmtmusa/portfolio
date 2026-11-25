@@ -1,5 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
-import { openHome } from './helpers';
+import { openHome, prepPage } from './helpers';
 
 /** Task 5 moments: load order (DESIGN.md, Motion), M7, M9, H2 and the drag on touch. */
 
@@ -525,6 +525,57 @@ test.describe('round 2 motion', () => {
       }, i);
       expect(Math.abs(d.dx), `rung ${i} x`).toBeLessThanOrEqual(2);
       expect(Math.abs(d.dy), `rung ${i} y`).toBeLessThanOrEqual(2);
+    }
+  });
+
+  // Motion r3, fix 2: a return to mid-Path (back by a view transition, or a reload that restores the scroll) finds the
+  // light already on the rung being read. No 900ms sweep in from rung 0.
+  test('returning to mid-Path places the light at once, without a sweep from rung 0', async ({ page }) => {
+    await prepPage(page);
+    await page.goto('/');
+    await page.evaluate(() => document.fonts.ready);
+    const toRung = (k: number) => page.evaluate((i) => {
+      const r = document.querySelectorAll('.path .rung')[i].getBoundingClientRect();
+      window.scrollTo({ top: scrollY + r.top - innerHeight * 0.4 + 2, behavior: 'instant' });
+    }, k);
+    const light = page.locator('[data-path-light]');
+    await toRung(2);
+    await expect(light).toHaveAttribute('data-rung', '2');
+    await page.waitForTimeout(1100);
+    const rest = await light.evaluate((el) => getComputedStyle(el).translate);
+    // Sample the light every frame from the arrival's page-load on (the window survives the soft navigation).
+    const arm = () => page.evaluate(() => {
+      const w = window as unknown as { __pl: { t: string; r: string | undefined; anim: number }[] };
+      w.__pl = [];
+      document.addEventListener('astro:page-load', () => {
+        const t0 = performance.now();
+        const tick = () => {
+          const el = document.querySelector<HTMLElement>('[data-path-light]');
+          if (el) w.__pl.push({ t: getComputedStyle(el).translate, r: el.dataset.rung, anim: el.getAnimations().length });
+          if (performance.now() - t0 < 700) requestAnimationFrame(tick);
+        };
+        tick();
+      }, { once: true });
+    });
+    await arm();
+    await page.evaluate(() => document.querySelector<HTMLAnchorElement>('.foot a[href="/work/"]')!.click());
+    await expect(page).toHaveURL(/\/work\/$/);
+    await page.waitForTimeout(400);
+    await arm();
+    await page.goBack();
+    await expect(page).toHaveURL(/\/$/);
+    await page.waitForFunction(() => ((window as unknown as { __pl: unknown[] }).__pl?.length ?? 0) > 20, null, { timeout: 5000 });
+    const log = await page.evaluate(() => (window as unknown as { __pl: { t: string; r: string | undefined; anim: number }[] }).__pl);
+    // From the first frame the observer has reported, the light sits on rung 2 and never animates.
+    const from = log.findIndex((f) => f.r === '2');
+    expect(from, 'the light reaches rung 2').toBeGreaterThanOrEqual(0);
+    const after = log.slice(from);
+    expect(after.every((f) => f.anim === 0), `no transition after the return: ${JSON.stringify(after.slice(0, 4))}`).toBe(true);
+    const px = (t: string) => t.split(' ').map(parseFloat);
+    const [rx, ry] = px(rest);
+    for (const f of after) {
+      const [x, y] = px(f.t);
+      expect(Math.abs(x - rx) + Math.abs(y - ry), `translate ${f.t} vs ${rest}`).toBeLessThanOrEqual(2);
     }
   });
 

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { openHome } from './helpers';
+import { openHome, prepPage } from './helpers';
 
 test.describe('layout guardrails', () => {
   test('G1: the masthead is two lines inside the margins (desktop)', async ({ page, isMobile }) => {
@@ -231,9 +231,51 @@ test.describe('layout guardrails', () => {
   // Creative director fix 12: on /contact/ the dock's Get in touch (pointing at the page you are on) is gone.
   test('contact: the dock has no Get in touch', async ({ page }) => {
     await page.goto('/contact/');
+    await page.evaluate(() => window.scrollTo({ top: 400, behavior: 'instant' }));
     await expect(page.locator('[data-dock]')).toBeVisible();
     await expect(page.locator('[data-dock] .dock-cta')).toBeHidden();
     expect(await page.evaluate(() => getComputedStyle(document.documentElement).scrollPaddingBottom)).toBe('112px');
+  });
+
+  // Finish r3 1 and creative director r3 3: on /contact/ no glass sits on the brief at rest. The dock is out (and out of
+  // the tab order) until 160px of scroll, and on phones it leaves again while focus is inside the form.
+  for (const [w, h, phone] of [[1440, 900, false], [375, 667, true]] as const) {
+    test(`contact at ${w}x${h}: the dock is off the form at rest and arrives past 160px`, async ({ page, isMobile }) => {
+      test.skip(isMobile !== phone, phone ? 'phone width' : 'desktop width');
+      await page.setViewportSize({ width: w, height: h });
+      await prepPage(page);
+      await page.goto('/contact/');
+      await page.waitForSelector('html[data-chrome="ready"]');
+      const dock = page.locator('[data-dock]');
+      const state = () => dock.evaluate((d) => ({ op: getComputedStyle(d).opacity, vis: getComputedStyle(d).visibility }));
+      await page.waitForTimeout(400);
+      expect(await state()).toEqual({ op: '0', vis: 'hidden' });
+      await page.evaluate(() => window.scrollTo({ top: 400, behavior: 'instant' }));
+      await expect.poll(state).toEqual({ op: '1', vis: 'visible' });
+      await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+      await expect.poll(state).toEqual({ op: '0', vis: 'hidden' });
+    });
+  }
+
+  test('phone: the dock is a centred, content-width pill, and on /contact/ it leaves while the brief has focus', async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'phone only');
+    await page.setViewportSize({ width: 375, height: 667 });
+    await prepPage(page);
+    await page.goto('/about/');
+    await page.waitForSelector('html[data-chrome="ready"]');
+    const box = (await page.locator('[data-dock]').boundingBox())!;
+    expect(box.width, 'content width, not the column').toBeLessThan(375 - 40 - 40);
+    expect(Math.abs(box.x + box.width / 2 - 375 / 2), 'centred').toBeLessThanOrEqual(1);
+    await page.goto('/contact/');
+    await page.waitForSelector('form[data-ready]');
+    const dock = page.locator('[data-dock]');
+    await page.evaluate(() => window.scrollTo({ top: 400, behavior: 'instant' }));
+    await expect.poll(() => dock.evaluate((d) => getComputedStyle(d).visibility)).toBe('visible');
+    await page.locator('form[data-brief] textarea').first().focus();
+    await expect.poll(() => dock.evaluate((d) => getComputedStyle(d).visibility)).toBe('hidden');
+    await page.evaluate(() => (document.activeElement as HTMLElement).blur());
+    await page.evaluate(() => window.scrollTo({ top: 400, behavior: 'instant' }));
+    await expect.poll(() => dock.evaluate((d) => getComputedStyle(d).visibility)).toBe('visible');
   });
 
   // Motion review 8: the dock's Get in touch folds in and out; the dock never jumps width.

@@ -6,7 +6,7 @@ const items = commandItems();
 describe('command menu', () => {
   it('has pages, the three cases and the actions', () => {
     expect(items.filter((i) => i.group === 'Cases')).toHaveLength(3);
-    expect(items.find((i) => i.label === 'Download CV')?.href).toBe('/cv/Musa-Walid-CV.pdf');
+    expect(items.find((i) => i.label === 'Download CV (PDF)')?.href).toBe('/cv/Musa-Walid-CV.pdf');
     expect(items.find((i) => i.label === 'Copy email')?.action).toBe('copy-email');
     expect(items.find((i) => i.label === 'Reduce motion')?.action).toBe('reduce-motion');
     expect(items.find((i) => i.label === 'LinkedIn')?.href).toBe('https://www.linkedin.com/in/musa-abdullah-walid');
@@ -16,7 +16,7 @@ describe('command menu', () => {
     expect(groups).toEqual([...groups].sort((a, b) => ['Actions', 'Cases', 'Pages'].indexOf(a) - ['Actions', 'Cases', 'Pages'].indexOf(b)));
     expect(groups).toHaveLength(items.length);
   });
-  it('"cv" puts Download CV first', () => expect(searchCommands(items, 'cv')[0].label).toBe('Download CV'));
+  it('"cv" puts Download CV first', () => expect(searchCommands(items, 'cv')[0].label).toBe('Download CV (PDF)'));
   it('"evi" finds the Evitech case first', () => expect(searchCommands(items, 'evi')[0].href).toBe('/work/evitech/'));
   it('is case-insensitive and drops non-matches', () => {
     expect(searchCommands(items, 'LINKED')[0].label).toBe('LinkedIn');
